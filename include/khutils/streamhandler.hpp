@@ -1,10 +1,11 @@
-﻿#ifndef KUTILS_CORE_STREAMREADER_HPP_INC
-#define KUTILS_CORE_STREAMREADER_HPP_INC
+﻿#ifndef KHUTILS_STREAMREADER_HPP_INC
+#define KHUTILS_STREAMREADER_HPP_INC
 
 //! file has dependency on boost.endian
 //! include wisely to keep compile times minimal
 
 #include <boost/endian/conversion.hpp>
+#include <functional>
 #include <istream>
 
 namespace khutils
@@ -27,14 +28,14 @@ namespace khutils
 	{
 		// converts provided _InT into _OutT performing reinterpret_cast on memory
 		template <typename _OutT, typename _InT = _OutT>
-		_OutT reinterpret_convert(_InT& r)
+		static _OutT reinterpret_convert(_InT r)
 		{
 			return *reinterpret_cast<_OutT*>(&r);
 		}
 
 		// converts provided _InT into _OutT using union reinterpretation
 		template <typename _OutT, typename _InT = _OutT>
-		_OutT fast_convert(_InT& r)
+		static _OutT fast_convert(_InT r)
 		{
 			union conversion {
 				_OutT t;
@@ -50,13 +51,15 @@ namespace khutils
 		//! bigger _OutT
 		//! e.g. to convert read U16 as F32
 		template <typename _OutT, typename _ReadT = _OutT>
-		static _OutT read(std::istream& is, std::function<_OutT(_ReadT&)> convert = reinterpret_convert<_OutT, _ReadT>)
+		static _OutT read(std::istream&				   is,
+						  std::function<_OutT(_ReadT)> convert
+						  = std::bind(_streamhandler::reinterpret_convert<_OutT, _ReadT>, std::placeholders::_1))
 		{
 			using boost::endian::conditional_reverse;
 
 			_ReadT r;
 			is.read(reinterpret_cast<char*>(&r), sizeof(_ReadT));
-			return convert(conditional_reverse(r));
+			return convert(conditional_reverse<order::native, _order>(r));
 		}
 
 		//! writes _WriteT into ostream after converting and end0an-swapping provided
@@ -65,15 +68,18 @@ namespace khutils
 		//! smaller _WriteT
 		//! e.g. to write F32 as U16
 		template <typename _WriteT, typename _InT = _WriteT>
-		static void write(std::ostream& os, _InT t, std::function<_WriteT(_InT&)> convert = reinterpret_convert<_WriteT, _InT>)
+		static void write(std::ostream&				   os,
+						  _InT						   t,
+						  std::function<_WriteT(_InT)> convert
+						  = std::bind(_streamhandler::reinterpret_convert<_WriteT, _InT>, std::placeholders::_1))
 		{
 			using boost::endian::conditional_reverse;
 
-			_WriteT r = conditional_reverse(convert(t));
+			_WriteT r = conditional_reverse<_order, order::native>(convert(t));
 			os.write(reinterpret_cast<char*>(&r), sizeof(_WriteT));
 		}
 	};
 
 }	// namespace khutils
 
-#endif	// KUTILS_CORE_STREAMREADER_HPP_INC
+#endif	// KHUTILS_STREAMREADER_HPP_INC
