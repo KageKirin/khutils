@@ -258,6 +258,32 @@ go_bandit([]() {
 		});
 	});
 
+	describe("fetching", []() {
+		it("int", []() {
+			std::stringstream s;
+			int				  write = 42;
+			streamhandler::write<int>(s, write);
+			int fetch = streamhandler::fetch<int>(s);
+			int read  = streamhandler::read<int>(s);
+
+			AssertThat(fetch, Equals(write));
+			AssertThat(read, Equals(write));
+			AssertThat(fetch, Equals(read));
+		});
+
+		it("float", []() {
+			std::stringstream s;
+			float			  write = 0.65;
+			streamhandler::write<int, float>(s, write);
+			float fetch = streamhandler::fetch<float, int>(s);
+			float read  = streamhandler::read<float, int>(s);
+
+			AssertThat(fetch, Equals(write));
+			AssertThat(read, Equals(write));
+			AssertThat(fetch, Equals(read));
+		});
+	});
+
 	//////////////////////////////////////////////////////////////////////////
 	// filestream-based tests
 
@@ -562,6 +588,40 @@ go_bandit([]() {
 
 			AssertThat(read, Equals(write));
 			AssertThat(read2, Equals(write2));
+		});
+	});
+
+	describe("fetching", []() {
+		it("int", []() {
+			std::ofstream ofs(ut_temp);
+			int			  write = 42;
+			streamhandler::write<int>(ofs, write);
+			ofs.close();
+
+			std::ifstream ifs(ut_temp);
+			int			  fetch = streamhandler::fetch<int>(ifs);
+			int			  read  = streamhandler::read<int>(ifs);
+			ifs.close();
+
+			AssertThat(fetch, Equals(write));
+			AssertThat(read, Equals(write));
+			AssertThat(fetch, Equals(read));
+		});
+
+		it("float", []() {
+			std::ofstream ofs(ut_temp);
+			float		  write = 0.65;
+			streamhandler::write<int, float>(ofs, write);
+			ofs.close();
+
+			std::ifstream ifs(ut_temp);
+			float		  fetch = streamhandler::fetch<float, int>(ifs);
+			float		  read  = streamhandler::read<float, int>(ifs);
+			ifs.close();
+
+			AssertThat(fetch, Equals(write));
+			AssertThat(read, Equals(write));
+			AssertThat(fetch, Equals(read));
 		});
 	});
 });

@@ -62,6 +62,22 @@ namespace khutils
 			return convert(conditional_reverse<order::native, _order>(r));
 		}
 
+		//! fetches _ReadT from istream WITHOUT incrementing position, then
+		//! endian-swaps and converts it into _OutT
+		//! optional convert function can be used to upsample _ReadT into bytewise
+		//! bigger _OutT
+		//! e.g. to convert read U16 as F32
+		template <typename _OutT, typename _ReadT = _OutT>
+		static _OutT fetch(std::istream&				is,
+						   std::function<_OutT(_ReadT)> convert
+						   = std::bind(_streamhandler::reinterpret_convert<_OutT, _ReadT>, std::placeholders::_1))
+		{
+			auto  pos = is.tellg();
+			_OutT t   = read<_OutT, _ReadT>(is, convert);
+			is.seekg(pos);
+			return t;
+		}
+
 		//! writes _WriteT into ostream after converting and end0an-swapping provided
 		//! _InT
 		//! optional convert function can be used to downsample _InT into bytewise
