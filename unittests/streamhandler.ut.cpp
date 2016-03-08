@@ -284,6 +284,50 @@ go_bandit([]() {
 		});
 	});
 
+	describe("skip and alignment", []() {
+		it("int", []() {
+			std::ostringstream oss;
+			int				   write = 42;
+			streamhandler::write<int>(oss, write);
+			streamhandler::skip<int>(oss);
+			streamhandler::write<int>(oss, write);
+			streamhandler::alignToNext<16>(oss);
+			streamhandler::write<int>(oss, write);
+
+			std::istringstream iss(oss.str());
+			int				   read = streamhandler::read<int>(iss);
+			streamhandler::skip<int>(iss);
+			int read2 = streamhandler::read<int>(iss);
+			streamhandler::alignToNext<16>(iss);
+			int read3 = streamhandler::read<int>(iss);
+
+			AssertThat(read, Equals(write));
+			AssertThat(read2, Equals(write));
+			AssertThat(read3, Equals(write));
+		});
+
+		it("float", []() {
+			std::ostringstream oss;
+			float			   write = 0.65;
+			streamhandler::write<int, float>(oss, write);
+			streamhandler::skip<int>(oss);
+			streamhandler::write<int, float>(oss, write);
+			streamhandler::alignToNext<16>(oss);
+			streamhandler::write<int, float>(oss, write);
+
+			std::istringstream iss(oss.str());
+			float			   read = streamhandler::read<float, int>(iss);
+			streamhandler::skip<int>(iss);
+			float read2 = streamhandler::read<float, int>(iss);
+			streamhandler::alignToNext<16>(iss);
+			float read3 = streamhandler::read<float, int>(iss);
+
+			AssertThat(read, Equals(write));
+			AssertThat(read2, Equals(write));
+			AssertThat(read3, Equals(write));
+		});
+	});
+
 	//////////////////////////////////////////////////////////////////////////
 	// filestream-based tests
 
@@ -622,6 +666,54 @@ go_bandit([]() {
 			AssertThat(fetch, Equals(write));
 			AssertThat(read, Equals(write));
 			AssertThat(fetch, Equals(read));
+		});
+	});
+
+	describe("skip and alignment", []() {
+		it("int", []() {
+			std::ofstream ofs(ut_temp);
+			int			  write = 42;
+			streamhandler::write<int>(ofs, write);
+			streamhandler::skip<int>(ofs);
+			streamhandler::write<int>(ofs, write);
+			streamhandler::alignToNext<16>(ofs);
+			streamhandler::write<int>(ofs, write);
+			ofs.close();
+
+			std::ifstream ifs(ut_temp);
+			int			  read = streamhandler::read<int>(ifs);
+			streamhandler::skip<int>(ifs);
+			int read2 = streamhandler::read<int>(ifs);
+			streamhandler::alignToNext<16>(ifs);
+			int read3 = streamhandler::read<int>(ifs);
+			ifs.close();
+
+			AssertThat(read, Equals(write));
+			AssertThat(read2, Equals(write));
+			AssertThat(read3, Equals(write));
+		});
+
+		it("float", []() {
+			std::ofstream ofs(ut_temp);
+			float		  write = 0.65;
+			streamhandler::write<int, float>(ofs, write);
+			streamhandler::skip<int>(ofs);
+			streamhandler::write<int, float>(ofs, write);
+			streamhandler::alignToNext<16>(ofs);
+			streamhandler::write<int, float>(ofs, write);
+			ofs.close();
+
+			std::ifstream ifs(ut_temp);
+			float		  read = streamhandler::read<float, int>(ifs);
+			streamhandler::skip<int>(ifs);
+			float read2 = streamhandler::read<float, int>(ifs);
+			streamhandler::alignToNext<16>(ifs);
+			float read3 = streamhandler::read<float, int>(ifs);
+			ifs.close();
+
+			AssertThat(read, Equals(write));
+			AssertThat(read2, Equals(write));
+			AssertThat(read3, Equals(write));
 		});
 	});
 });

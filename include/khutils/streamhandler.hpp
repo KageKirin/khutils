@@ -94,6 +94,43 @@ namespace khutils
 			_WriteT r = conditional_reverse<_order, order::native>(convert(t));
 			os.write(reinterpret_cast<char*>(&r), sizeof(_WriteT));
 		}
+
+		template <typename _SkipT>
+		static void skip(std::istream& is)
+		{
+			is.ignore(sizeof(_SkipT));
+		}
+
+		template <typename _SkipT>
+		static void skip(std::ostream& os)
+		{
+			const char c = 0;
+			for (size_t i = 0; i < sizeof(_SkipT); ++i)
+			{
+				os.write(&c, 1);
+			}
+		}
+
+		template <size_t _Alignment>
+		static void alignToNext(std::istream& is)
+		{
+			auto pos			= is.tellg();
+			auto nextAlignedPos = ((pos / _Alignment) + 1) * _Alignment;
+			is.ignore(nextAlignedPos - pos);
+		}
+
+		template <size_t _Alignment>
+		static void alignToNext(std::ostream& os)
+		{
+			auto	   pos			  = os.tellp();
+			auto	   nextAlignedPos = ((pos / _Alignment) + 1) * _Alignment;
+			auto	   fillup		  = nextAlignedPos - pos;
+			const char c			  = 0;
+			for (size_t i = 0; i < fillup; ++i)
+			{
+				os.write(&c, 1);
+			}
+		}
 	};
 
 }	// namespace khutils
