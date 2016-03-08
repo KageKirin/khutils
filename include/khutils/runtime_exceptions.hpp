@@ -11,6 +11,12 @@ namespace khutils
 		explicit FatalImportException(const std::string& pErrorText);
 	};
 
+	class FatalExportException : public std::runtime_error
+	{
+	public:
+		explicit FatalExportException(const std::string& pErrorText);
+	};
+
 }	// namespace khutils
 
 #if defined(KHUTILS_RUNTIME_EXCEPTIONS_IMPL)
@@ -23,6 +29,10 @@ namespace khutils
 	//////////////////////////////////////////////////////////////////////////
 
 	FatalImportException::FatalImportException(const std::string& pErrorText) : std::runtime_error(pErrorText)
+	{
+	}
+
+	FatalExportException::FatalExportException(const std::string& pErrorText) : std::runtime_error(pErrorText)
 	{
 	}
 
