@@ -1,0 +1,35 @@
+﻿#ifndef KHUTILS_RUNTIME_EXCEPTIONS_HPP_INC
+#define KHUTILS_RUNTIME_EXCEPTIONS_HPP_INC
+
+#include <stdexcept>
+
+namespace khutils
+{
+	class FatalImportException : public std::runtime_error
+	{
+	public:
+		explicit FatalImportException(const std::string& pErrorText);
+	};
+
+}	// namespace khutils
+
+#if defined(KHUTILS_RUNTIME_EXCEPTIONS_IMPL)
+
+#include "khutils/runtime_exceptions.hpp"
+
+namespace khutils
+{
+
+	//////////////////////////////////////////////////////////////////////////
+
+	FatalImportException::FatalImportException(const std::string& pErrorText) : std::runtime_error(pErrorText)
+	{
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+
+}	// namespace khutils
+
+#endif	// defined (KHUTILS_RUNTIME_EXCEPTIONS_IMPL)
+
+#endif	// !KHUTILS_RUNTIME_EXCEPTIONS_HPP_INC
