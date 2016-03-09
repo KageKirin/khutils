@@ -96,16 +96,16 @@ namespace khutils
 		}
 
 		template <typename _SkipT>
-		static void skip(std::istream& is)
+		static void skip(std::istream& is, size_t count = 1)
 		{
-			is.ignore(sizeof(_SkipT));
+			is.ignore(sizeof(_SkipT) * count);
 		}
 
 		template <typename _SkipT>
-		static void skip(std::ostream& os)
+		static void skip(std::ostream& os, size_t count = 1)
 		{
 			const char c = 0;
-			for (size_t i = 0; i < sizeof(_SkipT); ++i)
+			for (size_t i = 0; i < sizeof(_SkipT) * count; ++i)
 			{
 				os.write(&c, 1);
 			}
