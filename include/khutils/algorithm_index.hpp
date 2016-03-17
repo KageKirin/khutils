@@ -25,6 +25,7 @@ namespace khutils
 		std::for_each(first, last, [&index, &binary_op](typename InputIt::value_type& value) {
 			binary_op(value, index);
 			++index;
+			// maybe return binary_op(value, index++); works as well
 		});
 	}
 
@@ -61,7 +62,19 @@ namespace khutils
 			auto v = binary_op(value, index);
 			++index;
 			return v;
+
+			// maybe return binary_op(value, index++); works as well
 		});
+	}
+
+	// using pythonic.enumerate
+	template <class _Collection, class OutputIt, class BinaryOperation>
+	void transform_indexed_pythonic(_Collection collection, OutputIt d_first, BinaryOperation binary_op)
+	{
+		for (auto vp : pythonic::enumerate(collection))
+		{
+			*(d_first + vp.first) = binary_op(vp.second, vp.first);
+		}
 	}
 
 }	// namespace khutils
