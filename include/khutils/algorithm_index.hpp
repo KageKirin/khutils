@@ -22,7 +22,7 @@ namespace khutils
 	void for_each_indexed(InputIt first, InputIt last, BinaryOperation binary_op)
 	{
 		size_t index = 0;
-		std::for_each(first, last, [&index, &binary_op](typename InputIt::value_type& value) {
+		std::for_each(first, last, [&index, &binary_op](const typename InputIt::value_type& value) {
 			binary_op(value, index);
 			++index;
 			// maybe return binary_op(value, index++); works as well
@@ -58,7 +58,7 @@ namespace khutils
 	OutputIt transform_indexed(InputIt first, InputIt last, OutputIt d_first, BinaryOperation binary_op)
 	{
 		size_t index = 0;
-		return std::transform(first, last, d_first, [&index, &binary_op](typename InputIt::value_type & value) -> typename OutputIt::value_type {
+		return std::transform(first, last, d_first, [&index, &binary_op](const typename InputIt::value_type& value) -> typename OutputIt::value_type {
 			auto v = binary_op(value, index);
 			++index;
 			return v;
