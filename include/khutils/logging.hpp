@@ -7,20 +7,40 @@ namespace khutils
 {
 	struct logger
 	{
+		static std::ostream& null();
 		static std::ostream& log();
 		static std::ostream& warn();
 		static std::ostream& error();
 		static std::ostream& debug();
+
+		// overload template for specific classes
+		template <typename _T>
+		static std::ostream& debug_t()
+		{
+			return null();
+		}
+
+		// overload template for specific values
+		template <int		 _I>
+		static std::ostream& debug_i()
+		{
+			return null();
+		}
 	};
 
 }	// namespace khutils
 
 #if defined(KHUTILS_LOGGING_IMPL)
 
-
+#include <fstream>
 #include <iostream>
 
 // clang-format off
+std::ostream&  khutils::logger::null()
+{
+	static std::ofstream ofs;
+	return ofs;
+}
 
 std::ostream& khutils::logger::log()
 {
