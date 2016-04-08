@@ -50,6 +50,9 @@ go_bandit([]() {
 	//////////////////////////////////////////////////////////////////////////
 	// spiritual cast
 	describe("spiritual cast", []() {
+		IT_TEST_SPIRITUAL_CAST(bool, "true", true);
+		IT_TEST_SPIRITUAL_CAST(bool, "false", false);
+
 		IT_TEST_SPIRITUAL_CAST(char, "1", 1);
 		IT_TEST_SPIRITUAL_CAST(short, "1", 1);
 		IT_TEST_SPIRITUAL_CAST(int, "1", 1);
@@ -337,6 +340,16 @@ go_bandit([]() {
 	});
 
 	describe("spiritual cast exceptions", []() {
+		IT_TEST_SPIRITUAL_CAST(bool, "true", false);
+		IT_TEST_SPIRITUAL_CAST(bool, "false", false);
+		IT_TEST_SPIRITUAL_CAST(bool, "tru", true);
+		IT_TEST_SPIRITUAL_CAST(bool, "fals", true);
+		IT_TEST_SPIRITUAL_CAST(bool, "tru", true);
+		IT_TEST_SPIRITUAL_CAST(bool, "flase", true);
+		IT_TEST_SPIRITUAL_CAST(bool, "fasle", true);
+		IT_TEST_SPIRITUAL_CAST(bool, "1", false);
+		IT_TEST_SPIRITUAL_CAST(bool, "0", false);
+
 		IT_TEST_SPIRITUAL_CAST_EXCEPTION(char, "1", false);
 		IT_TEST_SPIRITUAL_CAST_EXCEPTION(short, "1", false);
 		IT_TEST_SPIRITUAL_CAST_EXCEPTION(int, "1", false);

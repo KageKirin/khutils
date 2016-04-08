@@ -28,6 +28,8 @@ namespace khutils
 	//- basic type declaration/template instantiation
 
 	template <>
+	bool spiritual_cast<bool>(const std::string& str);
+	template <>
 	char spiritual_cast<char>(const std::string& str);
 	// template <>
 	// short spiritual_cast<short>(const std::string& str);
@@ -119,6 +121,7 @@ namespace khutils
 	using x3::float_;
 	using x3::double_;
 	using x3::char_;
+	using x3::bool_;
 	// using x3::uchar_;
 
 	using x3::int8;
@@ -138,6 +141,22 @@ namespace khutils
 
 	//////////////////////////////////////////////////////////////////////////
 	//- basic types
+
+	template <>
+	bool spiritual_cast<bool>(const std::string& str)
+	{
+		bool value;
+		auto first = begin(str);
+		auto last  = end(str);
+
+		bool r = phrase_parse(first, last, (bool_), space, value);
+		if (!r || first != last)	// fail if we did not get a full match
+		{
+			throw SpiritualCastException(__FUNCTION__);
+		}
+
+		return value;
+	}
 
 	template <>
 	char spiritual_cast<char>(const std::string& str)
