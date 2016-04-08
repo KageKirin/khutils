@@ -24,11 +24,30 @@ namespace khutils
 	template <typename _Type>
 	_Type spiritual_cast(const std::string& str);
 
-	template <typename _Type>
-	inline _Type spiritual_cast(const char* sz)
-	{
-		return spiritual_cast<_Type>(std::string(sz));
-	}
+	//////////////////////////////////////////////////////////////////////////
+	//- basic type declaration/template instantiation
+
+	template <>
+	char spiritual_cast<char>(const std::string& str);
+	// template <>
+	// short spiritual_cast<short>(const std::string& str);
+	// template <>
+	// int spiritual_cast<int>(const std::string& str);
+	template <>
+	long spiritual_cast<long>(const std::string& str);
+	// template <>
+	// long long spiritual_cast<long long>(const std::string& str);
+	// template <>
+	// unsigned char spiritual_cast<unsigned char>(const std::string& str);
+	// template <>
+	// unsigned short spiritual_cast<unsigned short>(const std::string& str);
+	// template <>
+	// unsigned int spiritual_cast<unsigned int>(const std::string& str);
+	template <>
+	unsigned long spiritual_cast<unsigned long>(const std::string& str);
+	// template <>
+	// unsigned long long spiritual_cast<unsigned long long>(const std::string&
+	// str);
 
 	template <>
 	int8_t spiritual_cast<int8_t>(const std::string& str);
@@ -51,6 +70,18 @@ namespace khutils
 	float spiritual_cast<float>(const std::string& str);
 	template <>
 	double spiritual_cast<double>(const std::string& str);
+
+	//////////////////////////////////////////////////////////////////////////
+	//- composite types
+
+	//////////////////////////////////////////////////////////////////////////
+	//- char to string
+
+	template <typename _Type>
+	inline _Type spiritual_cast(const char* sz)
+	{
+		return spiritual_cast<_Type>(std::string(sz));
+	}
 
 }	// namespace khutils
 
@@ -75,11 +106,20 @@ namespace khutils
 	namespace x3	= boost::spirit::x3;
 	namespace ascii = boost::spirit::x3::ascii;
 
+	using x3::short_;
 	using x3::int_;
+	using x3::long_;
+	using x3::long_long;
+
+	using x3::ushort_;
 	using x3::uint_;
+	using x3::ulong_;
+	using x3::ulong_long;
+
 	using x3::float_;
 	using x3::double_;
-	using ascii::char_;
+	using x3::char_;
+	// using x3::uchar_;
 
 	using x3::int8;
 	using x3::int16;
@@ -98,6 +138,198 @@ namespace khutils
 
 	//////////////////////////////////////////////////////////////////////////
 	//- basic types
+
+	template <>
+	char spiritual_cast<char>(const std::string& str)
+	{
+		char value;
+		auto first = begin(str);
+		auto last  = end(str);
+
+		bool r = phrase_parse(first, last, (int8), space, value);
+		if (!r || first != last)	// fail if we did not get a full match
+		{
+			throw SpiritualCastException(__FUNCTION__);
+		}
+
+		return value;
+	}
+
+	// template <>
+	// short spiritual_cast<short>(const std::string& str)
+	//{
+	//	short value;
+	//	auto  first = begin(str);
+	//	auto  last  = end(str);
+	//
+	//	bool r = phrase_parse(first, last, (short_), space, value);
+	//	if (!r || first != last)	// fail if we did not get a full match
+	//	{
+	//		throw SpiritualCastException(__FUNCTION__);
+	//	}
+	//
+	//	return value;
+	//}
+	//
+	// template <>
+	// int spiritual_cast<int>(const std::string& str)
+	//{
+	//	int  value;
+	//	auto first = begin(str);
+	//	auto last  = end(str);
+	//
+	//	bool r = phrase_parse(first, last, (int_), space, value);
+	//	if (!r || first != last)	// fail if we did not get a full match
+	//	{
+	//		throw SpiritualCastException(__FUNCTION__);
+	//	}
+	//
+	//	return value;
+	//}
+
+	template <>
+	long spiritual_cast<long>(const std::string& str)
+	{
+		long value;
+		auto first = begin(str);
+		auto last  = end(str);
+
+		bool r = phrase_parse(first, last, (long_), space, value);
+		if (!r || first != last)	// fail if we did not get a full match
+		{
+			throw SpiritualCastException(__FUNCTION__);
+		}
+
+		return value;
+	}
+
+	// template <>
+	// long long spiritual_cast<long long>(const std::string& str)
+	//{
+	//	long long value;
+	//	auto	  first = begin(str);
+	//	auto	  last  = end(str);
+	//
+	//	bool r = phrase_parse(first, last, (long_long), space, value);
+	//	if (!r || first != last)	// fail if we did not get a full match
+	//	{
+	//		throw SpiritualCastException(__FUNCTION__);
+	//	}
+	//
+	//	return value;
+	//}
+	//
+	// template <>
+	// unsigned char spiritual_cast<unsigned char>(const std::string& str)
+	//{
+	//	unsigned char value;
+	//	auto		  first = begin(str);
+	//	auto		  last  = end(str);
+	//
+	//	bool r = phrase_parse(first, last, (uchar_), space, value);
+	//	if (!r || first != last)	// fail if we did not get a full match
+	//	{
+	//		throw SpiritualCastException(__FUNCTION__);
+	//	}
+	//
+	//	return value;
+	//}
+	//
+	// template <>
+	// unsigned short spiritual_cast<unsigned short>(const std::string& str)
+	//{
+	//	unsigned short value;
+	//	auto		   first = begin(str);
+	//	auto		   last  = end(str);
+	//
+	//	bool r = phrase_parse(first, last, (ushort_), space, value);
+	//	if (!r || first != last)	// fail if we did not get a full match
+	//	{
+	//		throw SpiritualCastException(__FUNCTION__);
+	//	}
+	//
+	//	return value;
+	//}
+	//
+	// template <>
+	// unsigned int spiritual_cast<unsigned int>(const std::string& str)
+	//{
+	//	unsigned int value;
+	//	auto		 first = begin(str);
+	//	auto		 last  = end(str);
+	//
+	//	bool r = phrase_parse(first, last, (uint_), space, value);
+	//	if (!r || first != last)	// fail if we did not get a full match
+	//	{
+	//		throw SpiritualCastException(__FUNCTION__);
+	//	}
+	//
+	//	return value;
+	//}
+
+	template <>
+	unsigned long spiritual_cast<unsigned long>(const std::string& str)
+	{
+		unsigned long value;
+		auto		  first = begin(str);
+		auto		  last  = end(str);
+
+		bool r = phrase_parse(first, last, (ulong_), space, value);
+		if (!r || first != last)	// fail if we did not get a full match
+		{
+			throw SpiritualCastException(__FUNCTION__);
+		}
+
+		return value;
+	}
+
+	// template <>
+	// unsigned long long spiritual_cast<unsigned long long>(const std::string& str)
+	//{
+	//	unsigned long long value;
+	//	auto			   first = begin(str);
+	//	auto			   last  = end(str);
+	//
+	//	bool r = phrase_parse(first, last, (ulong_long), space, value);
+	//	if (!r || first != last)	// fail if we did not get a full match
+	//	{
+	//		throw SpiritualCastException(__FUNCTION__);
+	//	}
+	//
+	//	return value;
+	//}
+
+	template <>
+	float spiritual_cast<float>(const std::string& str)
+	{
+		float value;
+		auto  first = begin(str);
+		auto  last  = end(str);
+
+		bool r = phrase_parse(first, last, (float_), space, value);
+		if (!r || first != last)	// fail if we did not get a full match
+		{
+			throw SpiritualCastException(__FUNCTION__);
+		}
+
+		return value;
+	}
+
+	template <>
+	double spiritual_cast<double>(const std::string& str)
+	{
+		double value;
+		auto   first = begin(str);
+		auto   last  = end(str);
+
+		bool r = phrase_parse(first, last, (double_), space, value);
+		if (!r || first != last)	// fail if we did not get a full match
+		{
+			throw SpiritualCastException(__FUNCTION__);
+		}
+
+		return value;
+	}
 
 	template <>
 	int8_t spiritual_cast<int8_t>(const std::string& str)
@@ -219,38 +451,6 @@ namespace khutils
 		auto	 last  = end(str);
 
 		bool r = phrase_parse(first, last, (uint64), space, value);
-		if (!r || first != last)	// fail if we did not get a full match
-		{
-			throw SpiritualCastException(__FUNCTION__);
-		}
-
-		return value;
-	}
-
-	template <>
-	float spiritual_cast<float>(const std::string& str)
-	{
-		float value;
-		auto  first = begin(str);
-		auto  last  = end(str);
-
-		bool r = phrase_parse(first, last, (float_), space, value);
-		if (!r || first != last)	// fail if we did not get a full match
-		{
-			throw SpiritualCastException(__FUNCTION__);
-		}
-
-		return value;
-	}
-
-	template <>
-	double spiritual_cast<double>(const std::string& str)
-	{
-		double value;
-		auto   first = begin(str);
-		auto   last  = end(str);
-
-		bool r = phrase_parse(first, last, (double_), space, value);
 		if (!r || first != last)	// fail if we did not get a full match
 		{
 			throw SpiritualCastException(__FUNCTION__);
