@@ -17,6 +17,12 @@ namespace khutils
 		explicit FatalExportException(const std::string& pErrorText);
 	};
 
+	class SpiritualCastException : public std::runtime_error
+	{
+	public:
+		explicit SpiritualCastException(const std::string& pErrorText);
+	};
+
 }	// namespace khutils
 
 #if defined(KHUTILS_RUNTIME_EXCEPTIONS_IMPL)
@@ -33,6 +39,10 @@ namespace khutils
 	}
 
 	FatalExportException::FatalExportException(const std::string& pErrorText) : std::runtime_error(pErrorText)
+	{
+	}
+
+	SpiritualCastException::SpiritualCastException(const std::string& pErrorText) : std::runtime_error(pErrorText)
 	{
 	}
 
