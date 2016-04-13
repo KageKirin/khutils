@@ -44,14 +44,16 @@ std::ostream&  khutils::logger::null()
 
 std::ostream& khutils::logger::log()
 {
-	std::clog << u8"\U0001F604 "
+	std::clog << std::endl 
+			  << u8"\U0001F604 "
 			  << "Log: ";
 	return std::clog;
 }
 
 std::ostream& khutils::logger::warn()
 {
-	std::clog << u8"\U000026A0 "
+	std::clog << std::endl 
+			  << u8"\U000026A0 "
 			  << u8"\U0001F914 "
 			  << "Warning: ";
 	return std::clog;
@@ -59,7 +61,8 @@ std::ostream& khutils::logger::warn()
 
 std::ostream& khutils::logger::error()
 {
-	std::clog << u8"\U00002622 "
+	std::clog << std::endl 
+			  << u8"\U00002622 "
 			  << u8"\U0001F631 "
 			  << "Error: ";
 	return std::clog;
@@ -67,7 +70,8 @@ std::ostream& khutils::logger::error()
 
 std::ostream& khutils::logger::debug()
 {
-	std::clog << u8"\U0001F37A "
+	std::clog << std::endl 
+			  << u8"\U0001F37A "
 			  << "Debug: ";
 	return std::clog;
 }
