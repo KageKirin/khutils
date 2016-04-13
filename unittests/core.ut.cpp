@@ -339,6 +339,162 @@ go_bandit([]() {
 		IT_TEST_SPIRITUAL_CAST(std::int64_t, "-1234567890", -1234567890);
 	});
 
+	describe("spiritual cast floating points", []() {
+		IT_TEST_SPIRITUAL_CAST(float, "1", 1);
+		IT_TEST_SPIRITUAL_CAST(double, "1", 1);
+
+		IT_TEST_SPIRITUAL_CAST(float, "1.", 1.);
+		IT_TEST_SPIRITUAL_CAST(double, "1.", 1.);
+
+		IT_TEST_SPIRITUAL_CAST(float, ".1", .1);
+		IT_TEST_SPIRITUAL_CAST(double, ".1", .1);
+
+		IT_TEST_SPIRITUAL_CAST(float, "0.1", 0.1);
+		IT_TEST_SPIRITUAL_CAST(double, "0.1", 0.1);
+
+		IT_TEST_SPIRITUAL_CAST(float, "1.0", 1.0);
+		IT_TEST_SPIRITUAL_CAST(double, "1.0", 1.0);
+
+		IT_TEST_SPIRITUAL_CAST(float, "1.2", 1.2);
+		IT_TEST_SPIRITUAL_CAST(double, "1.2", 1.2);
+
+		IT_TEST_SPIRITUAL_CAST(float, "1.23", 1.23);
+		IT_TEST_SPIRITUAL_CAST(double, "1.23", 1.23);
+
+		IT_TEST_SPIRITUAL_CAST(float, "1.234", 1.234);
+		IT_TEST_SPIRITUAL_CAST(double, "1.234", 1.234);
+
+		IT_TEST_SPIRITUAL_CAST(float, "1.2345", 1.2345);
+		IT_TEST_SPIRITUAL_CAST(double, "1.2345", 1.2345);
+
+		IT_TEST_SPIRITUAL_CAST(float, "1.23456", 1.23456);
+		IT_TEST_SPIRITUAL_CAST(double, "1.23456", 1.23456);
+
+		IT_TEST_SPIRITUAL_CAST(float, "1.234567", 1.234567);
+		IT_TEST_SPIRITUAL_CAST(double, "1.234567", 1.234567);
+
+		IT_TEST_SPIRITUAL_CAST(float, "1.2345678", 1.2345678);
+		IT_TEST_SPIRITUAL_CAST(double, "1.2345678", 1.2345678);
+
+		IT_TEST_SPIRITUAL_CAST(float, "1.23456789", 1.23456789);
+		IT_TEST_SPIRITUAL_CAST(double, "1.23456789", 1.23456789);
+
+		IT_TEST_SPIRITUAL_CAST(float, "-1", -1);
+		IT_TEST_SPIRITUAL_CAST(double, "-1", -1);
+
+		IT_TEST_SPIRITUAL_CAST(float, "-1.", -1.);
+		IT_TEST_SPIRITUAL_CAST(double, "-1.", -1.);
+
+		IT_TEST_SPIRITUAL_CAST(float, "-.1", -.1);
+		IT_TEST_SPIRITUAL_CAST(double, "-.1", -.1);
+
+		IT_TEST_SPIRITUAL_CAST(float, "-0.1", -0.1);
+		IT_TEST_SPIRITUAL_CAST(double, "-0.1", -0.1);
+
+		IT_TEST_SPIRITUAL_CAST(float, "-1.0", -1.0);
+		IT_TEST_SPIRITUAL_CAST(double, "-1.0", -1.0);
+
+		IT_TEST_SPIRITUAL_CAST(float, "-1.2", -1.2);
+		IT_TEST_SPIRITUAL_CAST(double, "-1.2", -1.2);
+
+		IT_TEST_SPIRITUAL_CAST(float, "-1.23", -1.23);
+		IT_TEST_SPIRITUAL_CAST(double, "-1.23", -1.23);
+
+		IT_TEST_SPIRITUAL_CAST(float, "-1.234", -1.234);
+		IT_TEST_SPIRITUAL_CAST(double, "-1.234", -1.234);
+
+		IT_TEST_SPIRITUAL_CAST(float, "-1.2345", -1.2345);
+		IT_TEST_SPIRITUAL_CAST(double, "-1.2345", -1.2345);
+
+		IT_TEST_SPIRITUAL_CAST(float, "-1.23456", -1.23456);
+		IT_TEST_SPIRITUAL_CAST(double, "-1.23456", -1.23456);
+
+		IT_TEST_SPIRITUAL_CAST(float, "-1.234567", -1.234567);
+		IT_TEST_SPIRITUAL_CAST(double, "-1.234567", -1.234567);
+
+		IT_TEST_SPIRITUAL_CAST(float, "-1.2345678", -1.2345678);
+		IT_TEST_SPIRITUAL_CAST(double, "-1.2345678", -1.2345678);
+
+		IT_TEST_SPIRITUAL_CAST(float, "-1.23456789", -1.23456789);
+		IT_TEST_SPIRITUAL_CAST(double, "-1.23456789", -1.23456789);
+
+		// ~f notation is invalid for parser
+		// IT_TEST_SPIRITUAL_CAST(float, "1.f", 1.f);
+		// IT_TEST_SPIRITUAL_CAST(double, "1.f", 1.f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "-.1f", .1f);
+		// IT_TEST_SPIRITUAL_CAST(double, "-.1f", .1f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "0.1f", 0.1f);
+		// IT_TEST_SPIRITUAL_CAST(double, "0.1f", 0.1f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "1.0f", 1.0f);
+		// IT_TEST_SPIRITUAL_CAST(double, "1.0f", 1.0f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "1.2f", 1.2f);
+		// IT_TEST_SPIRITUAL_CAST(double, "1.2f", 1.2f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "1.23f", 1.23f);
+		// IT_TEST_SPIRITUAL_CAST(double, "1.23f", 1.23f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "1.234f", 1.234f);
+		// IT_TEST_SPIRITUAL_CAST(double, "1.234f", 1.234f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "1.2345f", 1.2345f);
+		// IT_TEST_SPIRITUAL_CAST(double, "1.2345f", 1.2345f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "1.23456f", 1.23456f);
+		// IT_TEST_SPIRITUAL_CAST(double, "1.23456f", 1.23456f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "1.234567f", 1.234567f);
+		// IT_TEST_SPIRITUAL_CAST(double, "1.234567f", 1.234567f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "1.2345678f", 1.2345678f);
+		// IT_TEST_SPIRITUAL_CAST(double, "1.2345678f", 1.2345678f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "1.23456789f", 1.23456789f);
+		// IT_TEST_SPIRITUAL_CAST(double, "1.23456789f", 1.23456789f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "-1.f", -1.f);
+		// IT_TEST_SPIRITUAL_CAST(double, "-1.f", -1.f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "-.1f", -.1f);
+		// IT_TEST_SPIRITUAL_CAST(double, "-.1f", -.1f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "-0.1f", -0.1f);
+		// IT_TEST_SPIRITUAL_CAST(double, "-0.1f", -0.1f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "-1.0f", -1.0f);
+		// IT_TEST_SPIRITUAL_CAST(double, "-1.0f", -1.0f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "-1.2f", -1.2f);
+		// IT_TEST_SPIRITUAL_CAST(double, "-1.2f", -1.2f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "-1.23f", -1.23f);
+		// IT_TEST_SPIRITUAL_CAST(double, "-1.23f", -1.23f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "-1.234f", -1.234f);
+		// IT_TEST_SPIRITUAL_CAST(double, "-1.234f", -1.234f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "-1.2345f", -1.2345f);
+		// IT_TEST_SPIRITUAL_CAST(double, "-1.2345f", -1.2345f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "-1.23456f", -1.23456f);
+		// IT_TEST_SPIRITUAL_CAST(double, "-1.23456f", -1.23456f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "-1.234567f", -1.234567f);
+		// IT_TEST_SPIRITUAL_CAST(double, "-1.234567f", -1.234567f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "-1.2345678f", -1.2345678f);
+		// IT_TEST_SPIRITUAL_CAST(double, "-1.2345678f", -1.2345678f);
+
+		// IT_TEST_SPIRITUAL_CAST(float, "-1.23456789f", -1.23456789f);
+		// IT_TEST_SPIRITUAL_CAST(double, "-1.23456789f", -1.23456789f);
+
+		IT_TEST_SPIRITUAL_CAST(float, "-1.5496e-006", -1.5496e-006);
+		IT_TEST_SPIRITUAL_CAST(double, "-1.5496e-006", -1.5496e-006);
+	});
+
 	describe("spiritual cast exceptions", []() {
 		IT_TEST_SPIRITUAL_CAST(bool, "true", false);
 		IT_TEST_SPIRITUAL_CAST(bool, "false", false);
