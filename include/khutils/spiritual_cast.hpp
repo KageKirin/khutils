@@ -96,6 +96,7 @@ namespace khutils
 #include <boost/fusion/include/io.hpp>
 #include <boost/spirit/home/x3.hpp>
 
+#include <cppformat/format.h>
 #include <glm/glm.hpp>
 
 //////////////////////////////////////////////////////////////////////////
@@ -105,6 +106,7 @@ namespace khutils
 
 namespace khutils
 {
+	using namespace fmt::literals;
 	namespace x3	= boost::spirit::x3;
 	namespace ascii = boost::spirit::x3::ascii;
 
@@ -136,7 +138,7 @@ namespace khutils
 
 	using ascii::space;
 
-	using x3::phrase_parse;
+	using x3::parse;
 	using x3::parse;
 
 	//////////////////////////////////////////////////////////////////////////
@@ -149,10 +151,12 @@ namespace khutils
 		auto first = begin(str);
 		auto last  = end(str);
 
-		bool r = phrase_parse(first, last, (bool_), space, value);
+		bool r = parse(first, last, (bool_), value);
 		if (!r || first != last)	// fail if we did not get a full match
 		{
-			throw SpiritualCastException(__FUNCTION__);
+			static std::string errMsg;
+			errMsg = "spiritual_cast<bool>({})"_format(str);
+			throw SpiritualCastException(errMsg);
 		}
 
 		return value;
@@ -165,46 +169,16 @@ namespace khutils
 		auto first = begin(str);
 		auto last  = end(str);
 
-		bool r = phrase_parse(first, last, (int8), space, value);
+		bool r = parse(first, last, (int8), value);
 		if (!r || first != last)	// fail if we did not get a full match
 		{
-			throw SpiritualCastException(__FUNCTION__);
+			static std::string errMsg;
+			errMsg = "spiritual_cast<char>({})"_format(str);
+			throw SpiritualCastException(errMsg);
 		}
 
 		return value;
 	}
-
-	// template <>
-	// short spiritual_cast<short>(const std::string& str)
-	//{
-	//	short value;
-	//	auto  first = begin(str);
-	//	auto  last  = end(str);
-	//
-	//	bool r = phrase_parse(first, last, (short_), space, value);
-	//	if (!r || first != last)	// fail if we did not get a full match
-	//	{
-	//		throw SpiritualCastException(__FUNCTION__);
-	//	}
-	//
-	//	return value;
-	//}
-	//
-	// template <>
-	// int spiritual_cast<int>(const std::string& str)
-	//{
-	//	int  value;
-	//	auto first = begin(str);
-	//	auto last  = end(str);
-	//
-	//	bool r = phrase_parse(first, last, (int_), space, value);
-	//	if (!r || first != last)	// fail if we did not get a full match
-	//	{
-	//		throw SpiritualCastException(__FUNCTION__);
-	//	}
-	//
-	//	return value;
-	//}
 
 	template <>
 	long spiritual_cast<long>(const std::string& str)
@@ -213,78 +187,16 @@ namespace khutils
 		auto first = begin(str);
 		auto last  = end(str);
 
-		bool r = phrase_parse(first, last, (long_), space, value);
+		bool r = parse(first, last, (long_), value);
 		if (!r || first != last)	// fail if we did not get a full match
 		{
-			throw SpiritualCastException(__FUNCTION__);
+			static std::string errMsg;
+			errMsg = "spiritual_cast<long>({})"_format(str);
+			throw SpiritualCastException(errMsg);
 		}
 
 		return value;
 	}
-
-	// template <>
-	// long long spiritual_cast<long long>(const std::string& str)
-	//{
-	//	long long value;
-	//	auto	  first = begin(str);
-	//	auto	  last  = end(str);
-	//
-	//	bool r = phrase_parse(first, last, (long_long), space, value);
-	//	if (!r || first != last)	// fail if we did not get a full match
-	//	{
-	//		throw SpiritualCastException(__FUNCTION__);
-	//	}
-	//
-	//	return value;
-	//}
-	//
-	// template <>
-	// unsigned char spiritual_cast<unsigned char>(const std::string& str)
-	//{
-	//	unsigned char value;
-	//	auto		  first = begin(str);
-	//	auto		  last  = end(str);
-	//
-	//	bool r = phrase_parse(first, last, (uchar_), space, value);
-	//	if (!r || first != last)	// fail if we did not get a full match
-	//	{
-	//		throw SpiritualCastException(__FUNCTION__);
-	//	}
-	//
-	//	return value;
-	//}
-	//
-	// template <>
-	// unsigned short spiritual_cast<unsigned short>(const std::string& str)
-	//{
-	//	unsigned short value;
-	//	auto		   first = begin(str);
-	//	auto		   last  = end(str);
-	//
-	//	bool r = phrase_parse(first, last, (ushort_), space, value);
-	//	if (!r || first != last)	// fail if we did not get a full match
-	//	{
-	//		throw SpiritualCastException(__FUNCTION__);
-	//	}
-	//
-	//	return value;
-	//}
-	//
-	// template <>
-	// unsigned int spiritual_cast<unsigned int>(const std::string& str)
-	//{
-	//	unsigned int value;
-	//	auto		 first = begin(str);
-	//	auto		 last  = end(str);
-	//
-	//	bool r = phrase_parse(first, last, (uint_), space, value);
-	//	if (!r || first != last)	// fail if we did not get a full match
-	//	{
-	//		throw SpiritualCastException(__FUNCTION__);
-	//	}
-	//
-	//	return value;
-	//}
 
 	template <>
 	unsigned long spiritual_cast<unsigned long>(const std::string& str)
@@ -293,30 +205,16 @@ namespace khutils
 		auto		  first = begin(str);
 		auto		  last  = end(str);
 
-		bool r = phrase_parse(first, last, (ulong_), space, value);
+		bool r = parse(first, last, (ulong_), value);
 		if (!r || first != last)	// fail if we did not get a full match
 		{
-			throw SpiritualCastException(__FUNCTION__);
+			static std::string errMsg;
+			errMsg = "spiritual_cast<unsigned long>({})"_format(str);
+			throw SpiritualCastException(errMsg);
 		}
 
 		return value;
 	}
-
-	// template <>
-	// unsigned long long spiritual_cast<unsigned long long>(const std::string& str)
-	//{
-	//	unsigned long long value;
-	//	auto			   first = begin(str);
-	//	auto			   last  = end(str);
-	//
-	//	bool r = phrase_parse(first, last, (ulong_long), space, value);
-	//	if (!r || first != last)	// fail if we did not get a full match
-	//	{
-	//		throw SpiritualCastException(__FUNCTION__);
-	//	}
-	//
-	//	return value;
-	//}
 
 	template <>
 	float spiritual_cast<float>(const std::string& str)
@@ -325,10 +223,12 @@ namespace khutils
 		auto  first = begin(str);
 		auto  last  = end(str);
 
-		bool r = phrase_parse(first, last, (float_), space, value);
+		bool r = parse(first, last, (float_), value);
 		if (!r || first != last)	// fail if we did not get a full match
 		{
-			throw SpiritualCastException(__FUNCTION__);
+			static std::string errMsg;
+			errMsg = "spiritual_cast<float>({})"_format(str);
+			throw SpiritualCastException(errMsg);
 		}
 
 		return value;
@@ -341,10 +241,12 @@ namespace khutils
 		auto   first = begin(str);
 		auto   last  = end(str);
 
-		bool r = phrase_parse(first, last, (double_), space, value);
+		bool r = parse(first, last, (double_), value);
 		if (!r || first != last)	// fail if we did not get a full match
 		{
-			throw SpiritualCastException(__FUNCTION__);
+			static std::string errMsg;
+			errMsg = "spiritual_cast<double>({})"_format(str);
+			throw SpiritualCastException(errMsg);
 		}
 
 		return value;
@@ -357,10 +259,12 @@ namespace khutils
 		auto   first = begin(str);
 		auto   last  = end(str);
 
-		bool r = phrase_parse(first, last, (int8), space, value);
+		bool r = parse(first, last, (int8), value);
 		if (!r || first != last)	// fail if we did not get a full match
 		{
-			throw SpiritualCastException(__FUNCTION__);
+			static std::string errMsg;
+			errMsg = "spiritual_cast<int8_t>({})"_format(str);
+			throw SpiritualCastException(errMsg);
 		}
 
 		return value;
@@ -373,10 +277,12 @@ namespace khutils
 		auto	first = begin(str);
 		auto	last  = end(str);
 
-		bool r = phrase_parse(first, last, (int16), space, value);
+		bool r = parse(first, last, (int16), value);
 		if (!r || first != last)	// fail if we did not get a full match
 		{
-			throw SpiritualCastException(__FUNCTION__);
+			static std::string errMsg;
+			errMsg = "spiritual_cast<int16_t>({})"_format(str);
+			throw SpiritualCastException(errMsg);
 		}
 
 		return value;
@@ -389,10 +295,12 @@ namespace khutils
 		auto	first = begin(str);
 		auto	last  = end(str);
 
-		bool r = phrase_parse(first, last, (int32), space, value);
+		bool r = parse(first, last, (int32), value);
 		if (!r || first != last)	// fail if we did not get a full match
 		{
-			throw SpiritualCastException(__FUNCTION__);
+			static std::string errMsg;
+			errMsg = "spiritual_cast<int32_t>({})"_format(str);
+			throw SpiritualCastException(errMsg);
 		}
 
 		return value;
@@ -405,10 +313,12 @@ namespace khutils
 		auto	first = begin(str);
 		auto	last  = end(str);
 
-		bool r = phrase_parse(first, last, (int64), space, value);
+		bool r = parse(first, last, (int64), value);
 		if (!r || first != last)	// fail if we did not get a full match
 		{
-			throw SpiritualCastException(__FUNCTION__);
+			static std::string errMsg;
+			errMsg = "spiritual_cast<int64_t>({})"_format(str);
+			throw SpiritualCastException(errMsg);
 		}
 
 		return value;
@@ -421,10 +331,12 @@ namespace khutils
 		auto	first = begin(str);
 		auto	last  = end(str);
 
-		bool r = phrase_parse(first, last, (uint8), space, value);
+		bool r = parse(first, last, (uint8), value);
 		if (!r || first != last)	// fail if we did not get a full match
 		{
-			throw SpiritualCastException(__FUNCTION__);
+			static std::string errMsg;
+			errMsg = "spiritual_cast<uint8_t>({})"_format(str);
+			throw SpiritualCastException(errMsg);
 		}
 
 		return value;
@@ -437,10 +349,12 @@ namespace khutils
 		auto	 first = begin(str);
 		auto	 last  = end(str);
 
-		bool r = phrase_parse(first, last, (uint16), space, value);
+		bool r = parse(first, last, (uint16), value);
 		if (!r || first != last)	// fail if we did not get a full match
 		{
-			throw SpiritualCastException(__FUNCTION__);
+			static std::string errMsg;
+			errMsg = "spiritual_cast<uint16_t>({})"_format(str);
+			throw SpiritualCastException(errMsg);
 		}
 
 		return value;
@@ -453,10 +367,12 @@ namespace khutils
 		auto	 first = begin(str);
 		auto	 last  = end(str);
 
-		bool r = phrase_parse(first, last, (uint32), space, value);
+		bool r = parse(first, last, (uint32), value);
 		if (!r || first != last)	// fail if we did not get a full match
 		{
-			throw SpiritualCastException(__FUNCTION__);
+			static std::string errMsg;
+			errMsg = "spiritual_cast<uint32_t>({})"_format(str);
+			throw SpiritualCastException(errMsg);
 		}
 
 		return value;
@@ -469,10 +385,12 @@ namespace khutils
 		auto	 first = begin(str);
 		auto	 last  = end(str);
 
-		bool r = phrase_parse(first, last, (uint64), space, value);
+		bool r = parse(first, last, (uint64), value);
 		if (!r || first != last)	// fail if we did not get a full match
 		{
-			throw SpiritualCastException(__FUNCTION__);
+			static std::string errMsg;
+			errMsg = "spiritual_cast<uint64_t>({})"_format(str);
+			throw SpiritualCastException(errMsg);
 		}
 
 		return value;
