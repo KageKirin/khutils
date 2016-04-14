@@ -5,6 +5,7 @@
 
 #include <bandit/bandit.h>
 #include <fstream>
+#include <functional>
 #include <sstream>
 #include <string>
 
@@ -12,27 +13,32 @@ using namespace bandit;
 using namespace khutils;
 
 
-#define IT_TEST_SPIRITUAL_CAST(type, str, expect)                                                                      \
-	it(#type " from " str, []() {                                                                                      \
-		type val = khutils::spiritual_cast<type>(str);                                                                 \
-		AssertThat(val, Equals((type)expect));                                                                         \
-                                                                                                                       \
-	})
+template <typename T>
+static void spiritual_cast_test(const std::string& str, const T expect)
+{
+	T val = khutils::spiritual_cast<T>(str);
+	AssertThat(val, Equals(expect));
+};
+
+template <typename T>
+static void spiritual_cast_test_exception(const std::string& str, const T expect)
+{
+	bool hasExcepted = false;
+	try
+	{
+		T val = khutils::spiritual_cast<T>(str);
+	}
+	catch (const khutils::SpiritualCastException& e)
+	{
+		hasExcepted = true;
+	}
+	AssertThat(hasExcepted, Equals(expect));
+};
+
+#define IT_TEST_SPIRITUAL_CAST(type, str, expect) it(#type " from " str, std::bind(spiritual_cast_test, str, expect));
 
 #define IT_TEST_SPIRITUAL_CAST_EXCEPTION(type, str, expect)                                                            \
-	it(#type " from " str, []() {                                                                                      \
-		bool hasExcepted = false;                                                                                      \
-		try                                                                                                            \
-		{                                                                                                              \
-			type val = khutils::spiritual_cast<type>(str);                                                             \
-		}                                                                                                              \
-		catch (const khutils::SpiritualCastException& e)                                                               \
-		{                                                                                                              \
-			hasExcepted = true;                                                                                        \
-		}                                                                                                              \
-		AssertThat(hasExcepted, Equals(expect));                                                                       \
-                                                                                                                       \
-	})
+	it(#type " from " str, std::bind(spiritual_cast_test_exception, str, expect));
 
 go_bandit([]() {
 	//////////////////////////////////////////////////////////////////////////
@@ -417,79 +423,6 @@ go_bandit([]() {
 
 		IT_TEST_SPIRITUAL_CAST(float, "-1.23456789", -1.23456789);
 		IT_TEST_SPIRITUAL_CAST(double, "-1.23456789", -1.23456789);
-
-		// ~f notation is invalid for parser
-		// IT_TEST_SPIRITUAL_CAST(float, "1.f", 1.f);
-		// IT_TEST_SPIRITUAL_CAST(double, "1.f", 1.f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "-.1f", .1f);
-		// IT_TEST_SPIRITUAL_CAST(double, "-.1f", .1f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "0.1f", 0.1f);
-		// IT_TEST_SPIRITUAL_CAST(double, "0.1f", 0.1f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "1.0f", 1.0f);
-		// IT_TEST_SPIRITUAL_CAST(double, "1.0f", 1.0f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "1.2f", 1.2f);
-		// IT_TEST_SPIRITUAL_CAST(double, "1.2f", 1.2f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "1.23f", 1.23f);
-		// IT_TEST_SPIRITUAL_CAST(double, "1.23f", 1.23f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "1.234f", 1.234f);
-		// IT_TEST_SPIRITUAL_CAST(double, "1.234f", 1.234f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "1.2345f", 1.2345f);
-		// IT_TEST_SPIRITUAL_CAST(double, "1.2345f", 1.2345f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "1.23456f", 1.23456f);
-		// IT_TEST_SPIRITUAL_CAST(double, "1.23456f", 1.23456f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "1.234567f", 1.234567f);
-		// IT_TEST_SPIRITUAL_CAST(double, "1.234567f", 1.234567f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "1.2345678f", 1.2345678f);
-		// IT_TEST_SPIRITUAL_CAST(double, "1.2345678f", 1.2345678f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "1.23456789f", 1.23456789f);
-		// IT_TEST_SPIRITUAL_CAST(double, "1.23456789f", 1.23456789f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "-1.f", -1.f);
-		// IT_TEST_SPIRITUAL_CAST(double, "-1.f", -1.f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "-.1f", -.1f);
-		// IT_TEST_SPIRITUAL_CAST(double, "-.1f", -.1f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "-0.1f", -0.1f);
-		// IT_TEST_SPIRITUAL_CAST(double, "-0.1f", -0.1f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "-1.0f", -1.0f);
-		// IT_TEST_SPIRITUAL_CAST(double, "-1.0f", -1.0f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "-1.2f", -1.2f);
-		// IT_TEST_SPIRITUAL_CAST(double, "-1.2f", -1.2f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "-1.23f", -1.23f);
-		// IT_TEST_SPIRITUAL_CAST(double, "-1.23f", -1.23f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "-1.234f", -1.234f);
-		// IT_TEST_SPIRITUAL_CAST(double, "-1.234f", -1.234f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "-1.2345f", -1.2345f);
-		// IT_TEST_SPIRITUAL_CAST(double, "-1.2345f", -1.2345f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "-1.23456f", -1.23456f);
-		// IT_TEST_SPIRITUAL_CAST(double, "-1.23456f", -1.23456f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "-1.234567f", -1.234567f);
-		// IT_TEST_SPIRITUAL_CAST(double, "-1.234567f", -1.234567f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "-1.2345678f", -1.2345678f);
-		// IT_TEST_SPIRITUAL_CAST(double, "-1.2345678f", -1.2345678f);
-
-		// IT_TEST_SPIRITUAL_CAST(float, "-1.23456789f", -1.23456789f);
-		// IT_TEST_SPIRITUAL_CAST(double, "-1.23456789f", -1.23456789f);
 
 		IT_TEST_SPIRITUAL_CAST(float, "-1.5496e-006", -1.5496e-006);
 		IT_TEST_SPIRITUAL_CAST(double, "-1.5496e-006", -1.5496e-006);
