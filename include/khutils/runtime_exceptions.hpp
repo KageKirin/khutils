@@ -23,6 +23,12 @@ namespace khutils
 		explicit SpiritualCastException(const std::string& pErrorText);
 	};
 
+	class MissingImplementationException : public std::runtime_error
+	{
+	public:
+		explicit MissingImplementationException(const std::string& pErrorText);
+	};
+
 }	// namespace khutils
 
 #if defined(KHUTILS_RUNTIME_EXCEPTIONS_IMPL)
@@ -46,9 +52,16 @@ namespace khutils
 	{
 	}
 
-	//////////////////////////////////////////////////////////////////////////
+
+	MissingImplementationException::MissingImplementationException(const std::string& pErrorText)
+		: std::runtime_error(pErrorText)
+	{
+	}
+
 
 }	// namespace khutils
+
+//////////////////////////////////////////////////////////////////////////
 
 #endif	// defined (KHUTILS_RUNTIME_EXCEPTIONS_IMPL)
 
