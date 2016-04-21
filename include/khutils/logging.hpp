@@ -10,6 +10,7 @@ namespace khutils
 		static std::ostream& null();
 		static std::ostream& log();
 		static std::ostream& warn();
+		static std::ostream& file();
 		static std::ostream& error();
 		static std::ostream& debug();
 
@@ -44,15 +45,22 @@ std::ostream&  khutils::logger::null()
 
 std::ostream& khutils::logger::log()
 {
-	std::clog << std::endl 
+	std::clog << std::endl
 			  << u8"\U0001F604 "
 			  << "Log: ";
 	return std::clog;
 }
 
+std::ostream& khutils::logger::file()
+{
+	static std::ofstream ofs("log.txt", std::ios_base::trunc);
+	ofs << std::endl;
+	return ofs;
+}
+
 std::ostream& khutils::logger::warn()
 {
-	std::clog << std::endl 
+	std::clog << std::endl
 			  << u8"\U000026A0 "
 			  << u8"\U0001F914 "
 			  << "Warning: ";
@@ -61,7 +69,7 @@ std::ostream& khutils::logger::warn()
 
 std::ostream& khutils::logger::error()
 {
-	std::clog << std::endl 
+	std::clog << std::endl
 			  << u8"\U00002622 "
 			  << u8"\U0001F631 "
 			  << "Error: ";
@@ -70,7 +78,7 @@ std::ostream& khutils::logger::error()
 
 std::ostream& khutils::logger::debug()
 {
-	std::clog << std::endl 
+	std::clog << std::endl
 			  << u8"\U0001F37A "
 			  << "Debug: ";
 	return std::clog;
