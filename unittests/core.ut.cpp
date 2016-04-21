@@ -2,6 +2,7 @@
 #include "khutils/logging.hpp"
 #include "khutils/runtime_exceptions.hpp"
 #include "khutils/spiritual_cast.hpp"
+#include "khutils/spiritual_compare.hpp"
 
 #include <bandit/bandit.h>
 #include <fstream>
@@ -44,6 +45,15 @@ static void spiritual_cast_test_exception(const std::string& str, const T expect
 
 #define IT_TEST_SPIRITUAL_CAST_EXCEPTION(type, str, expect)                                                            \
 	it(#type " from " str, std::bind(spiritual_cast_test_exception<type>, str, expect));
+
+static void spiritual_compare_test(const std::string& lhv, const std::string& rhv, bool expect)
+{
+	bool comp = khutils::spiritual_compare(lhv, rhv);
+	AssertThat(comp, Equals(expect));
+}
+
+#define IT_TEST_SPIRITUAL_COMPARE(strA, strB, expect)                                                                  \
+	it(strA " =?= " strB, std::bind(spiritual_compare_test, strA, strB, expect))
 
 go_bandit([]() {
 	//////////////////////////////////////////////////////////////////////////
@@ -1740,5 +1750,18 @@ go_bandit([]() {
 		IT_TEST_SPIRITUAL_CAST_EXCEPTION(std::uint32_t, "-1234567890", true);
 		IT_TEST_SPIRITUAL_CAST_EXCEPTION(std::uint64_t, "-1234567890", true);
 
+	});
+
+	describe("spiritual compare", []() {
+		IT_TEST_SPIRITUAL_COMPARE("abc", "abc", true);
+		IT_TEST_SPIRITUAL_COMPARE("abc", "def", false);
+
+		IT_TEST_SPIRITUAL_COMPARE("abc", "abcd", false);
+		IT_TEST_SPIRITUAL_COMPARE("abcd", "abc", false);
+
+		IT_TEST_SPIRITUAL_COMPARE("abc", "ABC", false);
+		IT_TEST_SPIRITUAL_COMPARE("abc", "AbC", false);
+
+		IT_TEST_SPIRITUAL_COMPARE("abc", R"(abc)", true);
 	});
 });
