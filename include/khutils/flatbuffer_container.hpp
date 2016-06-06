@@ -32,16 +32,21 @@ namespace khutils
 		FlatbufferContainer& operator=(const FlatbufferContainer& rhv) = default;
 		FlatbufferContainer& operator=(FlatbufferContainer&& rhv) = default;
 
-		inline const FlatbufferType* ptr()
+		inline const FlatbufferType* ptr() const
 		{
 			return flatbuffers::GetRoot<FlatbufferType>(m_buffer.data());
 		}
 
-		inline const FlatbufferType& ref()
+		inline const FlatbufferType& ref() const
 		{
 			auto ptr = ptr();
 			assert(ptr);
 			return *ptr;
+		}
+
+		inline size_t size() const
+		{
+			return m_buffer.size();
 		}
 	};
 
