@@ -1,6 +1,8 @@
 ﻿#ifndef KHUTILS_FLATBUFFER_CONTAINER_HPP_INC
 #define KHUTILS_FLATBUFFER_CONTAINER_HPP_INC
 
+#include <flatbuffers/flatbuffers.h>
+
 #include <cstdint>
 #include <vector>
 
@@ -39,9 +41,9 @@ namespace khutils
 
 		inline const FlatbufferType& ref() const
 		{
-			auto ptr = ptr();
-			assert(ptr);
-			return *ptr;
+			auto ptr_ = ptr();
+			assert(ptr_);
+			return *ptr_;
 		}
 
 		inline size_t size() const
