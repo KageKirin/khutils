@@ -23,11 +23,14 @@ namespace khutils
 		FlatbufferContainer() = delete;
 		FlatbufferContainer(const std::vector<uint8_t>& buffer) : m_buffer(buffer)
 		{
+			assert(verify());
 		}
-		FlatbufferContainer(uint8_t* data, size_t length) : m_buffer(data, data + length)
+		FlatbufferContainer(uint8_t* data, size_t length)
+			: FlatbufferContainer(std::vector<uint8_t>(data, data + length))
 		{
 		}
-		FlatbufferContainer(const FlatbufferContainer& rhv) = default;	//: FlatbufferContainer(rhv.m_buffer){}
+		// no need to verify buffer, as it already has been verified when creating rhv
+		FlatbufferContainer(const FlatbufferContainer& rhv) = default;
 		FlatbufferContainer(FlatbufferContainer&& rhv)		= default;
 		~FlatbufferContainer()								= default;
 
@@ -49,6 +52,12 @@ namespace khutils
 		inline size_t size() const
 		{
 			return m_buffer.size();
+		}
+
+		inline bool verify() const
+		{
+			flatbuffers::Verifier verifier(m_buffer.data(), m_buffer.size());
+			return ptr()->Verify(verifier);
 		}
 	};
 
