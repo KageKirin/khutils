@@ -54,6 +54,11 @@ namespace khutils
 			return *ptr_;
 		}
 
+		inline const uint8_t* const raw() const
+		{
+			return m_buffer.data();
+		}
+
 		inline size_t size() const
 		{
 			return m_buffer.size();
@@ -62,6 +67,67 @@ namespace khutils
 		inline bool verify() const
 		{
 			flatbuffers::Verifier verifier(m_buffer.data(), m_buffer.size());
+			return ptr()->Verify(verifier);
+		}
+	};
+
+	/// handles a flatbuffer on given memory
+	template <typename _T>
+	class FlatbufferHandler
+	{
+	public:
+		typedef _T FlatbufferType;
+
+	private:
+		const uint8_t* const m_data;
+		const size_t		 m_length;
+
+	public:
+		FlatbufferHandler() = delete;
+
+		FlatbufferHandler(uint8_t* data, size_t length) : m_data(data), m_length(length)
+		{
+			assert(m_data);
+			assert(m_length);
+			assert(verify());
+			if (!verify())
+			{
+				throw FatalImportException("bad flatbuffer");
+			}
+		}
+		// no need to verify buffer, as it already has been verified when creating rhv
+		FlatbufferHandler(const FlatbufferHandler& rhv) = default;
+		FlatbufferHandler(FlatbufferHandler&& rhv)		= default;
+		~FlatbufferHandler()							= default;
+
+		FlatbufferHandler& operator=(const FlatbufferHandler& rhv) = default;
+		FlatbufferHandler& operator=(FlatbufferHandler&& rhv) = default;
+
+		inline const FlatbufferType* ptr() const
+		{
+			return flatbuffers::GetRoot<FlatbufferType>(m_data);
+		}
+
+		inline const FlatbufferType& ref() const
+		{
+			auto ptr_ = ptr();
+			assert(ptr_);
+			return *ptr_;
+		}
+
+		inline const uint8_t* const raw() const
+		{
+			return m_data;
+		}
+
+		inline size_t size() const
+		{
+			return m_length;
+		}
+
+		inline bool verify() const
+		{
+			flatbuffers::Verifier verifier(m_data, m_length);
 			return ptr()->Verify(verifier);
 		}
 	};
