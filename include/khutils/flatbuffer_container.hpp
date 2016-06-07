@@ -1,6 +1,7 @@
 ﻿#ifndef KHUTILS_FLATBUFFER_CONTAINER_HPP_INC
 #define KHUTILS_FLATBUFFER_CONTAINER_HPP_INC
 
+#include "khutils/runtime_exceptions.hpp"
 #include <flatbuffers/flatbuffers.h>
 
 #include <cstdint>
@@ -24,6 +25,10 @@ namespace khutils
 		FlatbufferContainer(const std::vector<uint8_t>& buffer) : m_buffer(buffer)
 		{
 			assert(verify());
+			if (!verify())
+			{
+				throw FatalImportException("bad flatbuffer");
+			}
 		}
 		FlatbufferContainer(uint8_t* data, size_t length)
 			: FlatbufferContainer(std::vector<uint8_t>(data, data + length))
