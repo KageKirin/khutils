@@ -13,6 +13,8 @@ namespace khutils
 		static std::ostream& file();
 		static std::ostream& error();
 		static std::ostream& debug();
+		static std::ostream& big_fat_warning();
+		static std::ostream& big_fat_error();
 
 		// overload template for specific classes
 		template <typename _T>
@@ -82,6 +84,34 @@ std::ostream& khutils::logger::debug()
 			  << u8"\U0001F37A "
 			  << "Debug: ";
 	return std::clog;
+}
+
+
+std::ostream& khutils::logger::big_fat_warning()
+{
+	std::clog << std::endl
+		<< std::string('W', 120) << std::endl
+		<< std::string('W', 120) << std::endl
+		<< "** THIS IS A WARNING **" << std::endl << std::endl
+		<< "** an unexpected situation has occurred **" << std::endl 
+		<< "** this is bad **" << std::endl 
+		<< std::endl;
+
+	return std::clog;
+
+}
+
+std::ostream& khutils::logger::big_fat_error()
+{
+	std::clog << std::endl
+		<< std::string('E', 120) << std::endl
+		<< std::string('E', 120) << std::endl
+		<< "** THIS IS AN ERROR **" << std::endl << std::endl
+		<< "** an unexpected error has occurred **" << std::endl
+		<< "** this is bad **" << std::endl
+		<< std::endl;
+	
+	return std::clog;	
 }
 
 // '\u1F4A9' to be used as well
