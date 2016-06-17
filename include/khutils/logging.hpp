@@ -87,31 +87,46 @@ std::ostream& khutils::logger::debug()
 }
 
 
+struct floodfill
+{
+	std::string s;
+	size_t amount;
+};
+
+std::ostream& operator<<(std::ostream& os, const floodfill& f)
+{
+	for(size_t i = 0; i < f.amount; ++i)
+	{
+		os << f.s;
+	}
+	return os;
+}
+
+
 std::ostream& khutils::logger::big_fat_warning()
 {
 	std::clog << std::endl
-		<< std::string('W', 120) << std::endl
-		<< std::string('W', 120) << std::endl
+		<< floodfill{"*", 80} << std::endl	//std::string(80, '*')
+		<< floodfill{"*", 80} << std::endl
 		<< "** THIS IS A WARNING **" << std::endl << std::endl
-		<< "** an unexpected situation has occurred **" << std::endl 
-		<< "** this is bad **" << std::endl 
+		<< "** an unexpected situation has occurred **" << std::endl
+		<< "** this is bad **" << std::endl
 		<< std::endl;
 
 	return std::clog;
-
 }
 
 std::ostream& khutils::logger::big_fat_error()
 {
 	std::clog << std::endl
-		<< std::string('E', 120) << std::endl
-		<< std::string('E', 120) << std::endl
-		<< "** THIS IS AN ERROR **" << std::endl << std::endl
-		<< "** an unexpected error has occurred **" << std::endl
-		<< "** this is bad **" << std::endl
+		<< floodfill{u8"\U0001F4A9", 40} << std::endl
+		<< floodfill{u8"\U0001F4A9", 40} << std::endl
+		<< "xx THIS IS AN ERROR xx" << std::endl << std::endl
+		<< "xx an unexpected error has occurred xx" << std::endl
+		<< "xx this is beyond bad xx" << std::endl
 		<< std::endl;
-	
-	return std::clog;	
+
+	return std::clog;
 }
 
 // '\u1F4A9' to be used as well
