@@ -89,6 +89,8 @@ namespace khutils
 
 #if defined(KHUTILS_SPIRITUAL_CAST_IMPL)
 
+#include <fmt/format.h>
+
 #include "runtime_exceptions.hpp"
 
 #include <boost/config/warning_disable.hpp>
@@ -96,7 +98,6 @@ namespace khutils
 #include <boost/fusion/include/io.hpp>
 #include <boost/spirit/home/x3.hpp>
 
-#include <fmt/format.h>
 #include <glm/glm.hpp>
 
 //////////////////////////////////////////////////////////////////////////

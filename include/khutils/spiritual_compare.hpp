@@ -14,6 +14,8 @@ namespace khutils
 
 #if defined(KHUTILS_SPIRITUAL_COMPARE_IMPL)
 
+#include <fmt/format.h>
+
 #include "runtime_exceptions.hpp"
 #include "spiritual_compare.hpp"
 
@@ -22,7 +24,6 @@ namespace khutils
 #include <boost/fusion/include/io.hpp>
 #include <boost/spirit/home/x3.hpp>
 
-#include <fmt/format.h>
 #include <glm/glm.hpp>
 
 //////////////////////////////////////////////////////////////////////////
