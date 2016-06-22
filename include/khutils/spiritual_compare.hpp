@@ -22,7 +22,7 @@ namespace khutils
 #include <boost/fusion/include/io.hpp>
 #include <boost/spirit/home/x3.hpp>
 
-#include <cppformat/format.h>
+#include <fmt/format.h>
 #include <glm/glm.hpp>
 
 //////////////////////////////////////////////////////////////////////////
