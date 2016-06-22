@@ -37,6 +37,7 @@ namespace khutils
 
 #include <fstream>
 #include <iostream>
+#include <string>
 
 // clang-format off
 std::ostream&  khutils::logger::null()
