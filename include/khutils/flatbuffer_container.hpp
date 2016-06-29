@@ -1,6 +1,7 @@
 ﻿#ifndef KHUTILS_FLATBUFFER_CONTAINER_HPP_INC
 #define KHUTILS_FLATBUFFER_CONTAINER_HPP_INC
 
+#include "khutils/assertion.hpp"
 #include "khutils/runtime_exceptions.hpp"
 #include <flatbuffers/flatbuffers.h>
 
@@ -24,7 +25,7 @@ namespace khutils
 		FlatbufferContainer() = delete;
 		FlatbufferContainer(const std::vector<uint8_t>& buffer) : m_buffer(buffer)
 		{
-			assert(verify());
+			KHUTILS_ASSERT(verify());
 			if (!verify())
 			{
 				throw FatalImportException("bad flatbuffer");
@@ -50,7 +51,7 @@ namespace khutils
 		inline const FlatbufferType& ref() const
 		{
 			auto ptr_ = ptr();
-			assert(ptr_);
+			KHUTILS_ASSERT_PTR(ptr_);
 			return *ptr_;
 		}
 
@@ -87,9 +88,9 @@ namespace khutils
 
 		FlatbufferHandler(uint8_t* data, size_t length) : m_data(data), m_length(length)
 		{
-			assert(m_data);
-			assert(m_length);
-			assert(verify());
+			KHUTILS_ASSERT_PTR(m_data);
+			KHUTILS_ASSERT(m_length > 0);
+			KHUTILS_ASSERT(verify());
 			if (!verify())
 			{
 				throw FatalImportException("bad flatbuffer");
@@ -111,7 +112,7 @@ namespace khutils
 		inline const FlatbufferType& ref() const
 		{
 			auto ptr_ = ptr();
-			assert(ptr_);
+			KHUTILS_ASSERT_PTR(ptr_);
 			return *ptr_;
 		}
 

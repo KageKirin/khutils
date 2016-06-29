@@ -1,10 +1,11 @@
-﻿#ifndef KHUTILS_ASSERTION_HPP_INC﻿
+﻿#ifndef KHUTILS_ASSERTION_HPP_INC
 #define KHUTILS_ASSERTION_HPP_INC
 
 #include <memory>
 
 namespace khutils
 {
+	void Assert(const bool cond, const char* _file, const int _line);
 
 	template <typename T>
 	void Assert(const T& var, const T& val, const char* _file, const int _line);
@@ -20,7 +21,8 @@ namespace khutils
 
 }	// namespace khutils
 
-#define KHUTILS_ASSERT(variable, value) khutils::Assert((variable), (value), __FILE__, __LINE__);
+#define KHUTILS_ASSERT(cond) khutils::Assert(bool((cond)), __FILE__, __LINE__);
+#define KHUTILS_ASSERT_EQUALS(variable, value) khutils::Assert((variable), (value), __FILE__, __LINE__);
 #define KHUTILS_ASSERT_NULLPTR(pointer) khutils::AssertNullPtr((pointer), __FILE__, __LINE__);
 #define KHUTILS_ASSERT_PTR(pointer) khutils::AssertValidPtr((pointer), __FILE__, __LINE__);
 #define KHUTILS_ASSERT_SPTR(pointer) khutils::AssertValidSharedPtr((pointer), __FILE__, __LINE__);
@@ -29,10 +31,22 @@ namespace khutils
 
 #if defined(KHUTILS_ASSERTION_IMPL)
 
+#include "khutils/assertion.hpp"
 #include "khutils/runtime_exceptions.hpp"
+
+#include <bandit/assertion_frameworks/snowhouse/snowhouse/snowhouse.h>﻿
+
+#include <bandit/assertion_frameworks/snowhouse/snowhouse/fluent/expressionbuilder.h>
 
 namespace khutils
 {
+
+	void Assert(const bool cond, const char* _file, const int _line)
+	{
+		using namespace snowhouse;
+		ConfigurableAssert<DefaultFailureHandler>::That(cond, IsTrue(), _file, _line);
+	}
+
 }	// namespace khutils
 
 #endif	// defined (KHUTILS_ASSERTION_IMPL)
