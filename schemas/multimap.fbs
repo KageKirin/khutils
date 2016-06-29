@@ -1,5 +1,5 @@
 
-namespace string_multimap;
+namespace khutils.string_multimap;
 
 /// simple simili-multimap type for Flatbuffers
 /// maps a key to a number of values

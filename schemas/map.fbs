@@ -1,5 +1,5 @@
 
-namespace string_map;
+namespace khutils.string_map;
 
 /// simple simili-map type for Flatbuffers
 /// maps a key to a value
