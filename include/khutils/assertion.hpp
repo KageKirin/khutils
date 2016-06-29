@@ -20,10 +20,10 @@ namespace khutils
 
 }	// namespace khutils
 
-#define KHUTILS_ASSERT(variable, value) khutils::Assert(variable, value, __FILE__, __LINE__);
-#define KHUTILS_ASSERT_NULLPTR(pointer) khutils::AssertNullPtr(pointer, __FILE__, __LINE__);
-#define KHUTILS_ASSERT_PTR(pointer) khutils::AssertValidPtr(pointer, __FILE__, __LINE__);
-#define KHUTILS_ASSERT_SPTR(pointer) khutils::AssertValidSharedPtr(pointer, __FILE__, __LINE__);
+#define KHUTILS_ASSERT(variable, value) khutils::Assert((variable), (value), __FILE__, __LINE__);
+#define KHUTILS_ASSERT_NULLPTR(pointer) khutils::AssertNullPtr((pointer), __FILE__, __LINE__);
+#define KHUTILS_ASSERT_PTR(pointer) khutils::AssertValidPtr((pointer), __FILE__, __LINE__);
+#define KHUTILS_ASSERT_SPTR(pointer) khutils::AssertValidSharedPtr((pointer), __FILE__, __LINE__);
 
 #include "khutils/assertion.inl"
 
