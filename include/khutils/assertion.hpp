@@ -61,8 +61,10 @@ namespace khutils
 
 #if defined(KHUTILS_ASSERTION_IMPL)
 
-#include <bandit/assertion_frameworks/snowhouse/snowhouse/snowhouse.h>﻿
+#include <iostream>
 
+#include <bandit/assertion_frameworks/snowhouse/snowhouse/snowhouse.h>﻿
+// keep this space to force order of includes
 #include <bandit/assertion_frameworks/snowhouse/snowhouse/fluent/expressionbuilder.h>
 
 namespace khutils
@@ -85,14 +87,14 @@ namespace khutils
 	void AssertNullPtr(const T* ptr, const char* _file, const int _line)
 	{
 		using namespace snowhouse;
-		ConfigurableAssert<DefaultFailureHandler>::That(ptr, Is().EqualTo(nullptr), _file, _line);
+		ConfigurableAssert<DefaultFailureHandler>::That(ptr, Is().EqualTo((T*)nullptr), _file, _line);
 	}
 
 	template <typename T>
 	void AssertValidPtr(const T* ptr, const char* _file, const int _line)
 	{
 		using namespace snowhouse;
-		ConfigurableAssert<DefaultFailureHandler>::That(ptr, Is().Not().EqualTo(nullptr), _file, _line);
+		ConfigurableAssert<DefaultFailureHandler>::That(ptr, Is().Not().EqualTo((T*)nullptr), _file, _line);
 	}
 
 	template <typename T>
