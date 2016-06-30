@@ -10,6 +10,9 @@ namespace khutils
 	template <typename T>
 	void Assert(const T& var, const T& val, const char* _file, const int _line);
 
+	template <typename T, typename Expression>
+	void Assert(const T& var, Expression expression, const char* _file, const int _line);
+
 	template <typename T>
 	void AssertNullPtr(const T* ptr, const char* _file, const int _line);
 
@@ -26,6 +29,11 @@ namespace khutils
 #define KHUTILS_ASSERT_NULLPTR(pointer) khutils::AssertNullPtr((pointer), __FILE__, __LINE__);
 #define KHUTILS_ASSERT_PTR(pointer) khutils::AssertValidPtr((pointer), __FILE__, __LINE__);
 #define KHUTILS_ASSERT_SPTR(pointer) khutils::AssertValidSharedPtr((pointer), __FILE__, __LINE__);
+#define KHUTILS_ASSERT_EXPR(variable, expr)                                                                            \
+	{                                                                                                                  \
+		using namespace snowhouse;                                                                                     \
+		khutils::Assert((variable), (expr), __FILE__, __LINE__);                                                       \
+	};
 
 #include "khutils/assertion.inl"
 
@@ -64,6 +72,13 @@ namespace khutils
 	{
 		using namespace snowhouse;
 		ConfigurableAssert<DefaultFailureHandler>::That(var, Is().EqualTo(val), _file, _line);
+	}
+
+	template <typename T, typename Expression>
+	void Assert(const T& var, Expression expression, const char* _file, const int _line)
+	{
+		using namespace snowhouse;
+		ConfigurableAssert<DefaultFailureHandler>::That(var, expression, _file, _line);
 	}
 
 	template <typename T>
