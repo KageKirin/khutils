@@ -63,7 +63,7 @@ namespace khutils
 
 #include <iostream>
 
-#include <bandit/assertion_frameworks/snowhouse/snowhouse/snowhouse.h>﻿
+#include <bandit/assertion_frameworks/snowhouse/snowhouse/snowhouse.h>	//﻿
 // keep this space to force order of includes
 #include <bandit/assertion_frameworks/snowhouse/snowhouse/fluent/expressionbuilder.h>
 
