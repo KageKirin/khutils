@@ -23,6 +23,14 @@ namespace khutils
 	flatbuffers::Offset<string_map::Map> to_flatbuffer_builder(flatbuffers::FlatBufferBuilder& _fbb,
 															   const std::map<std::string, std::string>& dd);
 
+	template <typename KeyModifier, typename ValueModifier>
+	std::map<std::string, std::string>::value_type modify(const std::map<std::string, std::string>::value_type& kv,
+														  KeyModifier   modifyKey,
+														  ValueModifier modifyValue);
+
+	template <typename KeyModifier, typename ValueModifier>
+	std::map<std::string, std::string> modify(const std::map<std::string, std::string>& kvps, KeyModifier modifyKey, ValueModifier modifyValue);
+
 }	// namespace khutils
 
 #if defined(KHUTILS_FLATBUFFER_MAP_IMPL)
@@ -93,6 +101,29 @@ namespace khutils
 #endif	// defined (KHUTILS_FLATBUFFER_MAP_IMPL)
 
 #if defined(KHUTILS_FLATBUFFER_MAP_IMPL)
+
+namespace khutils
+{
+
+	template <typename KeyModifier, typename ValueModifier>
+	std::map<std::string, std::string>::value_type modify(const std::map<std::string, std::string>::value_type& kv,
+														  KeyModifier   modifyKey,
+														  ValueModifier modifyValue)
+	{
+		return std::map<std::string, std::string>::value_type{modifyKey(kv.first), modifyValue(kv.second)};
+	}
+
+	template <typename KeyModifier, typename ValueModifier>
+	std::map<std::string, std::string> modify(const std::map<std::string, std::string>& kvps, KeyModifier modifyKey, ValueModifier modifyValue)
+	{
+		std::map<std::string, std::string> ret;
+		for (const auto& kv : kvps)
+		{
+			ret.insert(modify(kv, modifyKey, modifyValue));
+		}
+	}
+
+}	// namespace khutils
 
 #endif	// defined (KHUTILS_FLATBUFFER_MAP_IMPL)
 

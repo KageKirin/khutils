@@ -26,6 +26,15 @@ namespace khutils
 	flatbuffers::Offset<string_multimap::Map> to_flatbuffer_builder(flatbuffers::FlatBufferBuilder& _fbb,
 																	const std::map<std::string, std::vector<std::string>>& dd);
 
+	template <typename KeyModifier, typename ValueModifier>
+	std::map<std::string, std::vector<std::string>>::value_type
+	modify(const std::map<std::string, std::vector<std::string>>::value_type& kv, KeyModifier modifyKey, ValueModifier modifyValue);
+
+	template <typename KeyModifier, typename ValueModifier>
+	std::map<std::string, std::vector<std::string>> modify(const std::map<std::string, std::vector<std::string>>& kvps,
+														   KeyModifier   modifyKey,
+														   ValueModifier modifyValue);
+
 }	// namespace khutils
 
 #if defined(KHUTILS_FLATBUFFER_MULTIMAP_IMPL)
@@ -108,6 +117,38 @@ namespace khutils
 #endif	// defined (KHUTILS_FLATBUFFER_MULTIMAP_IMPL)
 
 #if defined(KHUTILS_FLATBUFFER_MULTIMAP_IMPL)
+
+namespace khutils
+{
+
+	template <typename KeyModifier, typename ValueModifier>
+	std::map<std::string, std::vector<std::string>>::value_type
+	modify(const std::map<std::string, std::vector<std::string>>::value_type& kv, KeyModifier modifyKey, ValueModifier modifyValue)
+	{
+		auto r = std::remove_reference<std::remove_const<decltype(kv)>::type>::type{modifyKey(kv.first), {}};
+		std::map<std::string, std::vector<std::string>>::value_type ret{modifyKey(kv.first), {}};
+		ret.second.resize(kv.second.size());
+		std::transform(kv.second.begin(), kv.second.end(), ret.second.begin(), modifyValue);
+
+		return ret;
+	}
+
+	template <typename KeyModifier, typename ValueModifier>
+	std::map<std::string, std::vector<std::string>> modify(const std::map<std::string, std::vector<std::string>>& kvps,
+														   KeyModifier   modifyKey,
+														   ValueModifier modifyValue)
+	{
+		auto ret = std::map<std::string, std::vector<std::string>>{};
+
+		for (const auto& kv : kvps)
+		{
+			ret.insert(modify(kv, modifyKey, modifyValue));
+		}
+
+		return ret;
+	}
+
+}	// namespace khutils
 
 #endif	// defined (KHUTILS_FLATBUFFER_MULTIMAP_IMPL)
 
