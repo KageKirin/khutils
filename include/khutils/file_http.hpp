@@ -10,6 +10,8 @@
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/filesystem/path.hpp>
 
+#include <cppformat/format.h>
+
 #include <regex>
 #include <sstream>
 #include <string>
@@ -18,6 +20,7 @@
 namespace khutils
 {
 	namespace ip = boost::asio::ip;
+	using namespace fmt::literals;
 
 	//////////////////////////////////////////////////////////////////////////
 	//!!! totally fixed on 1 server and path system for now
@@ -66,14 +69,14 @@ namespace khutils
 		if (!s || http_version.substr(0, 5) != "HTTP/")
 		{
 			static std::string errorMsg;
-			errorMsg = "Could not open URL " + url + " . Invalid response.";
+			errorMsg = "Could not open URL 'http://{}{}'. Invalid response."_format(serverName, url);
 			throw FatalImportException(errorMsg);
 		}
 
 		if (status_code != 200)
 		{
 			static std::string errorMsg;
-			errorMsg = "Could not open URL " + url + " . Status code not 200.";
+			errorMsg = "Could not open URL 'http://{}{}'. Status code {} not 200."_format(serverName, url, status_code);
 			throw FatalImportException(errorMsg);
 		}
 
