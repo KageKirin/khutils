@@ -11,6 +11,9 @@ namespace khutils
 		static std::ostream& log();
 		static std::ostream& warn();
 		static std::ostream& file();
+		static std::ostream& file2();
+		static std::ostream& csv();
+		static std::ostream& csv2();
 		static std::ostream& error();
 		static std::ostream& debug();
 		static std::ostream& big_fat_warning();
@@ -57,6 +60,27 @@ std::ostream& khutils::logger::log()
 std::ostream& khutils::logger::file()
 {
 	static std::ofstream ofs("log.txt", std::ios_base::trunc);
+	ofs << std::endl;
+	return ofs;
+}
+
+std::ostream& khutils::logger::file2()
+{
+	static std::ofstream ofs("log2.txt", std::ios_base::trunc);
+	ofs << std::endl;
+	return ofs;
+}
+
+std::ostream& khutils::logger::csv()
+{
+	static std::ofstream ofs("data.csv", std::ios_base::trunc);
+	ofs << std::endl;
+	return ofs;
+}
+
+std::ostream& khutils::logger::csv2()
+{
+	static std::ofstream ofs("data2.csv", std::ios_base::trunc);
 	ofs << std::endl;
 	return ofs;
 }
