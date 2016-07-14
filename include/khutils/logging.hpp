@@ -8,6 +8,7 @@ namespace khutils
 	struct logger
 	{
 		static std::ostream& null();
+		static std::ostream& info();
 		static std::ostream& log();
 		static std::ostream& warn();
 		static std::ostream& file();
@@ -55,6 +56,12 @@ std::ostream& khutils::logger::log()
 			  << u8"\U0001F604 "
 			  << "Log: ";
 	return std::clog;
+}
+
+std::ostream& khutils::logger::info()
+{
+	std::cout << std::endl;
+	return std::cout;
 }
 
 std::ostream& khutils::logger::file()
