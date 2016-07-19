@@ -3,3 +3,5 @@
 *.ninja
 .ninja_deps
 .ninja_log
+
+*.patch
