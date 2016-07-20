@@ -23,6 +23,7 @@ namespace khutils
 
 #include "khutils/glm/glm_to_string.hpp"
 #include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 #include <string>
 
