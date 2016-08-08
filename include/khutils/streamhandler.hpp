@@ -23,37 +23,36 @@ namespace khutils
 	typedef _streamhandler<order::little> little_endian_streamhandler;
 	typedef _streamhandler<order::big>	big_endian_streamhandler;
 
+	// converts provided _InT into _OutT performing reinterpret_cast on memory
+	template <typename _OutT, typename _InT = _OutT>
+	static _OutT reinterpret_convert(_InT r)
+	{
+		return *reinterpret_cast<_OutT*>(&r);
+	}
+
+	// converts provided _InT into _OutT using union reinterpretation
+	template <typename _OutT, typename _InT = _OutT>
+	static _OutT fast_convert(_InT r)
+	{
+		union conversion {
+			_OutT t;
+			_InT  r;
+		};
+		conversion val;
+		val.r = r;
+		return val.t;
+	}
+
 	template <order _order>
 	struct _streamhandler
 	{
-		// converts provided _InT into _OutT performing reinterpret_cast on memory
-		template <typename _OutT, typename _InT = _OutT>
-		static _OutT reinterpret_convert(_InT r)
-		{
-			return *reinterpret_cast<_OutT*>(&r);
-		}
-
-		// converts provided _InT into _OutT using union reinterpretation
-		template <typename _OutT, typename _InT = _OutT>
-		static _OutT fast_convert(_InT r)
-		{
-			union conversion {
-				_OutT t;
-				_InT  r;
-			};
-			conversion val;
-			val.r = r;
-			return val.t;
-		}
-
 		//! reads _ReadT from istream, then endian-swaps and converts it into _OutT
 		//! optional convert function can be used to upsample _ReadT into bytewise
 		//! bigger _OutT
 		//! e.g. to convert read U16 as F32
 		template <typename _OutT, typename _ReadT = _OutT>
 		static _OutT read(std::istream&				   is,
-						  std::function<_OutT(_ReadT)> convert
-						  = std::bind(_streamhandler::reinterpret_convert<_OutT, _ReadT>, std::placeholders::_1))
+						  std::function<_OutT(_ReadT)> convert = std::bind(reinterpret_convert<_OutT, _ReadT>, std::placeholders::_1))
 		{
 			using boost::endian::conditional_reverse;
 
@@ -70,7 +69,7 @@ namespace khutils
 		template <typename _OutT, typename _ReadT = _OutT>
 		static _OutT fetch(std::istream&				is,
 						   std::function<_OutT(_ReadT)> convert
-						   = std::bind(_streamhandler::reinterpret_convert<_OutT, _ReadT>, std::placeholders::_1))
+						   = std::bind(reinterpret_convert<_OutT, _ReadT>, std::placeholders::_1))
 		{
 			auto  pos = is.tellg();
 			_OutT t   = read<_OutT, _ReadT>(is, convert);
@@ -86,8 +85,7 @@ namespace khutils
 		template <typename _WriteT, typename _InT = _WriteT>
 		static void write(std::ostream&				   os,
 						  _InT						   t,
-						  std::function<_WriteT(_InT)> convert
-						  = std::bind(_streamhandler::reinterpret_convert<_WriteT, _InT>, std::placeholders::_1))
+						  std::function<_WriteT(_InT)> convert = std::bind(reinterpret_convert<_WriteT, _InT>, std::placeholders::_1))
 		{
 			using boost::endian::conditional_reverse;
 
