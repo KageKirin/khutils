@@ -1,5 +1,5 @@
-﻿#ifndef KHUTILS_DATAREADER_HPP_INC
-#define KHUTILS_DATAREADER_HPP_INC
+﻿#ifndef KHUTILS_MEMORYREADER_HPP_INC
+#define KHUTILS_MEMORYREADER_HPP_INC
 
 //! file has dependency on boost.endian
 //! include wisely to keep compile times minimal
@@ -17,34 +17,34 @@ namespace khutils
 	//! read data from buffer
 	//! usage: use typedef'ed version (see below)
 	template <typename ByteForwardIterator, order _order>
-	struct _datareader;
+	struct _memoryreader;
 
 	template <typename ByteForwardIterator>
-	using datareader = _datareader<ByteForwardIterator, order::native>;
+	using memoryreader = _memoryreader<ByteForwardIterator, order::native>;
 	template <typename ByteForwardIterator>
-	using little_endian_datareader = _datareader<ByteForwardIterator, order::little>;
+	using little_endian_memoryreader = _memoryreader<ByteForwardIterator, order::little>;
 	template <typename ByteForwardIterator>
-	using big_endian_datareader = _datareader<ByteForwardIterator, order::big>;
+	using big_endian_memoryreader = _memoryreader<ByteForwardIterator, order::big>;
 
 	template <typename ByteForwardIterator, order _order>
-	struct _datareader
+	struct _memoryreader
 	{
 		ByteForwardIterator m_begin;
 		ByteForwardIterator m_end;
 		ByteForwardIterator m_current;
 
-		_datareader()					= delete;
-		_datareader(const _datareader&) = default;
-		_datareader(_datareader&&)		= default;
-		_datareader(ByteForwardIterator begin, ByteForwardIterator end)
+		_memoryreader()						= delete;
+		_memoryreader(const _memoryreader&) = default;
+		_memoryreader(_memoryreader&&)		= default;
+		_memoryreader(ByteForwardIterator begin, ByteForwardIterator end)
 			: m_begin(begin)	//
 			, m_end(end)
 			, m_current(m_begin)
 		{
 		}
 
-		_datareader& operator=(const _datareader&) = default;
-		_datareader& operator=(_datareader&&) = default;
+		_memoryreader& operator=(const _memoryreader&) = default;
+		_memoryreader& operator=(_memoryreader&&) = default;
 
 		//! reads _ReadT from data, then endian-swaps and converts it into _OutT
 		//! optional convert function can be used to upsample _ReadT into bytewise
@@ -100,4 +100,4 @@ namespace khutils
 
 }	// namespace khutils
 
-#endif	// KHUTILS_DATAREADER_HPP_INC
+#endif	// KHUTILS_MEMORYREADER_HPP_INC

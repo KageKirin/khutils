@@ -1,5 +1,5 @@
-﻿#ifndef KHUTILS_DATAMWRITER_HPP_INC
-#define KHUTILS_DATAMWRITER_HPP_INC
+﻿#ifndef KHUTILS_MEMORYWRITER_HPP_INC
+#define KHUTILS_MEMORYWRITER_HPP_INC
 
 //! file has dependency on boost.endian
 //! include wisely to keep compile times minimal
@@ -18,34 +18,34 @@ namespace khutils
 	//! DOES NOT RESIZE BUFFER
 	//! usage: use typedef'ed version (see below)
 	template <typename ByteForwardIterator, order _order>
-	struct _datawriter;
+	struct _memorywriter;
 
 	template <typename ByteForwardIterator>
-	using datawriter = _datawriter<ByteForwardIterator, order::native>;
+	using memorywriter = _memorywriter<ByteForwardIterator, order::native>;
 	template <typename ByteForwardIterator>
-	using little_endian_datawriter = _datawriter<ByteForwardIterator, order::little>;
+	using little_endian_memorywriter = _memorywriter<ByteForwardIterator, order::little>;
 	template <typename ByteForwardIterator>
-	using big_endian_datawriter = _datawriter<ByteForwardIterator, order::big>;
+	using big_endian_memorywriter = _memorywriter<ByteForwardIterator, order::big>;
 
 	template <typename ByteForwardIterator, order _order>
-	struct _datawriter
+	struct _memorywriter
 	{
 		ByteForwardIterator m_begin;
 		ByteForwardIterator m_end;
 		ByteForwardIterator m_current;
 
-		_datawriter()					= delete;
-		_datawriter(const _datawriter&) = default;
-		_datawriter(_datawriter&&)		= default;
-		_datawriter(ByteForwardIterator begin, ByteForwardIterator end)
+		_memorywriter()						= delete;
+		_memorywriter(const _memorywriter&) = default;
+		_memorywriter(_memorywriter&&)		= default;
+		_memorywriter(ByteForwardIterator begin, ByteForwardIterator end)
 			: m_begin(begin)	//
 			, m_end(end)
 			, m_current(m_begin)
 		{
 		}
 
-		_datawriter& operator=(const _datawriter&) = default;
-		_datawriter& operator=(_datawriter&&) = default;
+		_memorywriter& operator=(const _memorywriter&) = default;
+		_memorywriter& operator=(_memorywriter&&) = default;
 
 		//! writes _WriteT into buffer after converting and endian-swapping provided
 		//! _InT
@@ -87,4 +87,4 @@ namespace khutils
 
 }	// namespace khutils
 
-#endif	// KHUTILS_DATAMWRITER_HPP_INC
+#endif	// KHUTILS_MEMORYWRITER_HPP_INC
