@@ -21,9 +21,9 @@ namespace khutils
 	template <order _order>
 	struct _streamwriter;
 
-	typedef _streamwriter<order::native> streamwriter;
-	typedef _streamwriter<order::little> little_endian_streamwriter;
-	typedef _streamwriter<order::big>	big_endian_streamwriter;
+	using streamwriter				 = _streamwriter<order::native>;
+	using little_endian_streamwriter = _streamwriter<order::little>;
+	using big_endian_streamwriter	= _streamwriter<order::big>;
 
 	template <order _order>
 	struct _streamwriter

@@ -21,9 +21,9 @@ namespace khutils
 	template <order _order>
 	struct _streamreader;
 
-	typedef _streamreader<order::native> streamreader;
-	typedef _streamreader<order::little> little_endian_streamreader;
-	typedef _streamreader<order::big>	big_endian_streamreader;
+	using streamreader				 = _streamreader<order::native>;
+	using little_endian_streamreader = _streamreader<order::little>;
+	using big_endian_streamreader	= _streamreader<order::big>;
 
 	template <order _order>
 	struct _streamreader
