@@ -30,11 +30,15 @@ namespace khutils
 	{
 		std::ostream& m_os;
 
-		_streamwriter()							= delete;
-		_streamwriter(const _streamwriter& ref) = delete;
+		_streamwriter()						= delete;
+		_streamwriter(const _streamwriter&) = default;
+		_streamwriter(_streamwriter&&)		= default;
 		_streamwriter(std::ostream& os) : m_os(os)
 		{
 		}
+
+		_streamwriter& operator=(const _streamwriter&) = default;
+		_streamwriter& operator=(_streamwriter&&) = default;
 
 		//! writes _WriteT into ostream after converting and end0an-swapping provided
 		//! _InT

@@ -30,11 +30,15 @@ namespace khutils
 	{
 		std::istream& m_is;
 
-		_streamreader()							= delete;
-		_streamreader(const _streamreader& ref) = delete;
+		_streamreader()						= delete;
+		_streamreader(const _streamreader&) = default;
+		_streamreader(_streamreader&&)		= default;
 		_streamreader(std::istream& is) : m_is(is)
 		{
 		}
+
+		_streamreader& operator=(const _streamreader&) = default;
+		_streamreader& operator=(_streamreader&&) = default;
 
 		//! reads _ReadT from istream, then endian-swaps and converts it into _OutT
 		//! optional convert function can be used to upsample _ReadT into bytewise
