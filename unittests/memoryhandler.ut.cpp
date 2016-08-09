@@ -98,11 +98,19 @@ go_bandit([]() {
 			params.new_file_size = 1024;
 
 			before_each([&]() {
-				ofs = io::mapped_file_sink{params};
-				ifs = io::mapped_file_source{params};
+
 			});
 
 			after_each([&]() {
+				if (ofs.is_open())
+				{
+					ofs.close();
+				}
+				if (ifs.is_open())
+				{
+					ifs.close();
+				}
+
 				fs::path testFile(ut_temp);
 				if (fs::exists(testFile))
 				{
@@ -110,23 +118,62 @@ go_bandit([]() {
 				}
 			});
 
-			// desc_testGroup("native endian",	//
-			//			   memorywriter<decltype(ofs.data())>{ofs.data(),
-			// ofs.data() + ofs.size()},
-			//			   memoryreader<decltype(ifs.data())>{ifs.data(),
-			// ifs.data() + ifs.size()});
+			desc_testGroup(	//
+			  "native endian",
+			  [&]() {
+				  if (ifs.is_open())
+				  {
+					  ifs.close();
+				  }
+				  ofs = io::mapped_file_sink{params};
+				  return memorywriter<decltype(ofs.data())>{ofs.data(), ofs.data() + ofs.size()};
+			  },
+			  [&]() {
+				  if (ofs.is_open())
+				  {
+					  ofs.close();
+				  }
+				  ifs = io::mapped_file_source{params};
+				  return memoryreader<decltype(ifs.data())>{ifs.data(), ifs.data() + ifs.size()};
+			  });
 
-			// desc_testGroup("little endian",
-			//			   little_endian_memorywriter<decltype(ofs.data())>{ofs.data(),
-			// ofs.data() + ofs.size()},
-			//			   little_endian_memoryreader<decltype(ifs.data())>{ifs.data(),
-			// ifs.data() + ifs.size()});
+			desc_testGroup(
+			  "little endian",
+			  [&]() {
+				  if (ifs.is_open())
+				  {
+					  ifs.close();
+				  }
+				  ofs = io::mapped_file_sink{params};
+				  return little_endian_memorywriter<decltype(ofs.data())>{ofs.data(), ofs.data() + ofs.size()};
+			  },
+			  [&]() {
+				  if (ofs.is_open())
+				  {
+					  ofs.close();
+				  }
+				  ifs = io::mapped_file_source{params};
+				  return little_endian_memoryreader<decltype(ifs.data())>{ifs.data(), ifs.data() + ifs.size()};
+			  });
 
-			// desc_testGroup("big endian",
-			//			   big_endian_memorywriter<decltype(ofs.data())>{ofs.data(),
-			// ofs.data() + ofs.size()},
-			//			   big_endian_memoryreader<decltype(ifs.data())>{ifs.data(),
-			// ifs.data() + ifs.size()});
+			desc_testGroup(
+			  "big endian",
+			  [&]() {
+				  if (ifs.is_open())
+				  {
+					  ifs.close();
+				  }
+				  ofs = io::mapped_file_sink{params};
+				  return big_endian_memorywriter<decltype(ofs.data())>{ofs.data(), ofs.data() + ofs.size()};
+			  },
+			  [&]() {
+				  if (ofs.is_open())
+				  {
+					  ofs.close();
+				  }
+				  ifs = io::mapped_file_source{params};
+				  return big_endian_memoryreader<decltype(ifs.data())>{ifs.data(), ifs.data() + ifs.size()};
+			  });
 		});
 	});
 });
