@@ -47,11 +47,20 @@ go_bandit([]() {
 
 			std::ostringstream oss;
 			std::istringstream iss;
+
+			before_each([&]() {
+				oss = std::ostringstream();
+				iss = std::istringstream();
+			});
+
 			desc_streamGroup("osstream, isstream",
-							 [&]() -> std::ostringstream& { return (oss); },
+							 [&]() -> std::ostringstream& {
+								 oss = std::ostringstream();
+								 return (oss);
+							 },
 							 [&]() -> std::istringstream& {
-								 auto buffer = oss.str();
-								 iss		 = std::istringstream{buffer};
+								 oss.flush();
+								 iss = std::istringstream(oss.str());
 								 return (iss);
 							 });
 
