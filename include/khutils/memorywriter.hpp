@@ -57,7 +57,7 @@ namespace khutils
 		{
 			using boost::endian::conditional_reverse;
 
-			_WriteT r = conditional_reverse<_order, order::native>(convert(t));
+			_WriteT r = conditional_reverse<_order, order::native>((_WriteT)convert(t));
 
 			char* rawdata = reinterpret_cast<char*>(&r);
 			for (size_t i = 0; i < sizeof(_WriteT); ++i)
@@ -73,7 +73,10 @@ namespace khutils
 		template <typename _SkipT>
 		void skip(size_t count = 1)
 		{
-			m_current += (sizeof(_SkipT) * count);
+			for (size_t i = 0; i < (sizeof(_SkipT) * count); ++i)
+			{
+				++m_current;
+			}
 		}
 
 		template <size_t _Alignment>
@@ -81,7 +84,8 @@ namespace khutils
 		{
 			auto pos			= std::distance(m_begin, m_current);
 			auto nextAlignedPos = ((pos / _Alignment) + 1) * _Alignment;
-			m_current			= m_begin + (nextAlignedPos - pos);
+
+			skip<char>(nextAlignedPos - pos);
 		}
 	};
 
