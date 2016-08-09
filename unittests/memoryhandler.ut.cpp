@@ -445,7 +445,7 @@ go_bandit([]() {
 			io::mapped_file_params params{ut_temp};
 			params.new_file_size = 1024;
 
-			before_each([&params]() {
+			before_each([&]() {
 				fs::path testFile(ut_temp);
 				if (fs::exists(testFile))
 				{
@@ -453,7 +453,7 @@ go_bandit([]() {
 				}
 			});
 
-			after_each([&params]() {
+			after_each([&]() {
 				fs::path testFile(ut_temp);
 				if (fs::exists(testFile))
 				{
@@ -461,9 +461,9 @@ go_bandit([]() {
 				}
 			});
 
-			describe("native", [&params]() {
-				describe("writing once, reading once", [&params]() {
-					it("int", [&params]() {
+			describe("native", [&]() {
+				describe("writing once, reading once", [&]() {
+					it("int", [&]() {
 
 						int					 write = 42;
 						io::mapped_file_sink ofs{params};
@@ -479,7 +479,7 @@ go_bandit([]() {
 						AssertThat(read, Equals(write));
 					});
 
-					it("float", [&params]() {
+					it("float", [&]() {
 
 						float write = 0.65;
 
@@ -497,8 +497,8 @@ go_bandit([]() {
 					});
 				});
 
-				describe("writing twice, reading twice", [&params]() {
-					it("int", [&params]() {
+				describe("writing twice, reading twice", [&]() {
+					it("int", [&]() {
 
 						int write  = 42;
 						int write2 = 87;
@@ -519,7 +519,7 @@ go_bandit([]() {
 						AssertThat(read2, Equals(write2));
 					});
 
-					it("float", [&params]() {
+					it("float", [&]() {
 
 						float write  = 0.65;
 						float write2 = 1.12;
@@ -541,8 +541,8 @@ go_bandit([]() {
 					});
 				});
 
-				describe("writing mixed, reading mixed", [&params]() {
-					it("int, float", [&params]() {
+				describe("writing mixed, reading mixed", [&]() {
+					it("int, float", [&]() {
 
 						int   write  = 42;
 						float write2 = 1.12;
@@ -563,7 +563,7 @@ go_bandit([]() {
 						AssertThat(read2, Equals(write2));
 					});
 
-					it("float, int", [&params]() {
+					it("float, int", [&]() {
 
 						float write  = 0.65;
 						int   write2 = 42;
@@ -587,9 +587,9 @@ go_bandit([]() {
 			});
 
 			////
-			describe("little endian", [&params]() {
-				describe("writing once, reading once", [&params]() {
-					it("int", [&params]() {
+			describe("little endian", [&]() {
+				describe("writing once, reading once", [&]() {
+					it("int", [&]() {
 
 						int write = 42;
 
@@ -606,7 +606,7 @@ go_bandit([]() {
 						AssertThat(read, Equals(write));
 					});
 
-					it("float", [&params]() {
+					it("float", [&]() {
 
 						float write = 0.65;
 
@@ -624,8 +624,8 @@ go_bandit([]() {
 					});
 				});
 
-				describe("writing twice, reading twice", [&params]() {
-					it("int", [&params]() {
+				describe("writing twice, reading twice", [&]() {
+					it("int", [&]() {
 
 						int write  = 42;
 						int write2 = 87;
@@ -646,7 +646,7 @@ go_bandit([]() {
 						AssertThat(read2, Equals(write2));
 					});
 
-					it("float", [&params]() {
+					it("float", [&]() {
 
 						float write  = 0.65;
 						float write2 = 1.12;
@@ -668,8 +668,8 @@ go_bandit([]() {
 					});
 				});
 
-				describe("writing mixed, reading mixed", [&params]() {
-					it("int, float", [&params]() {
+				describe("writing mixed, reading mixed", [&]() {
+					it("int, float", [&]() {
 
 						int   write  = 42;
 						float write2 = 1.12;
@@ -690,7 +690,7 @@ go_bandit([]() {
 						AssertThat(read2, Equals(write2));
 					});
 
-					it("float, int", [&params]() {
+					it("float, int", [&]() {
 
 						float write  = 0.65;
 						int   write2 = 42;
@@ -713,9 +713,9 @@ go_bandit([]() {
 				});
 			});
 			////
-			describe("big endian", [&params]() {
-				describe("writing once, reading once", [&params]() {
-					it("int", [&params]() {
+			describe("big endian", [&]() {
+				describe("writing once, reading once", [&]() {
+					it("int", [&]() {
 
 						int write = 42;
 
@@ -732,7 +732,7 @@ go_bandit([]() {
 						AssertThat(read, Equals(write));
 					});
 
-					it("float", [&params]() {
+					it("float", [&]() {
 
 						float write = 0.65;
 
@@ -750,8 +750,8 @@ go_bandit([]() {
 					});
 				});
 
-				describe("writing twice, reading twice", [&params]() {
-					it("int", [&params]() {
+				describe("writing twice, reading twice", [&]() {
+					it("int", [&]() {
 
 						int write  = 42;
 						int write2 = 87;
@@ -772,7 +772,7 @@ go_bandit([]() {
 						AssertThat(read2, Equals(write2));
 					});
 
-					it("float", [&params]() {
+					it("float", [&]() {
 
 						float write  = 0.65;
 						float write2 = 1.12;
@@ -794,8 +794,8 @@ go_bandit([]() {
 					});
 				});
 
-				describe("writing mixed, reading mixed", [&params]() {
-					it("int, float", [&params]() {
+				describe("writing mixed, reading mixed", [&]() {
+					it("int, float", [&]() {
 
 						int   write  = 42;
 						float write2 = 1.12;
@@ -816,7 +816,7 @@ go_bandit([]() {
 						AssertThat(read2, Equals(write2));
 					});
 
-					it("float, int", [&params]() {
+					it("float, int", [&]() {
 
 						float write  = 0.65;
 						int   write2 = 42;
@@ -838,8 +838,8 @@ go_bandit([]() {
 					});
 				});
 
-				describe("fetching", [&params]() {
-					it("int", [&params]() {
+				describe("fetching", [&]() {
+					it("int", [&]() {
 
 						int write = 42;
 
@@ -859,7 +859,7 @@ go_bandit([]() {
 						AssertThat(fetch, Equals(read));
 					});
 
-					it("float", [&params]() {
+					it("float", [&]() {
 
 						float write = 0.65;
 
@@ -880,8 +880,8 @@ go_bandit([]() {
 					});
 				});
 
-				describe("skip and alignment", [&params]() {
-					it("int", [&params]() {
+				describe("skip and alignment", [&]() {
+					it("int", [&]() {
 
 						int write = 42;
 
@@ -908,7 +908,7 @@ go_bandit([]() {
 						AssertThat(read3, Equals(write));
 					});
 
-					it("float", [&params]() {
+					it("float", [&]() {
 
 						float write = 0.65;
 
