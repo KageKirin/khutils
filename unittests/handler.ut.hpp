@@ -82,8 +82,8 @@ auto desc_singleWriteAndRead = [](auto desc, auto get_writer, auto get_reader) {
 
 	return describe(desc, [&]() {
 		it_singleWriteAndRead("int", 42, get_writer, get_reader);
-		// it_singleWriteAndRead("float", 0.65f, get_writer, get_reader);
-		// it_singleWriteAndRead("double", 2.56094, get_writer, get_reader);
+		it_singleWriteAndRead("float", 0.65f, get_writer, get_reader);
+		it_singleWriteAndRead("double", 2.56094, get_writer, get_reader);
 	});
 };
 
@@ -92,10 +92,8 @@ auto desc_doubleWriteAndRead = [](auto desc, auto get_writer, auto get_reader) {
 
 	return describe(desc, [&]() {
 		it_doubleWriteAndRead("int, int", 42, 87, get_writer, get_reader);
-		// it_doubleWriteAndRead("float, float", 0.65f, 1.12f, get_writer,
-		// get_reader);
-		// it_doubleWriteAndRead("double, double", 0.654245, 1.128745, get_writer,
-		// get_reader);
+		it_doubleWriteAndRead("float, float", 0.65f, 1.12f, get_writer, get_reader);
+		it_doubleWriteAndRead("double, double", 0.654245, 1.128745, get_writer, get_reader);
 	});
 };
 
@@ -103,10 +101,9 @@ auto desc_mixedWriteAndRead = [](auto desc, auto get_writer, auto get_reader) {
 	using namespace bandit;
 
 	return describe(desc, [&]() {
-		// it_doubleWriteAndRead("int, float", 42, 1.12f, get_writer, get_reader);
-		// it_doubleWriteAndRead("float, int", 0.65f, 87, get_writer, get_reader);
-		// it_doubleWriteAndRead("float, double", 0.65f, 1.128745, get_writer,
-		// get_reader);
+		it_doubleWriteAndRead("int, float", 42, 1.12f, get_writer, get_reader);
+		it_doubleWriteAndRead("float, int", 0.65f, 87, get_writer, get_reader);
+		it_doubleWriteAndRead("float, double", 0.65f, 1.128745, get_writer, get_reader);
 	});
 };
 
@@ -115,8 +112,8 @@ auto desc_writeFetchAndRead = [](auto desc, auto get_writer, auto get_reader) {
 
 	return describe(desc, [&]() {
 		it_writeFetchAndRead("int", 42, get_writer, get_reader);
-		// it_writeFetchAndRead("float", 0.65f, get_writer, get_reader);
-		// it_writeFetchAndRead("double", 2.56094, get_writer, get_reader);
+		it_writeFetchAndRead("float", 0.65f, get_writer, get_reader);
+		it_writeFetchAndRead("double", 2.56094, get_writer, get_reader);
 	});
 };
 
@@ -125,17 +122,12 @@ auto desc_skipAndAlign = [](auto desc, auto get_writer, auto get_reader) {
 
 	return describe(desc, [&]() {
 		it_skipAndAlign("int, int, int", 42, 87, 456, get_writer, get_reader);
-		// it_skipAndAlign("float, float, float", 0.65f, 1.12f, 75.545f, get_writer,
-		// get_reader);
-		// it_skipAndAlign("double, double, double", 0.654245, 1.128745, 345.54509,
-		// get_writer, get_reader);
+		it_skipAndAlign("float, float, float", 0.65f, 1.12f, 75.545f, get_writer, get_reader);
+		it_skipAndAlign("double, double, double", 0.654245, 1.128745, 345.54509, get_writer, get_reader);
 
-		// it_skipAndAlign("int, float, double", 42, 1.12f, 345.54509, get_writer,
-		// get_reader);
-		// it_skipAndAlign("float, int, double", 0.65f, 87, 345.54509, get_writer,
-		// get_reader);
-		// it_skipAndAlign("double, float, int", 0.654245, 1.12f, 345.54509,
-		// get_writer, get_reader);
+		it_skipAndAlign("int, float, double", 42, 1.12f, 345.54509, get_writer, get_reader);
+		it_skipAndAlign("float, int, double", 0.65f, 87, 345.54509, get_writer, get_reader);
+		it_skipAndAlign("double, float, int", 0.654245, 1.12f, 345.54509, get_writer, get_reader);
 	});
 };
 
