@@ -8,453 +8,88 @@
 #include <sstream>
 #include <string>
 
+// include last
+#include "handler.ut.hpp"
+
 using namespace bandit;
 using namespace khutils;
 
 
 static std::string ut_temp("ut.temp");
 
+auto desc_streamGroup = [](auto desc, auto get_oss, auto get_iss) {
+	return describe(desc, [&]() {
+
+		desc_testGroup("native endian",	//
+					   [&]() { return streamwriter{get_oss()}; },
+					   [&]() { return streamreader{get_iss()}; });
+
+		desc_testGroup("little endian",	//
+					   [&]() { return little_endian_streamwriter{get_oss()}; },
+					   [&]() { return little_endian_streamreader{get_iss()}; });
+
+		desc_testGroup("big endian",	//
+					   [&]() { return big_endian_streamwriter{get_oss()}; },
+					   [&]() { return big_endian_streamreader{get_iss()}; });
+	});
+};
+
 go_bandit([]() {
 	describe(__FILE__, []() {
 
 		//////////////////////////////////////////////////////////////////////////
-
+		// stringstream-based tests
 		describe("stringstream-based tests", []() {
-			describe("native", []() {
-				describe("writing once, reading once", []() {
-					it("int", []() {
+			std::stringstream s;
+			desc_streamGroup("sstream",
+							 [&]() -> std::stringstream& { return (s); },
+							 [&]() -> std::stringstream& { return (s); });
+
+			std::ostringstream oss;
+			std::istringstream iss;
+			desc_streamGroup("osstream, isstream",
+							 [&]() -> std::ostringstream& { return (oss); },
+							 [&]() -> std::istringstream& {
+								 auto buffer = oss.str();
+								 iss		 = std::istringstream{buffer};
+								 return (iss);
+							 });
 
-						int write = 42;
-
-						std::stringstream s;
-						auto			  sw = streamwriter{s};
-						sw.write<int>(write);
-
-						auto sr   = streamreader{s};
-						int  read = sr.read<int>();
-
-						AssertThat(read, Equals(write));
-					});
-
-					it("float", []() {
-
-						float write = 0.65;
-
-						std::stringstream s;
-						auto			  sw = streamwriter{s};
-						sw.write<int, float>(write);
-
-						auto  sr   = streamreader{s};
-						float read = sr.read<float, int>();
-
-						AssertThat(read, Equals(write));
-					});
-				});
-
-				describe("writing twice, reading twice", []() {
-					it("int", []() {
-
-						int write  = 42;
-						int write2 = 87;
-
-						std::stringstream s;
-						auto			  sw = streamwriter{s};
-						sw.write<int>(write);
-						sw.write<int>(write2);
-
-						auto sr	= streamreader{s};
-						int  read  = sr.read<int>();
-						int  read2 = sr.read<int>();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-
-					it("float", []() {
-
-						float write  = 0.65;
-						float write2 = 1.12;
-
-						std::stringstream s;
-						auto			  sw = streamwriter{s};
-						sw.write<int, float>(write);
-						sw.write<int, float>(write2);
-
-						auto  sr	= streamreader{s};
-						float read  = sr.read<float, int>();
-						float read2 = sr.read<float, int>();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-				});
-
-				describe("writing mixed, reading mixed", []() {
-					it("int, float", []() {
-
-						int   write  = 42;
-						float write2 = 1.12;
-
-						std::stringstream s;
-						auto			  sw = streamwriter{s};
-						sw.write<int>(write);
-						sw.write<int, float>(write2);
-
-						auto  sr	= streamreader{s};
-						int   read  = sr.read<int>();
-						float read2 = sr.read<float, int>();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-
-					it("float, int", []() {
-
-						float write  = 0.65;
-						int   write2 = 42;
-
-						std::stringstream s;
-						auto			  sw = streamwriter{s};
-						sw.write<int, float>(write);
-						sw.write<int>(write2);
-
-						auto  sr	= streamreader{s};
-						float read  = sr.read<float, int>();
-						int   read2 = sr.read<int>();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-				});
-
-				////
-
-				describe("fetching", []() {
-					it("int", []() {
-
-						int write = 42;
-
-						std::stringstream s;
-						auto			  sw = streamwriter{s};
-						sw.write<int>(write);
-
-						auto sr	= streamreader{s};
-						int  fetch = sr.fetch<int>();
-						int  read  = sr.read<int>();
-
-						AssertThat(fetch, Equals(write));
-						AssertThat(read, Equals(write));
-						AssertThat(fetch, Equals(read));
-					});
-
-					it("float", []() {
-
-						float write = 0.65;
-
-						std::stringstream s;
-						auto			  sw = streamwriter{s};
-						sw.write<int, float>(write);
-
-						auto  sr	= streamreader{s};
-						float fetch = sr.fetch<float, int>();
-						float read  = sr.read<float, int>();
-
-						AssertThat(fetch, Equals(write));
-						AssertThat(read, Equals(write));
-						AssertThat(fetch, Equals(read));
-					});
-				});
-
-				describe("skip and alignment", []() {
-					it("int", []() {
-
-						int write = 42;
-
-						std::ostringstream oss;
-						auto			   sw = streamwriter{oss};
-						sw.write<int>(write);
-						sw.skip<int>();
-						sw.write<int>(write);
-						sw.alignToNext<16>();
-						sw.write<int>(write);
-
-						std::istringstream iss(oss.str());
-						auto			   sr   = streamreader{iss};
-						int				   read = sr.read<int>();
-						sr.skip<int>();
-						int read2 = sr.read<int>();
-						sr.alignToNext<16>();
-						int read3 = sr.read<int>();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write));
-						AssertThat(read3, Equals(write));
-					});
-
-					it("float", []() {
-
-						float write = 0.65;
-
-						std::ostringstream oss;
-						auto			   sw = streamwriter{oss};
-						sw.write<int, float>(write);
-						sw.skip<int>();
-						sw.write<int, float>(write);
-						sw.alignToNext<16>();
-						sw.write<int, float>(write);
-
-						std::istringstream iss(oss.str());
-						auto			   sr   = streamreader{iss};
-						float			   read = sr.read<float, int>();
-						sr.skip<int>();
-						float read2 = sr.read<float, int>();
-						sr.alignToNext<16>();
-						float read3 = sr.read<float, int>();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write));
-						AssertThat(read3, Equals(write));
-					});
-				});
-			});
-
-			////
-			describe("little endian", []() {
-				describe("writing once, reading once", []() {
-					it("int", []() {
-
-						int write = 42;
-
-						std::stringstream s;
-						auto			  sw = little_endian_streamwriter{s};
-						sw.write<int>(write);
-
-						auto sr   = little_endian_streamreader{s};
-						int  read = sr.read<int>();
-
-						AssertThat(read, Equals(write));
-					});
-
-					it("float", []() {
-
-						float write = 0.65;
-
-						std::stringstream s;
-						auto			  sw = little_endian_streamwriter{s};
-						sw.write<int, float>(write);
-
-						auto  sr   = little_endian_streamreader{s};
-						float read = sr.read<float, int>();
-
-						AssertThat(read, Equals(write));
-					});
-				});
-
-				describe("writing twice, reading twice", []() {
-					it("int", []() {
-
-						int write  = 42;
-						int write2 = 87;
-
-						std::stringstream s;
-						auto			  sw = little_endian_streamwriter{s};
-						sw.write<int>(write);
-						sw.write<int>(write2);
-
-						auto sr	= little_endian_streamreader{s};
-						int  read  = sr.read<int>();
-						int  read2 = sr.read<int>();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-
-					it("float", []() {
-
-						float write  = 0.65;
-						float write2 = 1.12;
-
-						std::stringstream s;
-						auto			  sw = little_endian_streamwriter{s};
-						sw.write<int, float>(write);
-						sw.write<int, float>(write2);
-
-						auto  sr	= little_endian_streamreader{s};
-						float read  = sr.read<float, int>();
-						float read2 = sr.read<float, int>();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-				});
-
-				describe("writing mixed, reading mixed", []() {
-					it("int, float", []() {
-
-						int   write  = 42;
-						float write2 = 1.12;
-
-						std::stringstream s;
-						auto			  sw = little_endian_streamwriter{s};
-						sw.write<int>(write);
-						sw.write<int, float>(write2);
-
-						auto  sr	= little_endian_streamreader{s};
-						int   read  = sr.read<int>();
-						float read2 = sr.read<float, int>();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-
-					it("float, int", []() {
-
-						float write  = 0.65;
-						int   write2 = 42;
-
-						std::stringstream s;
-						auto			  sw = little_endian_streamwriter{s};
-						sw.write<int, float>(write);
-						sw.write<int>(write2);
-
-						auto  sr	= little_endian_streamreader{s};
-						float read  = sr.read<float, int>();
-						int   read2 = sr.read<int>();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-				});
-			});
-
-			////
-			describe("big endian", []() {
-				describe("writing once, reading once", []() {
-					it("int", []() {
-
-						int write = 42;
-
-						std::stringstream s;
-						auto			  sw = big_endian_streamwriter{s};
-						sw.write<int>(write);
-
-						auto sr   = big_endian_streamreader{s};
-						int  read = sr.read<int>();
-
-						AssertThat(read, Equals(write));
-					});
-
-					it("float", []() {
-
-						float write = 0.65;
-
-						std::stringstream s;
-						auto			  sw = big_endian_streamwriter{s};
-						sw.write<int, float>(write);
-
-						auto  sr   = big_endian_streamreader{s};
-						float read = sr.read<float, int>();
-
-						AssertThat(read, Equals(write));
-					});
-				});
-
-				describe("writing twice, reading twice", []() {
-					it("int", []() {
-
-						int write  = 42;
-						int write2 = 87;
-
-						std::stringstream s;
-						auto			  sw = big_endian_streamwriter{s};
-						sw.write<int>(write);
-						sw.write<int>(write2);
-
-						auto sr	= big_endian_streamreader{s};
-						int  read  = sr.read<int>();
-						int  read2 = sr.read<int>();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-
-					it("float", []() {
-
-						float write  = 0.65;
-						float write2 = 1.12;
-
-						std::stringstream s;
-						auto			  sw = big_endian_streamwriter{s};
-						sw.write<int, float>(write);
-						sw.write<int, float>(write2);
-
-						auto  sr	= big_endian_streamreader{s};
-						float read  = sr.read<float, int>();
-						float read2 = sr.read<float, int>();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-				});
-
-				describe("writing mixed, reading mixed", []() {
-					it("int, float", []() {
-
-						int   write  = 42;
-						float write2 = 1.12;
-
-						std::stringstream s;
-						auto			  sw = big_endian_streamwriter{s};
-						sw.write<int>(write);
-						sw.write<int, float>(write2);
-
-						auto  sr	= big_endian_streamreader{s};
-						int   read  = sr.read<int>();
-						float read2 = sr.read<float, int>();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-
-					it("float, int", []() {
-
-						float write  = 0.65;
-						int   write2 = 42;
-
-						std::stringstream s;
-						auto			  sw = big_endian_streamwriter{s};
-						sw.write<int, float>(write);
-						sw.write<int>(write2);
-
-						auto  sr	= big_endian_streamreader{s};
-						float read  = sr.read<float, int>();
-						int   read2 = sr.read<int>();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-				});
-			});
 		});
 
 		//////////////////////////////////////////////////////////////////////////
 		// filestream-based tests
-		describe("filestream", []() {
+		describe("filestream-based tests", []() {
 			namespace fs = boost::filesystem;
 			namespace io = boost::iostreams;
 
 			io::mapped_file_params params{ut_temp};
 			params.new_file_size = 1024;
 
+			std::ofstream ofs;
+			std::ifstream ifs;
+
 			before_each([&]() {
-				fs::path testFile(ut_temp);
-				if (fs::exists(testFile))
+				if (ofs.is_open())
 				{
-					fs::remove(testFile);
+					ofs.close();
+				}
+				if (ifs.is_open())
+				{
+					ifs.close();
 				}
 			});
 
 			after_each([&]() {
+				if (ofs.is_open())
+				{
+					ofs.close();
+				}
+				if (ifs.is_open())
+				{
+					ifs.close();
+				}
+
 				fs::path testFile(ut_temp);
 				if (fs::exists(testFile))
 				{
@@ -462,482 +97,25 @@ go_bandit([]() {
 				}
 			});
 
-			describe("native", [&]() {
-				describe("writing once, reading once", [&]() {
-					it("int", [&]() {
-
-						int write = 42;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = streamwriter{ofs};
-						sw.write<int>(write);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr   = streamreader{ifs};
-						int			  read = sr.read<int>();
-						ifs.close();
-
-						AssertThat(read, Equals(write));
-					});
-
-					it("float", [&]() {
-
-						float write = 0.65;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = streamwriter{ofs};
-						sw.write<int, float>(write);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr   = streamreader{ifs};
-						float		  read = sr.read<float, int>();
-						ifs.close();
-
-						AssertThat(read, Equals(write));
-					});
-				});
-
-				describe("writing twice, reading twice", [&]() {
-					it("int", [&]() {
-
-						int write  = 42;
-						int write2 = 87;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = streamwriter{ofs};
-						sw.write<int>(write);
-						sw.write<int>(write2);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr	= streamreader{ifs};
-						int			  read  = sr.read<int>();
-						int			  read2 = sr.read<int>();
-						ifs.close();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-
-					it("float", [&]() {
-
-						float write  = 0.65;
-						float write2 = 1.12;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = streamwriter{ofs};
-						sw.write<int, float>(write);
-						sw.write<int, float>(write2);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr	= streamreader{ifs};
-						float		  read  = sr.read<float, int>();
-						float		  read2 = sr.read<float, int>();
-						ifs.close();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-				});
-
-				describe("writing mixed, reading mixed", [&]() {
-					it("int, float", [&]() {
-
-						int   write  = 42;
-						float write2 = 1.12;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = streamwriter{ofs};
-						sw.write<int>(write);
-						sw.write<int, float>(write2);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr	= streamreader{ifs};
-						int			  read  = sr.read<int>();
-						float		  read2 = sr.read<float, int>();
-						ifs.close();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-
-					it("float, int", [&]() {
-
-						float write  = 0.65;
-						int   write2 = 42;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = streamwriter{ofs};
-						sw.write<int, float>(write);
-						sw.write<int>(write2);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr	= streamreader{ifs};
-						float		  read  = sr.read<float, int>();
-						int			  read2 = sr.read<int>();
-						ifs.close();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-				});
-			});
-
-			////
-			describe("little endian", [&]() {
-				describe("writing once, reading once", [&]() {
-					it("int", [&]() {
-
-						int write = 42;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = little_endian_streamwriter{ofs};
-						sw.write<int>(write);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr   = little_endian_streamreader{ifs};
-						int			  read = sr.read<int>();
-						ifs.close();
-
-						AssertThat(read, Equals(write));
-					});
-
-					it("float", [&]() {
-
-						float write = 0.65;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = little_endian_streamwriter{ofs};
-						sw.write<int, float>(write);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr   = little_endian_streamreader{ifs};
-						float		  read = sr.read<float, int>();
-						ifs.close();
-
-						AssertThat(read, Equals(write));
-					});
-				});
-
-				describe("writing twice, reading twice", [&]() {
-					it("int", [&]() {
-
-						int write  = 42;
-						int write2 = 87;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = little_endian_streamwriter{ofs};
-						sw.write<int>(write);
-						sw.write<int>(write2);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr	= little_endian_streamreader{ifs};
-						int			  read  = sr.read<int>();
-						int			  read2 = sr.read<int>();
-						ifs.close();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-
-					it("float", [&]() {
-
-						float write  = 0.65;
-						float write2 = 1.12;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = little_endian_streamwriter{ofs};
-						sw.write<int, float>(write);
-						sw.write<int, float>(write2);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr	= little_endian_streamreader{ifs};
-						float		  read  = sr.read<float, int>();
-						float		  read2 = sr.read<float, int>();
-						ifs.close();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-				});
-
-				describe("writing mixed, reading mixed", [&]() {
-					it("int, float", [&]() {
-
-						int   write  = 42;
-						float write2 = 1.12;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = little_endian_streamwriter{ofs};
-						sw.write<int>(write);
-						sw.write<int, float>(write2);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr	= little_endian_streamreader{ifs};
-						int			  read  = sr.read<int>();
-						float		  read2 = sr.read<float, int>();
-						ifs.close();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-
-					it("float, int", [&]() {
-
-						float write  = 0.65;
-						int   write2 = 42;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = little_endian_streamwriter{ofs};
-						sw.write<int, float>(write);
-						sw.write<int>(write2);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr	= little_endian_streamreader{ifs};
-						float		  read  = sr.read<float, int>();
-						int			  read2 = sr.read<int>();
-						ifs.close();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-				});
-			});
-			////
-			describe("big endian", [&]() {
-				describe("writing once, reading once", [&]() {
-					it("int", [&]() {
-
-						int write = 42;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = big_endian_streamwriter{ofs};
-						sw.write<int>(write);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr   = big_endian_streamreader{ifs};
-						int			  read = sr.read<int>();
-						ifs.close();
-
-						AssertThat(read, Equals(write));
-					});
-
-					it("float", [&]() {
-
-						float write = 0.65;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = big_endian_streamwriter{ofs};
-						sw.write<int, float>(write);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr   = big_endian_streamreader{ifs};
-						float		  read = sr.read<float, int>();
-						ifs.close();
-
-						AssertThat(read, Equals(write));
-					});
-				});
-
-				describe("writing twice, reading twice", [&]() {
-					it("int", [&]() {
-
-						int write  = 42;
-						int write2 = 87;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = big_endian_streamwriter{ofs};
-						sw.write<int>(write);
-						sw.write<int>(write2);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr	= big_endian_streamreader{ifs};
-						int			  read  = sr.read<int>();
-						int			  read2 = sr.read<int>();
-						ifs.close();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-
-					it("float", [&]() {
-
-						float write  = 0.65;
-						float write2 = 1.12;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = big_endian_streamwriter{ofs};
-						sw.write<int, float>(write);
-						sw.write<int, float>(write2);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr	= big_endian_streamreader{ifs};
-						float		  read  = sr.read<float, int>();
-						float		  read2 = sr.read<float, int>();
-						ifs.close();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-				});
-
-				describe("writing mixed, reading mixed", [&]() {
-					it("int, float", [&]() {
-
-						int   write  = 42;
-						float write2 = 1.12;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = big_endian_streamwriter{ofs};
-						sw.write<int>(write);
-						sw.write<int, float>(write2);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr	= big_endian_streamreader{ifs};
-						int			  read  = sr.read<int>();
-						float		  read2 = sr.read<float, int>();
-						ifs.close();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-
-					it("float, int", [&]() {
-
-						float write  = 0.65;
-						int   write2 = 42;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = big_endian_streamwriter{ofs};
-						sw.write<int, float>(write);
-						sw.write<int>(write2);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr	= big_endian_streamreader{ifs};
-						float		  read  = sr.read<float, int>();
-						int			  read2 = sr.read<int>();
-						ifs.close();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write2));
-					});
-				});
-
-				describe("fetching", [&]() {
-					it("int", [&]() {
-
-						int write = 42;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = big_endian_streamwriter{ofs};
-						sw.write<int>(write);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr	= big_endian_streamreader{ifs};
-						int			  fetch = sr.fetch<int>();
-						int			  read  = sr.read<int>();
-						ifs.close();
-
-						AssertThat(fetch, Equals(write));
-						AssertThat(read, Equals(write));
-						AssertThat(fetch, Equals(read));
-					});
-
-					it("float", [&]() {
-
-						float write = 0.65;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = big_endian_streamwriter{ofs};
-						sw.write<int, float>(write);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr	= big_endian_streamreader{ifs};
-						float		  fetch = sr.fetch<float, int>();
-						float		  read  = sr.read<float, int>();
-						ifs.close();
-
-						AssertThat(fetch, Equals(write));
-						AssertThat(read, Equals(write));
-						AssertThat(fetch, Equals(read));
-					});
-				});
-
-				describe("skip and alignment", [&]() {
-					it("int", [&]() {
-
-						int write = 42;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = big_endian_streamwriter{ofs};
-						sw.write<int>(write);
-						sw.skip<int>();
-						sw.write<int>(write);
-						sw.alignToNext<16>();
-						sw.write<int>(write);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr   = big_endian_streamreader{ifs};
-						int			  read = sr.read<int>();
-						sr.skip<int>();
-						int read2 = sr.read<int>();
-						sr.alignToNext<16>();
-						int read3 = sr.read<int>();
-						ifs.close();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write));
-						AssertThat(read3, Equals(write));
-					});
-
-					it("float", [&]() {
-
-						float write = 0.65;
-
-						std::ofstream ofs(ut_temp);
-						auto		  sw = big_endian_streamwriter{ofs};
-						sw.write<int, float>(write);
-						sw.skip<int>();
-						sw.write<int, float>(write);
-						sw.alignToNext<16>();
-						sw.write<int, float>(write);
-						ofs.close();
-
-						std::ifstream ifs(ut_temp);
-						auto		  sr   = big_endian_streamreader{ifs};
-						float		  read = sr.read<float, int>();
-						sr.skip<int>();
-						float read2 = sr.read<float, int>();
-						sr.alignToNext<16>();
-						float read3 = sr.read<float, int>();
-						ifs.close();
-
-						AssertThat(read, Equals(write));
-						AssertThat(read2, Equals(write));
-						AssertThat(read3, Equals(write));
-					});
-				});
-			});
+			desc_streamGroup("fstream",
+							 [&]() -> std::ofstream& {
+								 if (ifs.is_open())
+								 {
+									 ifs.close();
+								 }
+
+								 ofs.open(ut_temp);
+								 return ofs;
+							 },
+							 [&]() -> std::ifstream& {
+								 if (ofs.is_open())
+								 {
+									 ofs.close();
+								 }
+
+								 ifs.open(ut_temp);
+								 return ifs;
+							 });
 		});
 	});
 });
