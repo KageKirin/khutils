@@ -53,8 +53,6 @@ namespace khutils
 		template <typename _OutT, typename _ReadT = _OutT>
 		_OutT read(std::function<_OutT(_ReadT)> convert = std::bind(reinterpret_convert<_OutT, _ReadT>, std::placeholders::_1))
 		{
-			using boost::endian::conditional_reverse;
-
 			_ReadT r	   = (_ReadT)0;
 			char*  rawdata = reinterpret_cast<char*>(&r);
 			for (size_t i = 0; i < sizeof(_ReadT); ++i)

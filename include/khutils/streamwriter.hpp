@@ -48,8 +48,6 @@ namespace khutils
 		template <typename _WriteT, typename _InT = _WriteT>
 		void write(_InT t, std::function<_WriteT(_InT)> convert = std::bind(reinterpret_convert<_WriteT, _InT>, std::placeholders::_1))
 		{
-			using boost::endian::conditional_reverse;
-
 			_WriteT r = conditional_reverse<_order, order::native>(convert(t));
 			m_os.write(reinterpret_cast<char*>(&r), sizeof(_WriteT));
 		}
