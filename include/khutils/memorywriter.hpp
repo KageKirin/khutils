@@ -85,6 +85,16 @@ namespace khutils
 
 			skip<char>(nextAlignedPos - pos);
 		}
+
+		ByteForwardIterator getCurrent()
+		{
+			return m_current;
+		}
+
+		size_t getCurrentOffset()
+		{
+			return std::distance(m_begin, getCurrent());
+		}
 	};
 
 }	// namespace khutils
