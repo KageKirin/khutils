@@ -74,6 +74,16 @@ namespace khutils
 				m_os.write(&c, 1);
 			}
 		}
+
+		std::ostream& getStream()
+		{
+			return m_os;
+		}
+
+		size_t getCurrentOffset()
+		{
+			return m_os.tellp();
+		}
 	};
 
 }	// namespace khutils

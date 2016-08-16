@@ -79,6 +79,16 @@ namespace khutils
 			auto nextAlignedPos = ((pos / _Alignment) + 1) * _Alignment;
 			m_is.ignore(nextAlignedPos - pos);
 		}
+
+		std::istream& getStream()
+		{
+			return m_is;
+		}
+
+		size_t getCurrentOffset()
+		{
+			return m_is.tellg();
+		}
 	};
 
 }	// namespace khutils
