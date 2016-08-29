@@ -65,14 +65,10 @@ namespace khutils
 		template <size_t _Alignment>
 		void			 alignToNext()
 		{
-			auto	   pos			  = m_os.tellp();
-			auto	   nextAlignedPos = ((pos / _Alignment) + 1) * _Alignment;
-			auto	   fillup		  = nextAlignedPos - pos;
-			const char c			  = 0;
-			for (size_t i = 0; i < fillup; ++i)
-			{
-				m_os.write(&c, 1);
-			}
+			auto pos			= m_os.tellp();
+			auto nextAlignedPos = ((pos / _Alignment) + 1) * _Alignment;
+
+			skip<char>(nextAlignedPos - pos);
 		}
 
 		std::ostream& getStream()

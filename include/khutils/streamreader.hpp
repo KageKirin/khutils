@@ -77,7 +77,8 @@ namespace khutils
 		{
 			auto pos			= m_is.tellg();
 			auto nextAlignedPos = ((pos / _Alignment) + 1) * _Alignment;
-			m_is.ignore(nextAlignedPos - pos);
+
+			skip<char>(nextAlignedPos - pos);
 		}
 
 		std::istream& getStream()
