@@ -15,33 +15,33 @@ namespace khutils
 {
 	using boost::endian::order;
 
-	//! stream writer
-	//! wraps ostream.write in an endian-aware
-	//! and bitstream-fitting manner
+	//! file writer
+	//! wraps FILE* write in an endian-aware
+	//! and bit-fitting manner
 	//! usage: use typedef'ed version (see below)
 	template <order _order>
-	struct _streamwriter;
+	struct _filewriter;
 
-	using streamwriter				 = _streamwriter<order::native>;
-	using little_endian_streamwriter = _streamwriter<order::little>;
-	using big_endian_streamwriter	= _streamwriter<order::big>;
+	using filewriter			   = _filewriter<order::native>;
+	using little_endian_filewriter = _filewriter<order::little>;
+	using big_endian_filewriter	= _filewriter<order::big>;
 
 	template <order _order>
-	struct _streamwriter
+	struct _filewriter
 	{
 		const std::shared_ptr<FILE> m_file;
 
-		_streamwriter()						= delete;
-		_streamwriter(const _streamwriter&) = default;
-		_streamwriter(_streamwriter&&)		= default;
-		_streamwriter(const std::shared_ptr<FILE>& file) : m_file(file)
+		_filewriter()					= delete;
+		_filewriter(const _filewriter&) = default;
+		_filewriter(_filewriter&&)		= default;
+		_filewriter(const std::shared_ptr<FILE>& file) : m_file(file)
 		{
 		}
 
-		_streamwriter& operator=(const _streamwriter&) = default;
-		_streamwriter& operator=(_streamwriter&&) = default;
+		_filewriter& operator=(const _filewriter&) = default;
+		_filewriter& operator=(_filewriter&&) = default;
 
-		//! writes _WriteT into ostream after converting and end0an-swapping provided
+		//! writes _WriteT into ofile after converting and end0an-swapping provided
 		//! _InT
 		//! optional convert function can be used to downsample _InT into bytewise
 		//! smaller _WriteT

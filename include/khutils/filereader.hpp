@@ -15,33 +15,33 @@ namespace khutils
 {
 	using boost::endian::order;
 
-	//! stream reader
-	//! wraps istream.read and ostream.write in an endian-aware
-	//! and bitstream-fitting manner
+	//! file reader
+	//! wraps FILE* read in an endian-aware
+	//! and bit-fitting manner
 	//! usage: use typedef'ed version (see below)
 	template <order _order>
-	struct _streamreader;
+	struct _filereader;
 
-	using streamreader				 = _streamreader<order::native>;
-	using little_endian_streamreader = _streamreader<order::little>;
-	using big_endian_streamreader	= _streamreader<order::big>;
+	using filereader			   = _filereader<order::native>;
+	using little_endian_filereader = _filereader<order::little>;
+	using big_endian_filereader	= _filereader<order::big>;
 
 	template <order _order>
-	struct _streamreader
+	struct _filereader
 	{
 		const std::shared_ptr<FILE> m_file;
 
-		_streamreader()						= delete;
-		_streamreader(const _streamreader&) = default;
-		_streamreader(_streamreader&&)		= default;
-		_streamreader(const std::shared_ptr<FILE>& file) : m_file(file)
+		_filereader()					= delete;
+		_filereader(const _filereader&) = default;
+		_filereader(_filereader&&)		= default;
+		_filereader(const std::shared_ptr<FILE>& file) : m_file(file)
 		{
 		}
 
-		_streamreader& operator=(const _streamreader&) = default;
-		_streamreader& operator=(_streamreader&&) = default;
+		_filereader& operator=(const _filereader&) = default;
+		_filereader& operator=(_filereader&&) = default;
 
-		//! reads _ReadT from istream, then endian-swaps and converts it into _OutT
+		//! reads _ReadT from ifile, then endian-swaps and converts it into _OutT
 		//! optional convert function can be used to upsample _ReadT into bytewise
 		//! bigger _OutT
 		//! e.g. to convert read U16 as F32
@@ -53,7 +53,7 @@ namespace khutils
 			return convert(conditional_reverse<order::native, _order>(r));
 		}
 
-		//! fetches _ReadT from istream WITHOUT incrementing position, then
+		//! fetches _ReadT from ifile WITHOUT incrementing position, then
 		//! endian-swaps and converts it into _OutT
 		//! optional convert function can be used to upsample _ReadT into bytewise
 		//! bigger _OutT
