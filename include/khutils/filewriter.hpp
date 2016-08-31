@@ -29,7 +29,7 @@ namespace khutils
 	using big_endian_filewriter	= _filewriter<order::big>;
 
 	template <order _order>
-	struct _filewriter
+	struct _filewriter : base_handler_trait<_order>
 	{
 		const std::shared_ptr<FILE> m_file;
 

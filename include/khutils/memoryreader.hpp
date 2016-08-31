@@ -29,7 +29,7 @@ namespace khutils
 	using big_endian_memoryreader = _memoryreader<ByteForwardIterator, order::big>;
 
 	template <typename ByteForwardIterator, order _order>
-	struct _memoryreader
+	struct _memoryreader : base_handler_trait<_order>
 	{
 		ByteForwardIterator m_begin;
 		ByteForwardIterator m_end;

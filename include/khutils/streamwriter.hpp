@@ -28,7 +28,7 @@ namespace khutils
 	using big_endian_streamwriter	= _streamwriter<order::big>;
 
 	template <order _order>
-	struct _streamwriter
+	struct _streamwriter : base_handler_trait<_order>
 	{
 		std::ostream& m_os;
 

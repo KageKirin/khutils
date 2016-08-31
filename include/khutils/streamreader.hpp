@@ -28,7 +28,7 @@ namespace khutils
 	using big_endian_streamreader	= _streamreader<order::big>;
 
 	template <order _order>
-	struct _streamreader
+	struct _streamreader : base_handler_trait<_order>
 	{
 		std::istream& m_is;
 

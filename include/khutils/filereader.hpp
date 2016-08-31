@@ -29,7 +29,7 @@ namespace khutils
 	using big_endian_filereader	= _filereader<order::big>;
 
 	template <order _order>
-	struct _filereader
+	struct _filereader : base_handler_trait<_order>
 	{
 		const std::shared_ptr<FILE> m_file;
 

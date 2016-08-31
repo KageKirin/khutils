@@ -30,7 +30,7 @@ namespace khutils
 	using big_endian_memorywriter = _memorywriter<ByteForwardIterator, order::big>;
 
 	template <typename ByteForwardIterator, order _order>
-	struct _memorywriter
+	struct _memorywriter : base_handler_trait<_order>
 	{
 		ByteForwardIterator m_begin;
 		ByteForwardIterator m_end;
