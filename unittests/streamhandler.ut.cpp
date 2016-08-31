@@ -20,17 +20,35 @@ static std::string ut_temp("ut.temp");
 auto desc_streamGroup = [](auto desc, auto get_oss, auto get_iss) {
 	return describe(desc, [&]() {
 
-		desc_testGroup("native endian",	//
-					   [&]() { return streamwriter{get_oss()}; },
-					   [&]() { return streamreader{get_iss()}; });
+		auto get_streamwriter = [&]() { return streamwriter{get_oss()}; };
+		auto get_streamreader = [&]() { return streamreader{get_iss()}; };
 
-		desc_testGroup("little endian",	//
-					   [&]() { return little_endian_streamwriter{get_oss()}; },
-					   [&]() { return little_endian_streamreader{get_iss()}; });
+		desc_testGroup<streamwriter,
+					   streamreader,
+					   decltype(get_streamwriter),
+					   decltype(get_streamreader)>("native endian",	//
+												   get_streamwriter,
+												   get_streamreader);
 
-		desc_testGroup("big endian",	//
-					   [&]() { return big_endian_streamwriter{get_oss()}; },
-					   [&]() { return big_endian_streamreader{get_iss()}; });
+		auto get_little_endian_streamwriter = [&]() { return little_endian_streamwriter{get_oss()}; };
+		auto get_little_endian_streamreader = [&]() { return little_endian_streamreader{get_iss()}; };
+
+		desc_testGroup<little_endian_streamwriter,
+					   little_endian_streamreader,
+					   decltype(get_little_endian_streamwriter),
+					   decltype(get_little_endian_streamreader)>("little endian",	//
+																 get_little_endian_streamwriter,
+																 get_little_endian_streamreader);
+
+		auto get_big_endian_streamwriter = [&]() { return big_endian_streamwriter{get_oss()}; };
+		auto get_big_endian_streamreader = [&]() { return big_endian_streamreader{get_iss()}; };
+
+		desc_testGroup<big_endian_streamwriter,
+					   big_endian_streamreader,
+					   decltype(get_big_endian_streamwriter),
+					   decltype(get_big_endian_streamreader)>("big endian",	//
+															  get_big_endian_streamwriter,
+															  get_big_endian_streamreader);
 	});
 };
 

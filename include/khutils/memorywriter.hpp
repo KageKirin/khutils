@@ -49,13 +49,17 @@ namespace khutils
 		_memorywriter& operator=(const _memorywriter&) = default;
 		_memorywriter& operator=(_memorywriter&&) = default;
 
+		// function must stay this way to be compatible with list iterators
 		void _write_raw(char* rawdata, size_t count)
 		{
-			assert((m_current + count) <= m_end);
-			// TODO: throw as well
-
-			std::copy_n(rawdata, count, m_current);
-			m_current += count;
+			for (size_t i = 0; i < count; ++i)
+			{
+				if (m_current != m_end)
+				{
+					*(m_current) = rawdata[i];
+				}
+				++m_current;
+			}
 		}
 
 		//! writes WriteT into buffer after converting and endian-swapping provided

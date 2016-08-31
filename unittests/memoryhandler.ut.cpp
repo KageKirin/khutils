@@ -27,29 +27,47 @@ auto desc_containerGroup = [](auto desc, auto startIt, auto endIt) {
 
 		before_each([&]() { std::for_each(startIt, endIt, [](auto& elem) { elem = 0x0; }); });
 
-		desc_testGroup("native endian",	//
-					   [&]() {
-						   return memorywriter<decltype(startIt)>{startIt, endIt};
-					   },
-					   [&]() {
-						   return memoryreader<decltype(startIt)>{startIt, endIt};
-					   });
+		auto get_memorywriter = [&]() {	//
+			return memorywriter<decltype(startIt)>{startIt, endIt};
+		};
+		auto get_memoryreader = [&]() {	//
+			return memoryreader<decltype(startIt)>{startIt, endIt};
+		};
 
-		desc_testGroup("little endian",
-					   [&]() {
-						   return little_endian_memorywriter<decltype(startIt)>{startIt, endIt};
-					   },
-					   [&]() {
-						   return little_endian_memoryreader<decltype(startIt)>{startIt, endIt};
-					   });
+		desc_testGroup<memorywriter<decltype(startIt)>,
+					   memoryreader<decltype(startIt)>,
+					   decltype(get_memorywriter),
+					   decltype(get_memoryreader)>("native endian",	//
+												   get_memorywriter,
+												   get_memoryreader);
 
-		desc_testGroup("big endian",
-					   [&]() {
-						   return big_endian_memorywriter<decltype(startIt)>{startIt, endIt};
-					   },
-					   [&]() {
-						   return big_endian_memoryreader<decltype(startIt)>{startIt, endIt};
-					   });
+		auto get_little_endian_memorywriter = [&]() {	//
+			return little_endian_memorywriter<decltype(startIt)>{startIt, endIt};
+		};
+		auto get_little_endian_memoryreader = [&]() {	//
+			return little_endian_memoryreader<decltype(startIt)>{startIt, endIt};
+		};
+
+		desc_testGroup<little_endian_memorywriter<decltype(startIt)>,
+					   little_endian_memoryreader<decltype(startIt)>,
+					   decltype(get_little_endian_memorywriter),
+					   decltype(get_little_endian_memoryreader)>("little endian",	//
+																 get_little_endian_memorywriter,
+																 get_little_endian_memoryreader);
+
+		auto get_big_endian_memorywriter = [&]() {	//
+			return big_endian_memorywriter<decltype(startIt)>{startIt, endIt};
+		};
+		auto get_big_endian_memoryreader = [&]() {	//
+			return big_endian_memoryreader<decltype(startIt)>{startIt, endIt};
+		};
+
+		desc_testGroup<big_endian_memorywriter<decltype(startIt)>,	//
+					   big_endian_memoryreader<decltype(startIt)>,
+					   decltype(get_big_endian_memorywriter),
+					   decltype(get_big_endian_memoryreader)>("big endian",	//
+															  get_big_endian_memorywriter,
+															  get_big_endian_memoryreader);
 	});
 };
 
@@ -118,62 +136,77 @@ go_bandit([]() {
 				}
 			});
 
-			desc_testGroup(	//
-			  "native endian",
-			  [&]() {
-				  if (ifs.is_open())
-				  {
-					  ifs.close();
-				  }
-				  ofs = io::mapped_file_sink{params};
-				  return memorywriter<decltype(ofs.data())>{ofs.data(), ofs.data() + ofs.size()};
-			  },
-			  [&]() {
-				  if (ofs.is_open())
-				  {
-					  ofs.close();
-				  }
-				  ifs = io::mapped_file_source{params};
-				  return memoryreader<decltype(ifs.data())>{ifs.data(), ifs.data() + ifs.size()};
-			  });
+			auto get_memorywriter = [&]() {
+				if (ifs.is_open())
+				{
+					ifs.close();
+				}
+				ofs = io::mapped_file_sink{params};
+				return memorywriter<decltype(ofs.data())>{ofs.data(), ofs.data() + ofs.size()};
+			};
+			auto get_memoryreader = [&]() {
+				if (ofs.is_open())
+				{
+					ofs.close();
+				}
+				ifs = io::mapped_file_source{params};
+				return memoryreader<decltype(ifs.data())>{ifs.data(), ifs.data() + ifs.size()};
+			};
 
-			desc_testGroup(
-			  "little endian",
-			  [&]() {
-				  if (ifs.is_open())
-				  {
-					  ifs.close();
-				  }
-				  ofs = io::mapped_file_sink{params};
-				  return little_endian_memorywriter<decltype(ofs.data())>{ofs.data(), ofs.data() + ofs.size()};
-			  },
-			  [&]() {
-				  if (ofs.is_open())
-				  {
-					  ofs.close();
-				  }
-				  ifs = io::mapped_file_source{params};
-				  return little_endian_memoryreader<decltype(ifs.data())>{ifs.data(), ifs.data() + ifs.size()};
-			  });
+			desc_testGroup<memorywriter<decltype(ofs.data())>,
+						   memoryreader<decltype(ifs.data())>,
+						   decltype(get_memorywriter),
+						   decltype(get_memoryreader)>("native endian",	//
+													   get_memorywriter,
+													   get_memoryreader);
 
-			desc_testGroup(
-			  "big endian",
-			  [&]() {
-				  if (ifs.is_open())
-				  {
-					  ifs.close();
-				  }
-				  ofs = io::mapped_file_sink{params};
-				  return big_endian_memorywriter<decltype(ofs.data())>{ofs.data(), ofs.data() + ofs.size()};
-			  },
-			  [&]() {
-				  if (ofs.is_open())
-				  {
-					  ofs.close();
-				  }
-				  ifs = io::mapped_file_source{params};
-				  return big_endian_memoryreader<decltype(ifs.data())>{ifs.data(), ifs.data() + ifs.size()};
-			  });
+			auto get_little_endian_memorywriter = [&]() {
+				if (ifs.is_open())
+				{
+					ifs.close();
+				}
+				ofs = io::mapped_file_sink{params};
+				return little_endian_memorywriter<decltype(ofs.data())>{ofs.data(), ofs.data() + ofs.size()};
+			};
+			auto get_little_endian_memoryreader = [&]() {
+				if (ofs.is_open())
+				{
+					ofs.close();
+				}
+				ifs = io::mapped_file_source{params};
+				return little_endian_memoryreader<decltype(ifs.data())>{ifs.data(), ifs.data() + ifs.size()};
+			};
+
+			desc_testGroup<little_endian_memorywriter<decltype(ofs.data())>,
+						   little_endian_memoryreader<decltype(ifs.data())>,
+						   decltype(get_little_endian_memorywriter),
+						   decltype(get_little_endian_memoryreader)>("little endian",	//
+																	 get_little_endian_memorywriter,
+																	 get_little_endian_memoryreader);
+
+			auto get_big_endian_memorywriter = [&]() {
+				if (ifs.is_open())
+				{
+					ifs.close();
+				}
+				ofs = io::mapped_file_sink{params};
+				return big_endian_memorywriter<decltype(ofs.data())>{ofs.data(), ofs.data() + ofs.size()};
+			};
+			auto get_big_endian_memoryreader = [&]() {
+				if (ofs.is_open())
+				{
+					ofs.close();
+				}
+				ifs = io::mapped_file_source{params};
+				return big_endian_memoryreader<decltype(ifs.data())>{ifs.data(), ifs.data() + ifs.size()};
+			};
+
+			desc_testGroup<big_endian_memorywriter<decltype(ofs.data())>,
+						   big_endian_memoryreader<decltype(ifs.data())>,
+						   decltype(get_big_endian_memorywriter),
+						   decltype(get_big_endian_memoryreader)>("big endian",	//
+																  get_big_endian_memorywriter,
+																  get_big_endian_memoryreader);
 		});
 	});
 });

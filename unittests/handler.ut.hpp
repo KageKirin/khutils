@@ -1,147 +1,168 @@
 ﻿#ifndef KHUTILS_UNITTESTS_HANDLER_UT_HPP_INC
 #define KHUTILS_UNITTESTS_HANDLER_UT_HPP_INC
 
+#include "khutils/base_handler.hpp"
 #include <bandit/bandit.h>
+#include <functional>
 
-auto it_singleWriteAndRead = [](auto name, auto write, auto get_writer, auto get_reader) {
+template <typename WriterT, typename ReaderT, typename ValueT, typename GetWriterT, typename GetReaderT>
+void it_singleWriteAndRead(const char* name, ValueT value, GetWriterT getWriter, GetReaderT getReader)
+{
 	using namespace bandit;
 
 	return it(name, [&]() {
-		auto writer = get_writer();
-		writer.template write<decltype(write)>(write);
+		WriterT writer = getWriter();
+		writer.template write<decltype(value)>(value);
 
-		auto reader = get_reader();
-		auto read   = reader.template read<decltype(write)>();
+		ReaderT reader = getReader();
+		auto	read   = reader.template read<decltype(value)>();
 
-		AssertThat(read, Equals(write));
+		AssertThat(read, Equals(value));
 	});
 };
 
-auto it_doubleWriteAndRead = [](auto name, auto write, auto write2, auto get_writer, auto get_reader) {
+template <typename WriterT, typename ReaderT, typename ValueT, typename ValueT2, typename GetWriterT, typename GetReaderT>
+void it_doubleWriteAndRead(const char* name, ValueT value, ValueT2 value2, GetWriterT getWriter, GetReaderT getReader)
+{
 	using namespace bandit;
 
 	return it(name, [&]() {
-		auto writer = get_writer();
-		writer.template write<decltype(write)>(write);
-		writer.template write<decltype(write2)>(write2);
+		WriterT writer = getWriter();
+		writer.template write<decltype(value)>(value);
+		writer.template write<decltype(value2)>(value2);
 
-		auto reader = get_reader();
-		auto read   = reader.template read<decltype(write)>();
-		auto read2  = reader.template read<decltype(write2)>();
+		ReaderT reader = getReader();
+		auto	read   = reader.template read<decltype(value)>();
+		auto	read2  = reader.template read<decltype(value2)>();
 
-		AssertThat(read, Equals(write));
-		AssertThat(read2, Equals(write2));
+		AssertThat(read, Equals(value));
+		AssertThat(read2, Equals(value2));
 	});
 };
 
-auto it_writeFetchAndRead = [](auto name, auto write, auto get_writer, auto get_reader) {
+template <typename WriterT, typename ReaderT, typename ValueT, typename GetWriterT, typename GetReaderT>
+void it_writeFetchAndRead(const char* name, ValueT value, GetWriterT getWriter, GetReaderT getReader)
+{
 	using namespace bandit;
 
 	return it(name, [&]() {
-		auto writer = get_writer();
-		writer.template write<decltype(write)>(write);
+		WriterT writer = getWriter();
+		writer.template write<decltype(value)>(value);
 
-		auto reader = get_reader();
-		auto fetch  = reader.template fetch<decltype(write)>();
-		auto read   = reader.template read<decltype(write)>();
+		ReaderT reader = getReader();
+		auto	fetch  = reader.template fetch<decltype(value)>();
+		auto	read   = reader.template read<decltype(value)>();
 
-		AssertThat(fetch, Equals(write));
-		AssertThat(read, Equals(write));
+		AssertThat(fetch, Equals(value));
+		AssertThat(read, Equals(value));
 		AssertThat(fetch, Equals(read));
 	});
 };
 
-auto it_skipAndAlign = [](auto name, auto write, auto write2, auto write3, auto get_writer, auto get_reader) {
+template <typename WriterT, typename ReaderT, typename ValueT, typename ValueT2, typename ValueT3, typename GetWriterT, typename GetReaderT>
+void it_skipAndAlign(const char* name, ValueT value, ValueT2 value2, ValueT3 value3, GetWriterT getWriter, GetReaderT getReader)
+{
 	using namespace bandit;
 
 	return it(name, [&]() {
-		auto writer = get_writer();
-		writer.template write<decltype(write)>(write);
-		writer.template skip<decltype(write)>();
-		writer.template write<decltype(write2)>(write2);
+		WriterT writer = getWriter();
+		writer.template write<decltype(value)>(value);
+		writer.template skip<decltype(value)>();
+		writer.template write<decltype(value2)>(value2);
 		writer.template alignToNext<16>();
-		writer.template write<decltype(write3)>(write3);
+		writer.template write<decltype(value3)>(value3);
 
-		auto reader = get_reader();
-		auto read   = reader.template read<decltype(write)>();
-		reader.template skip<decltype(write)>();
-		auto read2 = reader.template read<decltype(write2)>();
+		ReaderT reader = getReader();
+		auto	read   = reader.template read<decltype(value)>();
+		reader.template skip<decltype(value)>();
+		auto read2 = reader.template read<decltype(value2)>();
 		reader.template alignToNext<16>();
-		auto read3 = reader.template read<decltype(write3)>();
+		auto read3 = reader.template read<decltype(value3)>();
 
-		AssertThat(read, Equals(write));
-		AssertThat(read2, Equals(write2));
-		AssertThat(read3, Equals(write3));
+		AssertThat(read, Equals(value));
+		AssertThat(read2, Equals(value2));
+		AssertThat(read3, Equals(value3));
 	});
 };
 
 ///
 
-auto desc_singleWriteAndRead = [](auto desc, auto get_writer, auto get_reader) {
+template <typename WriterT, typename ReaderT, typename GetWriterT, typename GetReaderT>
+void desc_singleWriteAndRead(const char* desc, GetWriterT getWriter, GetReaderT getReader)
+{
 	using namespace bandit;
 
 	return describe(desc, [&]() {
-		it_singleWriteAndRead("int", 42, get_writer, get_reader);
-		it_singleWriteAndRead("float", 0.65f, get_writer, get_reader);
-		it_singleWriteAndRead("double", 2.56094, get_writer, get_reader);
+		it_singleWriteAndRead<WriterT, ReaderT>("int", 42, getWriter, getReader);
+		it_singleWriteAndRead<WriterT, ReaderT>("float", 0.65f, getWriter, getReader);
+		it_singleWriteAndRead<WriterT, ReaderT>("double", 2.56094, getWriter, getReader);
 	});
 };
 
-auto desc_doubleWriteAndRead = [](auto desc, auto get_writer, auto get_reader) {
+template <typename WriterT, typename ReaderT, typename GetWriterT, typename GetReaderT>
+void desc_doubleWriteAndRead(const char* desc, GetWriterT getWriter, GetReaderT getReader)
+{
 	using namespace bandit;
 
 	return describe(desc, [&]() {
-		it_doubleWriteAndRead("int, int", 42, 87, get_writer, get_reader);
-		it_doubleWriteAndRead("float, float", 0.65f, 1.12f, get_writer, get_reader);
-		it_doubleWriteAndRead("double, double", 0.654245, 1.128745, get_writer, get_reader);
+		it_doubleWriteAndRead<WriterT, ReaderT>("int, int", 42, 87, getWriter, getReader);
+		it_doubleWriteAndRead<WriterT, ReaderT>("float, float", 0.65f, 1.12f, getWriter, getReader);
+		it_doubleWriteAndRead<WriterT, ReaderT>("double, double", 0.654245, 1.128745, getWriter, getReader);
 	});
 };
 
-auto desc_mixedWriteAndRead = [](auto desc, auto get_writer, auto get_reader) {
+template <typename WriterT, typename ReaderT, typename GetWriterT, typename GetReaderT>
+void desc_mixedWriteAndRead(const char* desc, GetWriterT getWriter, GetReaderT getReader)
+{
 	using namespace bandit;
 
 	return describe(desc, [&]() {
-		it_doubleWriteAndRead("int, float", 42, 1.12f, get_writer, get_reader);
-		it_doubleWriteAndRead("float, int", 0.65f, 87, get_writer, get_reader);
-		it_doubleWriteAndRead("float, double", 0.65f, 1.128745, get_writer, get_reader);
+		it_doubleWriteAndRead<WriterT, ReaderT>("int, float", 42, 1.12f, getWriter, getReader);
+		it_doubleWriteAndRead<WriterT, ReaderT>("float, int", 0.65f, 87, getWriter, getReader);
+		it_doubleWriteAndRead<WriterT, ReaderT>("float, double", 0.65f, 1.128745, getWriter, getReader);
 	});
 };
 
-auto desc_writeFetchAndRead = [](auto desc, auto get_writer, auto get_reader) {
+template <typename WriterT, typename ReaderT, typename GetWriterT, typename GetReaderT>
+void desc_writeFetchAndRead(const char* desc, GetWriterT getWriter, GetReaderT getReader)
+{
 	using namespace bandit;
 
 	return describe(desc, [&]() {
-		it_writeFetchAndRead("int", 42, get_writer, get_reader);
-		it_writeFetchAndRead("float", 0.65f, get_writer, get_reader);
-		it_writeFetchAndRead("double", 2.56094, get_writer, get_reader);
+		it_writeFetchAndRead<WriterT, ReaderT>("int", 42, getWriter, getReader);
+		it_writeFetchAndRead<WriterT, ReaderT>("float", 0.65f, getWriter, getReader);
+		it_writeFetchAndRead<WriterT, ReaderT>("double", 2.56094, getWriter, getReader);
 	});
 };
 
-auto desc_skipAndAlign = [](auto desc, auto get_writer, auto get_reader) {
+template <typename WriterT, typename ReaderT, typename GetWriterT, typename GetReaderT>
+void desc_skipAndAlign(const char* desc, GetWriterT getWriter, GetReaderT getReader)
+{
 	using namespace bandit;
 
 	return describe(desc, [&]() {
-		it_skipAndAlign("int, int, int", 42, 87, 456, get_writer, get_reader);
-		it_skipAndAlign("float, float, float", 0.65f, 1.12f, 75.545f, get_writer, get_reader);
-		it_skipAndAlign("double, double, double", 0.654245, 1.128745, 345.54509, get_writer, get_reader);
+		it_skipAndAlign<WriterT, ReaderT>("int, int, int", 42, 87, 456, getWriter, getReader);
+		it_skipAndAlign<WriterT, ReaderT>("float, float, float", 0.65f, 1.12f, 75.545f, getWriter, getReader);
+		it_skipAndAlign<WriterT, ReaderT>("double, double, double", 0.654245, 1.128745, 345.54509, getWriter, getReader);
 
-		it_skipAndAlign("int, float, double", 42, 1.12f, 345.54509, get_writer, get_reader);
-		it_skipAndAlign("float, int, double", 0.65f, 87, 345.54509, get_writer, get_reader);
-		it_skipAndAlign("double, float, int", 0.654245, 1.12f, 345.54509, get_writer, get_reader);
+		it_skipAndAlign<WriterT, ReaderT>("int, float, double", 42, 1.12f, 345.54509, getWriter, getReader);
+		it_skipAndAlign<WriterT, ReaderT>("float, int, double", 0.65f, 87, 345.54509, getWriter, getReader);
+		it_skipAndAlign<WriterT, ReaderT>("double, float, int", 0.654245, 1.12f, 345.54509, getWriter, getReader);
 	});
 };
 
 ///
-
-auto desc_testGroup = [](auto desc, auto get_writer, auto get_reader) {
+template <typename WriterT, typename ReaderT, typename GetWriterT, typename GetReaderT>
+void desc_testGroup(const char* desc, GetWriterT getWriter, GetReaderT getReader)
+{
 	using namespace bandit;
 
 	return describe(desc, [&]() {
-		desc_singleWriteAndRead("writing once, reading once", get_writer, get_reader);
-		desc_doubleWriteAndRead("writing twice, reading twice", get_writer, get_reader);
-		desc_mixedWriteAndRead("writing mixed, reading mixed", get_writer, get_reader);
-		desc_writeFetchAndRead("fetching", get_writer, get_reader);
-		desc_skipAndAlign("skip and alignment", get_writer, get_reader);
+		desc_singleWriteAndRead<WriterT, ReaderT>("writing once, reading once", getWriter, getReader);
+		desc_doubleWriteAndRead<WriterT, ReaderT>("writing twice, reading twice", getWriter, getReader);
+		desc_mixedWriteAndRead<WriterT, ReaderT>("writing mixed, reading mixed", getWriter, getReader);
+		desc_writeFetchAndRead<WriterT, ReaderT>("fetching", getWriter, getReader);
+		desc_skipAndAlign<WriterT, ReaderT>("skip and alignment", getWriter, getReader);
 	});
 };
 
