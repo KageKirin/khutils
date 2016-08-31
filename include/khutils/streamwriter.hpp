@@ -4,11 +4,13 @@
 //! file has dependency on boost.endian
 //! include wisely to keep compile times minimal
 
+#include "khutils/base_handler.hpp"
 #include "khutils/typeconversion.hpp"
 
 #include <boost/endian/conversion.hpp>
 #include <functional>
 #include <ostream>
+#include <vector>
 
 namespace khutils
 {
@@ -40,16 +42,45 @@ namespace khutils
 		_streamwriter& operator=(const _streamwriter&) = default;
 		_streamwriter& operator=(_streamwriter&&) = default;
 
-		//! writes _WriteT into ostream after converting and end0an-swapping provided
-		//! _InT
-		//! optional convert function can be used to downsample _InT into bytewise
-		//! smaller _WriteT
+		//! writes WriteT into ostream after converting and end0an-swapping provided
+		//! InT
+		//! optional convert function can be used to downsample InT into bytewise
+		//! smaller WriteT
 		//! e.g. to write F32 as U16
-		template <typename _WriteT, typename _InT = _WriteT>
-		void write(_InT t, std::function<_WriteT(_InT)> convert = std::bind(reinterpret_convert<_WriteT, _InT>, std::placeholders::_1))
+		template <typename WriteT, typename InT>
+		void write(InT t, SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
 		{
-			_WriteT r = conditional_reverse<_order, order::native>(convert(t));
-			m_os.write(reinterpret_cast<char*>(&r), sizeof(_WriteT));
+			WriteT r = swapConv(t);
+			m_os.write(reinterpret_cast<char*>(&r), sizeof(WriteT));
+		}
+
+		//! writes count * WriteT into ostream after converting and end0an-swapping
+		//! provided
+		//! InT
+		//! optional convert function can be used to downsample InT into bytewise
+		//! smaller WriteT
+		//! e.g. to write F32 as U16
+		template <typename WriteT, typename InT>
+		void write(const InT* t,
+				   size_t	 count,
+				   SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
+
+		{
+			std::vector<WriteT> r(count);
+			std::transform(t, t + count, r.begin(), swapConv);
+			m_os.write(reinterpret_cast<char*>(&r[0]), sizeof(WriteT) * r.size());
+		}
+
+		//! writes WriteT into ostream after converting and end0an-swapping provided
+		//! InT
+		//! optional convert function can be used to downsample InT into bytewise
+		//! smaller WriteT
+		//! e.g. to write F32 as U16
+		template <typename WriteT, typename InT>
+		void write(const std::vector<InT>& t,
+				   SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
+		{
+			write(t.data(), t.size(), swapConv);
 		}
 
 		template <typename _SkipT>

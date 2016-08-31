@@ -4,12 +4,14 @@
 //! file has dependency on boost.endian
 //! include wisely to keep compile times minimal
 
+#include "khutils/base_handler.hpp"
 #include "khutils/typeconversion.hpp"
 
 #include <boost/endian/conversion.hpp>
 #include <cstdio>
 #include <functional>
 #include <memory>
+#include <vector>
 
 namespace khutils
 {
@@ -41,16 +43,48 @@ namespace khutils
 		_filewriter& operator=(const _filewriter&) = default;
 		_filewriter& operator=(_filewriter&&) = default;
 
-		//! writes _WriteT into ofile after converting and end0an-swapping provided
-		//! _InT
-		//! optional convert function can be used to downsample _InT into bytewise
-		//! smaller _WriteT
+		//! writes WriteT into ofile after converting and end0an-swapping provided
+		//! InT
+		//! optional convert function can be used to downsample InT into bytewise
+		//! smaller WriteT
 		//! e.g. to write F32 as U16
-		template <typename _WriteT, typename _InT = _WriteT>
-		void write(_InT t, std::function<_WriteT(_InT)> convert = std::bind(reinterpret_convert<_WriteT, _InT>, std::placeholders::_1))
+		template <typename WriteT, typename InT = WriteT>
+		void write(InT t, SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
 		{
-			_WriteT r = conditional_reverse<_order, order::native>(convert(t));
-			fwrite(&r, sizeof(char), sizeof(_WriteT), m_file.get());
+			WriteT r = swapConv(t);
+			fwrite(&r, sizeof(char), sizeof(WriteT), m_file.get());
+		}
+
+		//! writes coubnt * WriteT into ofile after converting and end0an-swapping
+		//! provided
+		//! InT
+		//! optional convert function can be used to downsample InT into bytewise
+		//! smaller WriteT
+		//! e.g. to write F32 as U16
+		template <typename WriteT, typename InT = WriteT>
+		void write(const InT* t,
+				   size_t	 count,
+				   SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
+		{
+			std::vector<WriteT> r(count);
+			std::transform(t, t + count, r.begin(), swapConv);
+
+			fwrite(&r[0], sizeof(char), sizeof(WriteT) * r.size(), m_file.get());
+			// or fwrite(&r[0], sizeof(WriteT), r.size(), m_file.get()); to fit FILE api
+			// nicely
+		}
+
+		//! writes vector<WriteT> into ofile after converting and end0an-swapping
+		//! provided
+		//! InT
+		//! optional convert function can be used to downsample InT into bytewise
+		//! smaller WriteT
+		//! e.g. to write F32 as U16
+		template <typename WriteT, typename InT = WriteT>
+		void write(const std::vector<InT>& t,
+				   SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
+		{
+			write(t.data(), t.size(), swapConv);
 		}
 
 		template <typename _SkipT>

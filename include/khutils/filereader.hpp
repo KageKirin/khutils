@@ -4,12 +4,14 @@
 //! file has dependency on boost.endian
 //! include wisely to keep compile times minimal
 
+#include "khutils/base_handler.hpp"
 #include "khutils/typeconversion.hpp"
 
 #include <boost/endian/conversion.hpp>
 #include <cstdio>
 #include <functional>
 #include <memory>
+#include <vector>
 
 namespace khutils
 {
@@ -41,29 +43,64 @@ namespace khutils
 		_filereader& operator=(const _filereader&) = default;
 		_filereader& operator=(_filereader&&) = default;
 
-		//! reads _ReadT from ifile, then endian-swaps and converts it into _OutT
-		//! optional convert function can be used to upsample _ReadT into bytewise
-		//! bigger _OutT
+		//! reads ReadT from file, then endian-swaps and converts it into OutT
+		//! optional convert function can be used to upsample ReadT into bytewise
+		//! bigger OutT
 		//! e.g. to convert read U16 as F32
-		template <typename _OutT, typename _ReadT = _OutT>
-		_OutT read(std::function<_OutT(_ReadT)> convert = std::bind(reinterpret_convert<_OutT, _ReadT>, std::placeholders::_1))
+		template <typename OutT, typename ReadT = OutT>
+		OutT read(SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			_ReadT r;
-			fread(&r, sizeof(char), sizeof(_ReadT), m_file.get());
-			return convert(conditional_reverse<order::native, _order>(r));
+			ReadT r;
+			fread(&r, sizeof(char), sizeof(ReadT), m_file.get());
+			return (r);
 		}
 
-		//! fetches _ReadT from ifile WITHOUT incrementing position, then
-		//! endian-swaps and converts it into _OutT
-		//! optional convert function can be used to upsample _ReadT into bytewise
-		//! bigger _OutT
+		//! fetches ReadT from file WITHOUT incrementing position, then
+		//! endian-swaps and converts it into OutT
+		//! optional convert function can be used to upsample ReadT into bytewise
+		//! bigger OutT
 		//! e.g. to convert read U16 as F32
-		template <typename _OutT, typename _ReadT = _OutT>
-		_OutT fetch(std::function<_OutT(_ReadT)> convert = std::bind(reinterpret_convert<_OutT, _ReadT>, std::placeholders::_1))
+		template <typename OutT, typename ReadT = OutT>
+		OutT fetch(SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto  pos = ftell(m_file.get());
-			_OutT t   = read<_OutT, _ReadT>(convert);
-			fseek(pos, m_file.get());
+			auto pos = ftell(m_file.get());
+			OutT t   = read<OutT, ReadT>(swapConv);
+			fseek(m_file.get(), pos, SEEK_SET);
+			return t;
+		}
+
+		//! reads count * ReadT from file, then endian-swaps and converts it into OutT
+		//! optional convert function can be used to upsample ReadT into bytewise
+		//! bigger OutT
+		//! e.g. to convert read U16 as F32
+		template <typename OutT, typename ReadT = OutT>
+		std::vector<OutT> read(size_t count,
+							   SwapConversionFuncT<OutT, ReadT> swapConv
+							   = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
+		{
+			std::vector<ReadT> r(count);
+			fread(&r[0], sizeof(char), sizeof(ReadT) * count, m_file.get());
+			// or fread(&r[0], sizeof(ReadT), count, m_file.get()); to nicely fit FILE
+			// api
+
+			std::vector<OutT> t(count);
+			std::transform(r.begin(), r.end(), t.begin(), swapConv);
+			return t;
+		}
+
+		//! fetches count * ReadT from file WITHOUT incrementing position, then
+		//! endian-swaps and converts it into OutT
+		//! optional convert function can be used to upsample ReadT into bytewise
+		//! bigger OutT
+		//! e.g. to convert read U16 as F32
+		template <typename OutT, typename ReadT = OutT>
+		std::vector<OutT> fetch(size_t count,
+								SwapConversionFuncT<OutT, ReadT> swapConv
+								= base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
+		{
+			auto			  pos = ftell(m_file.get());
+			std::vector<OutT> t   = read<OutT, ReadT>(count, swapConv);
+			fseek(m_file.get(), pos, SEEK_SET);
 			return t;
 		}
 
@@ -71,7 +108,7 @@ namespace khutils
 		void skip(size_t count = 1)
 		{
 			auto pos = ftell(m_file.get());
-			fseek(pos + sizeof(_SkipT) * count, m_file.get());
+			fseek(m_file.get(), pos + sizeof(_SkipT) * count, SEEK_SET);
 		}
 
 		template <size_t _Alignment>

@@ -4,11 +4,13 @@
 //! file has dependency on boost.endian
 //! include wisely to keep compile times minimal
 
+#include "khutils/base_handler.hpp"
 #include "khutils/typeconversion.hpp"
 
 #include <boost/endian/conversion.hpp>
 #include <functional>
 #include <istream>
+#include <vector>
 
 namespace khutils
 {
@@ -40,28 +42,62 @@ namespace khutils
 		_streamreader& operator=(const _streamreader&) = default;
 		_streamreader& operator=(_streamreader&&) = default;
 
-		//! reads _ReadT from istream, then endian-swaps and converts it into _OutT
-		//! optional convert function can be used to upsample _ReadT into bytewise
-		//! bigger _OutT
+		//! reads ReadT from istream, then endian-swaps and converts it into OutT
+		//! optional convert function can be used to upsample ReadT into bytewise
+		//! bigger OutT
 		//! e.g. to convert read U16 as F32
-		template <typename _OutT, typename _ReadT = _OutT>
-		_OutT read(std::function<_OutT(_ReadT)> convert = std::bind(reinterpret_convert<_OutT, _ReadT>, std::placeholders::_1))
+		template <typename OutT, typename ReadT = OutT>
+		OutT read(SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			_ReadT r;
-			m_is.read(reinterpret_cast<char*>(&r), sizeof(_ReadT));
-			return convert(conditional_reverse<order::native, _order>(r));
+			ReadT r;
+			m_is.read(reinterpret_cast<char*>(&r), sizeof(ReadT));
+			return swapConv(r);
 		}
 
-		//! fetches _ReadT from istream WITHOUT incrementing position, then
-		//! endian-swaps and converts it into _OutT
-		//! optional convert function can be used to upsample _ReadT into bytewise
-		//! bigger _OutT
+		//! fetches ReadT from istream WITHOUT incrementing position, then
+		//! endian-swaps and converts it into OutT
+		//! optional convert function can be used to upsample ReadT into bytewise
+		//! bigger OutT
 		//! e.g. to convert read U16 as F32
-		template <typename _OutT, typename _ReadT = _OutT>
-		_OutT fetch(std::function<_OutT(_ReadT)> convert = std::bind(reinterpret_convert<_OutT, _ReadT>, std::placeholders::_1))
+		template <typename OutT, typename ReadT = OutT>
+		OutT fetch(SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto  pos = m_is.tellg();
-			_OutT t   = read<_OutT, _ReadT>(convert);
+			auto pos = m_is.tellg();
+			OutT t   = read<OutT, ReadT>(swapConv);
+			m_is.seekg(pos);
+			return t;
+		}
+
+		//! reads count * ReadT from istream, then endian-swaps and converts them into
+		//! count * OutT
+		//! optional convert function can be used to upsample ReadT into bytewise
+		//! bigger OutT
+		//! e.g. to convert read U16 as F32
+		template <typename OutT, typename ReadT = OutT>
+		std::vector<OutT> read(size_t count,
+							   SwapConversionFuncT<OutT, ReadT> swapConv
+							   = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
+		{
+			std::vector<ReadT> r(count);
+			m_is.read(reinterpret_cast<char*>(&r[0]), sizeof(ReadT) * count);
+
+			std::vector<OutT> t(count);
+			std::transform(r.begin(), r.end(), t.begin(), swapConv);
+			return t;
+		}
+
+		//! fetches count * ReadT from istream WITHOUT incrementing position, then
+		//! endian-swaps and converts it into count * OutT
+		//! optional convert function can be used to upsample ReadT into bytewise
+		//! bigger OutT
+		//! e.g. to convert read U16 as F32
+		template <typename OutT, typename ReadT = OutT>
+		std::vector<OutT> fetch(size_t count,
+								SwapConversionFuncT<OutT, ReadT> swapConv
+								= base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
+		{
+			auto			  pos = m_is.tellg();
+			std::vector<OutT> t   = read<OutT, ReadT>(count, swapConv);
 			m_is.seekg(pos);
 			return t;
 		}

@@ -4,10 +4,12 @@
 //! file has dependency on boost.endian
 //! include wisely to keep compile times minimal
 
+#include "khutils/base_handler.hpp"
 #include "khutils/typeconversion.hpp"
 
 #include <boost/endian/conversion.hpp>
 #include <functional>
+#include <vector>
 
 namespace khutils
 {
@@ -46,16 +48,16 @@ namespace khutils
 		_memoryreader& operator=(const _memoryreader&) = default;
 		_memoryreader& operator=(_memoryreader&&) = default;
 
-		//! reads _ReadT from data, then endian-swaps and converts it into _OutT
-		//! optional convert function can be used to upsample _ReadT into bytewise
-		//! bigger _OutT
+		//! reads ReadT from data, then endian-swaps and converts it into OutT
+		//! optional convert function can be used to upsample ReadT into bytewise
+		//! bigger OutT
 		//! e.g. to convert read U16 as F32
-		template <typename _OutT, typename _ReadT = _OutT>
-		_OutT read(std::function<_OutT(_ReadT)> convert = std::bind(reinterpret_convert<_OutT, _ReadT>, std::placeholders::_1))
+		template <typename OutT, typename ReadT = OutT>
+		OutT read(SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			_ReadT r	   = (_ReadT)0;
-			char*  rawdata = reinterpret_cast<char*>(&r);
-			for (size_t i = 0; i < sizeof(_ReadT); ++i)
+			ReadT r		  = (ReadT)0;
+			char* rawdata = reinterpret_cast<char*>(&r);
+			for (size_t i = 0; i < sizeof(ReadT); ++i)
 			{
 				if (m_current != m_end)
 				{
@@ -64,20 +66,61 @@ namespace khutils
 				++m_current;
 			}
 
-			return convert(conditional_reverse<order::native, _order>(r));
+			return swapConv(r);
 		}
 
-		//! fetches _ReadT from data WITHOUT incrementing position, then
-		//! endian-swaps and converts it into _OutT
-		//! optional convert function can be used to upsample _ReadT into bytewise
-		//! bigger _OutT
+		//! fetches ReadT from data WITHOUT incrementing position, then
+		//! endian-swaps and converts it into OutT
+		//! optional convert function can be used to upsample ReadT into bytewise
+		//! bigger OutT
 		//! e.g. to convert read U16 as F32
-		template <typename _OutT, typename _ReadT = _OutT>
-		_OutT fetch(std::function<_OutT(_ReadT)> convert = std::bind(reinterpret_convert<_OutT, _ReadT>, std::placeholders::_1))
+		template <typename OutT, typename ReadT = OutT>
+		OutT fetch(SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto  pos = m_current;
-			_OutT t   = read<_OutT, _ReadT>(convert);
+			auto pos  = m_current;
+			OutT t	= read<OutT, ReadT>(swapConv);
 			m_current = pos;
+			return t;
+		}
+
+		//! reads count * ReadT from data, then endian-swaps and converts it into OutT
+		//! optional convert function can be used to upsample ReadT into bytewise
+		//! bigger OutT
+		//! e.g. to convert read U16 as F32
+		template <typename OutT, typename ReadT = OutT>
+		std::vector<OutT> read(size_t count,
+							   SwapConversionFuncT<OutT, ReadT> swapConv
+							   = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
+		{
+			std::vector<ReadT> r(count, (ReadT)0);
+			char*			   rawdata = reinterpret_cast<char*>(&r);
+			for (size_t i = 0; i < sizeof(ReadT) * count; ++i)
+			{
+				if (m_current != m_end)
+				{
+					rawdata[i] = *(m_current);
+				}
+				++m_current;
+			}
+
+			std::vector<OutT> t(count);
+			std::transform(r.begin(), r.end(), t.begin(), swapConv);
+			return t;
+		}
+
+		//! fetches count * ReadT from data WITHOUT incrementing position, then
+		//! endian-swaps and converts it into OutT
+		//! optional convert function can be used to upsample ReadT into bytewise
+		//! bigger OutT
+		//! e.g. to convert read U16 as F32
+		template <typename OutT, typename ReadT = OutT>
+		std::vector<OutT> fetch(size_t count,
+								SwapConversionFuncT<OutT, ReadT> swapConv
+								= base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
+		{
+			auto			  pos = m_current;
+			std::vector<OutT> t   = read<OutT, ReadT>(count, swapConv);
+			m_current			  = pos;
 			return t;
 		}
 

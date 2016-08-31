@@ -39,20 +39,20 @@ namespace boost
 
 namespace khutils
 {
-	// converts provided _InT into _OutT performing reinterpret_cast on memory
-	template <typename _OutT, typename _InT = _OutT>
-	_OutT reinterpret_convert(_InT r)
+	// converts provided InT into OutT performing reinterpret_cast on memory
+	template <typename OutT, typename InT = OutT>
+	OutT reinterpret_convert(InT r)
 	{
-		return *reinterpret_cast<_OutT*>(&r);
+		return *reinterpret_cast<OutT*>(&r);
 	}
 
-	// converts provided _InT into _OutT using union reinterpretation
-	template <typename _OutT, typename _InT = _OutT>
-	_OutT fast_convert(_InT r)
+	// converts provided InT into OutT using union reinterpretation
+	template <typename OutT, typename InT = OutT>
+	OutT fast_convert(InT r)
 	{
 		union conversion {
-			_OutT t;
-			_InT  r;
+			OutT t;
+			InT  r;
 		};
 		conversion val;
 		val.r = r;
