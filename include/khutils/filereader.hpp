@@ -78,13 +78,8 @@ namespace khutils
 							   SwapConversionFuncT<OutT, ReadT> swapConv
 							   = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			std::vector<ReadT> r(count);
-			fread(&r[0], sizeof(char), sizeof(ReadT) * count, m_file.get());
-			// or fread(&r[0], sizeof(ReadT), count, m_file.get()); to nicely fit FILE
-			// api
-
 			std::vector<OutT> t(count);
-			std::transform(r.begin(), r.end(), t.begin(), swapConv);
+			std::generate_n(t.begin(), count, [&swapConv]() { return read<OutT, InT>(swapConv); });
 			return t;
 		}
 

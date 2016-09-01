@@ -66,12 +66,7 @@ namespace khutils
 				   size_t	 count,
 				   SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
 		{
-			std::vector<WriteT> r(count);
-			std::transform(t, t + count, r.begin(), swapConv);
-
-			fwrite(&r[0], sizeof(char), sizeof(WriteT) * r.size(), m_file.get());
-			// or fwrite(&r[0], sizeof(WriteT), r.size(), m_file.get()); to fit FILE api
-			// nicely
+			std::for_each(t, t + count, [&swapConv](const auto& elem) { write<WriteT, InT>(elem, swapConv); });
 		}
 
 		//! writes vector<WriteT> into ofile after converting and end0an-swapping
