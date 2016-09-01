@@ -12,11 +12,11 @@
 
 #define KUTILS_OVERLOAD_READER_DECL(readerT, outT, readT)                                                              \
 	template <>                                                                                                        \
-	outT readerT::read<outT, readT>(SwapConversionFuncT<outT, readT> swapConv);
+	outT readerT::template read<outT, readT>(SwapConversionFuncT<outT, readT> swapConv);
 
 #define KUTILS_OVERLOAD_READER_IMPL(readerT, outT, readT, func)                                                        \
 	template <>                                                                                                        \
-	outT readerT::read<outT, readT>(SwapConversionFuncT<outT, readT> swapConv) BOOST_PP_REMOVE_PARENS(func)
+	outT readerT::template read<outT, readT>(SwapConversionFuncT<outT, readT> swapConv) BOOST_PP_REMOVE_PARENS(func)
 
 namespace khutils
 {

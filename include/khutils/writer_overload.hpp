@@ -12,11 +12,11 @@
 
 #define KUTILS_OVERLOAD_WRITER_DECL(writerT, writeT, inT)                                                              \
 	template <>                                                                                                        \
-	void writerT::write<writeT, inT>(inT t, SwapConversionFuncT<writeT, inT> swapConv);
+	void writerT::template write<writeT, inT>(inT t, SwapConversionFuncT<writeT, inT> swapConv);
 
 #define KUTILS_OVERLOAD_WRITER_IMPL(writerT, writeT, inT, func)                                                        \
 	template <>                                                                                                        \
-	void writerT::write<writeT, inT>(inT t, SwapConversionFuncT<writeT, inT> swapConv) BOOST_PP_REMOVE_PARENS(func)
+	void writerT::template write<writeT, inT>(inT t, SwapConversionFuncT<writeT, inT> swapConv) BOOST_PP_REMOVE_PARENS(func)
 
 namespace khutils
 {
