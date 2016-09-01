@@ -10,6 +10,13 @@
 
 #include <boost/preprocessor/punctuation/remove_parens.hpp>
 
+#define KUTILS_OVERLOAD_SWAPCONV(orderT, outT, inT)                                                                    \
+	template <>                                                                                                        \
+	inline outT base_handler_trait<orderT>::swap_after_convert<outT, inT>(inT _val)                                    \
+	{                                                                                                                  \
+		return noopSwap<outT, inT>(_val);                                                                              \
+	}
+
 #define KUTILS_OVERLOAD_WRITER_DECL(writerT, writeT, inT)                                                              \
 	template <>                                                                                                        \
 	void writerT::template write<writeT, inT>(inT t, SwapConversionFuncT<writeT, inT> swapConv);

@@ -17,6 +17,71 @@ namespace khutils
 	using boost::endian::order;
 
 	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::vec2, glm::vec2);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::vec3, glm::vec3);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::vec4, glm::vec4);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::quat, glm::quat);
+
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::dvec2, glm::dvec2);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::dvec3, glm::dvec3);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::dvec4, glm::dvec4);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::dquat, glm::dquat);
+
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::ivec2, glm::ivec2);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::ivec3, glm::ivec3);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::ivec4, glm::ivec4);
+
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::mat2x2, glm::mat2x2);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::mat2x3, glm::mat2x3);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::mat2x4, glm::mat2x4);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::mat3x2, glm::mat3x2);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::mat3x3, glm::mat3x3);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::mat3x4, glm::mat3x4);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::mat4x2, glm::mat4x2);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::mat4x3, glm::mat4x3);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::mat4x4, glm::mat4x4);
+
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::dmat2x2, glm::dmat2x2);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::dmat2x3, glm::dmat2x3);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::dmat2x4, glm::dmat2x4);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::dmat3x2, glm::dmat3x2);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::dmat3x3, glm::dmat3x3);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::dmat3x4, glm::dmat3x4);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::dmat4x2, glm::dmat4x2);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::dmat4x3, glm::dmat4x3);
+	template <>
+	KUTILS_OVERLOAD_CONVSWAP(order::big, glm::dmat4x4, glm::dmat4x4);
+
+	///
+
+	template <>
 	KUTILS_OVERLOAD_READER_DECL(big_endian_streamreader, glm::vec2, glm::vec2);
 	template <>
 	KUTILS_OVERLOAD_READER_DECL(big_endian_streamreader, glm::vec3, glm::vec3);

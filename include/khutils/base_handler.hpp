@@ -13,6 +13,12 @@ namespace khutils
 	template <typename OutT, typename InT>
 	using SwapConversionFuncT = std::function<OutT(InT)>;
 
+	template <typename OutT, typename InT>
+	inline OutT noopSwap(InT _val)
+	{
+		return reinterpret_convert<OutT, InT>(_val);
+	}
+
 	template <order _order>
 	struct base_handler_trait
 	{
