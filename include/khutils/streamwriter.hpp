@@ -66,7 +66,7 @@ namespace khutils
 				   SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
 
 		{
-			std::for_each(t, t + count, [&swapConv](const auto& elem) { write<WriteT, InT>(elem, swapConv); });
+			std::for_each(t, t + count, [&swapConv, this](const auto& elem) { this->write<WriteT, InT>(elem, swapConv); });
 		}
 
 		//! writes WriteT into ostream after converting and end0an-swapping provided

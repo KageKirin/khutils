@@ -79,7 +79,7 @@ namespace khutils
 							   = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
 			std::vector<OutT> t(count);
-			std::generate_n(t.begin(), count, [&swapConv]() { return read<OutT, InT>(swapConv); });
+			std::generate_n(t.begin(), count, [&swapConv, this]() { return this->read<OutT, ReadT>(swapConv); });
 			return t;
 		}
 
