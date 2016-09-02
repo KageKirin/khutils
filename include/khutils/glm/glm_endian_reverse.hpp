@@ -12,35 +12,35 @@ namespace boost
 {
 	namespace endian
 	{
-		glm::vec2 endian_reverse(glm::vec2 x) BOOST_NOEXCEPT;
-		glm::vec3 endian_reverse(glm::vec3 x) BOOST_NOEXCEPT;
-		glm::vec4 endian_reverse(glm::vec4 x) BOOST_NOEXCEPT;
-		glm::quat endian_reverse(glm::quat x) BOOST_NOEXCEPT;
-		glm::dvec2 endian_reverse(glm::dvec2 x) BOOST_NOEXCEPT;
-		glm::dvec3 endian_reverse(glm::dvec3 x) BOOST_NOEXCEPT;
-		glm::dvec4 endian_reverse(glm::dvec4 x) BOOST_NOEXCEPT;
-		glm::dquat endian_reverse(glm::dquat x) BOOST_NOEXCEPT;
-		glm::ivec2 endian_reverse(glm::ivec2 x) BOOST_NOEXCEPT;
-		glm::ivec3 endian_reverse(glm::ivec3 x) BOOST_NOEXCEPT;
-		glm::ivec4 endian_reverse(glm::ivec4 x) BOOST_NOEXCEPT;
-		glm::mat2x2 endian_reverse(glm::mat2x2 x) BOOST_NOEXCEPT;
-		glm::mat2x3 endian_reverse(glm::mat2x3 x) BOOST_NOEXCEPT;
-		glm::mat2x4 endian_reverse(glm::mat2x4 x) BOOST_NOEXCEPT;
-		glm::mat3x2 endian_reverse(glm::mat3x2 x) BOOST_NOEXCEPT;
-		glm::mat3x3 endian_reverse(glm::mat3x3 x) BOOST_NOEXCEPT;
-		glm::mat3x4 endian_reverse(glm::mat3x4 x) BOOST_NOEXCEPT;
-		glm::mat4x2 endian_reverse(glm::mat4x2 x) BOOST_NOEXCEPT;
-		glm::mat4x3 endian_reverse(glm::mat4x3 x) BOOST_NOEXCEPT;
-		glm::mat4x4 endian_reverse(glm::mat4x4 x) BOOST_NOEXCEPT;
-		glm::dmat2x2 endian_reverse(glm::dmat2x2 x) BOOST_NOEXCEPT;
-		glm::dmat2x3 endian_reverse(glm::dmat2x3 x) BOOST_NOEXCEPT;
-		glm::dmat2x4 endian_reverse(glm::dmat2x4 x) BOOST_NOEXCEPT;
-		glm::dmat3x2 endian_reverse(glm::dmat3x2 x) BOOST_NOEXCEPT;
-		glm::dmat3x3 endian_reverse(glm::dmat3x3 x) BOOST_NOEXCEPT;
-		glm::dmat3x4 endian_reverse(glm::dmat3x4 x) BOOST_NOEXCEPT;
-		glm::dmat4x2 endian_reverse(glm::dmat4x2 x) BOOST_NOEXCEPT;
-		glm::dmat4x3 endian_reverse(glm::dmat4x3 x) BOOST_NOEXCEPT;
-		glm::dmat4x4 endian_reverse(glm::dmat4x4 x) BOOST_NOEXCEPT;
+		inline glm::vec2 endian_reverse(glm::vec2 x) BOOST_NOEXCEPT;
+		inline glm::vec3 endian_reverse(glm::vec3 x) BOOST_NOEXCEPT;
+		inline glm::vec4 endian_reverse(glm::vec4 x) BOOST_NOEXCEPT;
+		inline glm::quat endian_reverse(glm::quat x) BOOST_NOEXCEPT;
+		inline glm::dvec2 endian_reverse(glm::dvec2 x) BOOST_NOEXCEPT;
+		inline glm::dvec3 endian_reverse(glm::dvec3 x) BOOST_NOEXCEPT;
+		inline glm::dvec4 endian_reverse(glm::dvec4 x) BOOST_NOEXCEPT;
+		inline glm::dquat endian_reverse(glm::dquat x) BOOST_NOEXCEPT;
+		inline glm::ivec2 endian_reverse(glm::ivec2 x) BOOST_NOEXCEPT;
+		inline glm::ivec3 endian_reverse(glm::ivec3 x) BOOST_NOEXCEPT;
+		inline glm::ivec4 endian_reverse(glm::ivec4 x) BOOST_NOEXCEPT;
+		inline glm::mat2x2 endian_reverse(glm::mat2x2 x) BOOST_NOEXCEPT;
+		inline glm::mat2x3 endian_reverse(glm::mat2x3 x) BOOST_NOEXCEPT;
+		inline glm::mat2x4 endian_reverse(glm::mat2x4 x) BOOST_NOEXCEPT;
+		inline glm::mat3x2 endian_reverse(glm::mat3x2 x) BOOST_NOEXCEPT;
+		inline glm::mat3x3 endian_reverse(glm::mat3x3 x) BOOST_NOEXCEPT;
+		inline glm::mat3x4 endian_reverse(glm::mat3x4 x) BOOST_NOEXCEPT;
+		inline glm::mat4x2 endian_reverse(glm::mat4x2 x) BOOST_NOEXCEPT;
+		inline glm::mat4x3 endian_reverse(glm::mat4x3 x) BOOST_NOEXCEPT;
+		inline glm::mat4x4 endian_reverse(glm::mat4x4 x) BOOST_NOEXCEPT;
+		inline glm::dmat2x2 endian_reverse(glm::dmat2x2 x) BOOST_NOEXCEPT;
+		inline glm::dmat2x3 endian_reverse(glm::dmat2x3 x) BOOST_NOEXCEPT;
+		inline glm::dmat2x4 endian_reverse(glm::dmat2x4 x) BOOST_NOEXCEPT;
+		inline glm::dmat3x2 endian_reverse(glm::dmat3x2 x) BOOST_NOEXCEPT;
+		inline glm::dmat3x3 endian_reverse(glm::dmat3x3 x) BOOST_NOEXCEPT;
+		inline glm::dmat3x4 endian_reverse(glm::dmat3x4 x) BOOST_NOEXCEPT;
+		inline glm::dmat4x2 endian_reverse(glm::dmat4x2 x) BOOST_NOEXCEPT;
+		inline glm::dmat4x3 endian_reverse(glm::dmat4x3 x) BOOST_NOEXCEPT;
+		inline glm::dmat4x4 endian_reverse(glm::dmat4x4 x) BOOST_NOEXCEPT;
 
 	}	// namespace endian
 }	// namespace boost
