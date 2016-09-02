@@ -1,7 +1,7 @@
-﻿#ifndef KHUTILS_READER_NE_GLM_HPP_INC
-#define KHUTILS_READER_NE_GLM_HPP_INC
+﻿#ifndef KHUTILS_GLM_NATIVE_ENDIAN_READER_HPP_INC
+#define KHUTILS_GLM_NATIVE_ENDIAN_READER_HPP_INC
 
-#include "khutils/glm_endian.hpp"
+#include "khutils/glm/glm_endian_reverse.hpp"
 
 #include "khutils/filereader.hpp"
 #include "khutils/memoryreader.hpp"
@@ -62,9 +62,9 @@ namespace khutils
 
 }	// namespace khutils
 
-#if defined(KHUTILS_READER_NE_GLM_IMPL)
+#if defined(KHUTILS_GLM_NATIVE_ENDIAN_READER_IMPL)
 
-#include "khutils/reader_ne_glm.hpp"
+#include "khutils/glm/glm_native_endian_reader.hpp"
 
 #include "khutils/filereader.hpp"
 #include "khutils/memoryreader.hpp"
@@ -316,6 +316,6 @@ namespace khutils
 
 }	// namespace khutils
 
-#endif	// defined (KHUTILS_READER_NE_GLM_IMPL)
+#endif	// defined (KHUTILS_GLM_NATIVE_ENDIAN_READER_IMPL)
 
-#endif	// !KHUTILS_READER_NE_GLM_HPP_INC
+#endif	// !KHUTILS_GLM_NATIVE_ENDIAN_READER_HPP_INC

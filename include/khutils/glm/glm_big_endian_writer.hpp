@@ -1,7 +1,7 @@
-﻿#ifndef KHUTILS_WRITER_BE_GLM_HPP_INC
-#define KHUTILS_WRITER_BE_GLM_HPP_INC
+﻿#ifndef KHUTILS_GLM_BIG_ENDIAN_WRITER_HPP_INC
+#define KHUTILS_GLM_BIG_ENDIAN_WRITER_HPP_INC
 
-#include "khutils/glm_endian.hpp"
+#include "khutils/glm/glm_endian_reverse.hpp"
 
 #include "khutils/filewriter.hpp"
 #include "khutils/memorywriter.hpp"
@@ -17,8 +17,8 @@ namespace khutils
 	using boost::endian::order;
 
 #define KUTILS_BIG_ENDIAN_WRITER_SEQ                                                                                   \
-	(little_endian_streamwriter)(little_endian_filewriter)(                                                            \
-	  little_endian_memorywriter<char*>)(little_endian_memorywriter<uint8_t*>)(little_endian_memorywriter<std::vector<uint8_t>::iterator>)
+	(big_endian_streamwriter)(big_endian_filewriter)(                                                                  \
+	  big_endian_memorywriter<char*>)(big_endian_memorywriter<uint8_t*>)(big_endian_memorywriter<std::vector<uint8_t>::iterator>)
 
 	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_BIG_ENDIAN_WRITER_SEQ, glm::vec2, glm::vec2)
 	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_BIG_ENDIAN_WRITER_SEQ, glm::vec3, glm::vec3)
@@ -60,9 +60,9 @@ namespace khutils
 
 }	// namespace khutils
 
-#if defined(KHUTILS_WRITER_BE_GLM_IMPL)
+#if defined(KHUTILS_GLM_BIG_ENDIAN_WRITER_IMPL)
 
-#include "khutils/writer_be_glm.hpp"
+#include "khutils/glm/glm_big_endian_writer.hpp"
 
 #include "khutils/filewriter.hpp"
 #include "khutils/memorywriter.hpp"
@@ -252,6 +252,6 @@ namespace khutils
 
 }	// namespace khutils
 
-#endif	// defined (KHUTILS_WRITER_BE_GLM_IMPL)
+#endif	// defined (KHUTILS_GLM_BIG_ENDIAN_WRITER_IMPL)
 
-#endif	// !KHUTILS_WRITER_BE_GLM_HPP_INC
+#endif	// !KHUTILS_GLM_BIG_ENDIAN_WRITER_HPP_INC

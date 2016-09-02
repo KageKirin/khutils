@@ -1,7 +1,7 @@
-﻿#ifndef KHUTILS_WRITER_NE_GLM_HPP_INC
-#define KHUTILS_WRITER_NE_GLM_HPP_INC
+﻿#ifndef KHUTILS_GLM_NATIVE_ENDIAN_WRITER_HPP_INC
+#define KHUTILS_GLM_NATIVE_ENDIAN_WRITER_HPP_INC
 
-#include "khutils/glm_endian.hpp"
+#include "khutils/glm/glm_endian_reverse.hpp"
 
 #include "khutils/filewriter.hpp"
 #include "khutils/memorywriter.hpp"
@@ -59,9 +59,9 @@ namespace khutils
 
 }	// namespace khutils
 
-#if defined(KHUTILS_WRITER_NE_GLM_IMPL)
+#if defined(KHUTILS_GLM_NATIVE_ENDIAN_WRITER_IMPL)
 
-#include "khutils/writer_ne_glm.hpp"
+#include "khutils/glm/glm_native_endian_writer.hpp"
 
 #include "khutils/filewriter.hpp"
 #include "khutils/memorywriter.hpp"
@@ -251,6 +251,6 @@ namespace khutils
 
 }	// namespace khutils
 
-#endif	// defined (KHUTILS_WRITER_NE_GLM_IMPL)
+#endif	// defined (KHUTILS_GLM_NATIVE_ENDIAN_WRITER_IMPL)
 
-#endif	// !KHUTILS_WRITER_NE_GLM_HPP_INC
+#endif	// !KHUTILS_GLM_NATIVE_ENDIAN_WRITER_HPP_INC

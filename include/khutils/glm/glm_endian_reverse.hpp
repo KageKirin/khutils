@@ -1,5 +1,5 @@
-﻿#ifndef KHUTILS_GLM_ENDIAN_HPP_INC
-#define KHUTILS_GLM_ENDIAN_HPP_INC
+﻿#ifndef KHUTILS_GLM_ENDIAN_REVERSE_HPP_INC
+#define KHUTILS_GLM_ENDIAN_REVERSE_HPP_INC
 
 #include <boost/config.hpp>
 #include <boost/cstdint.hpp>
@@ -318,4 +318,4 @@ namespace boost
 	}	// namespace endian
 }	// namespace boost
 
-#endif	// KHUTILS_GLM_ENDIAN_HPP_INC
+#endif	// KHUTILS_GLM_ENDIAN_REVERSE_HPP_INC
