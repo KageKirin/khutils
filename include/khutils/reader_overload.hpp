@@ -9,13 +9,7 @@
 
 
 #include <boost/preprocessor/punctuation/remove_parens.hpp>
-
-#define KUTILS_OVERLOAD_CONVSWAP(orderT, outT, inT)                                                                    \
-	template <>                                                                                                        \
-	inline outT base_handler_trait<orderT>::convert_after_swap<outT, inT>(inT _val)                                    \
-	{                                                                                                                  \
-		return noopSwap<outT, inT>(_val);                                                                              \
-	}
+#include <boost/preprocessor/seq/for_each.hpp>
 
 #define KUTILS_OVERLOAD_READER_DECL(readerT, outT, readT)                                                              \
 	template <>                                                                                                        \
