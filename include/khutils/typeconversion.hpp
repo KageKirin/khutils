@@ -59,6 +59,14 @@ namespace khutils
 		return val.t;
 	}
 
+	// converts provided InT into OutT using OutT::ctor
+	// obviously pre-requirement: OutT can be constructed from InT
+	template <typename OutT, typename InT = OutT>
+	inline OutT construct_convert(InT r)
+	{
+		return OutT(r);
+	}
+
 	// importing boost::endian_reverse symbol into our namespace
 	using boost::endian::endian_reverse;
 	using boost::endian::conditional_reverse;
