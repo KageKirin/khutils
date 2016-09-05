@@ -67,6 +67,7 @@ namespace khutils
 	template <typename OutT, typename InT = OutT>
 	OutT reinterpret_convert(InT r)
 	{
+		static_assert(sizeof(OutT) == sizeof(InT), "incompatible type sizes");
 		return *reinterpret_cast<OutT*>(&r);
 	}
 
@@ -74,6 +75,7 @@ namespace khutils
 	template <typename OutT, typename InT = OutT>
 	OutT fast_convert(InT r)
 	{
+		static_assert(sizeof(OutT) == sizeof(InT), "incompatible type sizes");
 		union conversion {
 			OutT t;
 			InT  r;
