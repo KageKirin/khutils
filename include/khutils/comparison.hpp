@@ -1,6 +1,7 @@
 ﻿#ifndef KHUTILS_COMPARISON_HPP_INC
 #define KHUTILS_COMPARISON_HPP_INC
 
+#include <cstdint>
 #include <limits>
 
 namespace khutils
@@ -20,7 +21,12 @@ namespace khutils
 	bool compareLiterally(const double& lhv, const double& rhv);
 	bool compare(const double& lhv, const double& rhv);
 
-	bool compareLiterally(const int& lhv, const int& rhv);
+	bool compareLiterally(const int32_t& lhv, const int32_t& rhv);
+	bool compareLiterally(const uint32_t& lhv, const uint32_t& rhv);
+	bool compareLiterally(const int16_t& lhv, const int16_t& rhv);
+	bool compareLiterally(const uint16_t& lhv, const uint16_t& rhv);
+	bool compareLiterally(const int8_t& lhv, const int8_t& rhv);
+	bool compareLiterally(const uint8_t& lhv, const uint8_t& rhv);
 
 }	// namespace khutils
 
@@ -53,7 +59,32 @@ namespace khutils
 		return compareLiterally(lhv, rhv) || compareEpsilon<double>(lhv, rhv, 0.0001);
 	}
 
-	bool compareLiterally(const int& lhv, const int& rhv)
+	bool compareLiterally(const int32_t& lhv, const int32_t& rhv)
+	{
+		return spiritual_compare(std::to_string(lhv), std::to_string(rhv));
+	}
+
+	bool compareLiterally(const uint32_t& lhv, const uint32_t& rhv)
+	{
+		return spiritual_compare(std::to_string(lhv), std::to_string(rhv));
+	}
+
+	bool compareLiterally(const int16_t& lhv, const int16_t& rhv)
+	{
+		return spiritual_compare(std::to_string(lhv), std::to_string(rhv));
+	}
+
+	bool compareLiterally(const uint16_t& lhv, const uint16_t& rhv)
+	{
+		return spiritual_compare(std::to_string(lhv), std::to_string(rhv));
+	}
+
+	bool compareLiterally(const int8_t& lhv, const int8_t& rhv)
+	{
+		return spiritual_compare(std::to_string(lhv), std::to_string(rhv));
+	}
+
+	bool compareLiterally(const uint8_t& lhv, const uint8_t& rhv)
 	{
 		return spiritual_compare(std::to_string(lhv), std::to_string(rhv));
 	}
