@@ -29,6 +29,14 @@ namespace khutils
 	template <typename ByteForwardIterator>
 	using big_endian_memorywriter = _memorywriter<ByteForwardIterator, order::big>;
 
+	template <typename ByteForwardIterator>
+	struct memorywriter_trait
+	{
+		typedef memorywriter<ByteForwardIterator>				native_endian_writer;
+		typedef little_endian_memorywriter<ByteForwardIterator> little_endian_writer;
+		typedef big_endian_memorywriter<ByteForwardIterator>	big_endian_writer;
+	};
+
 	template <typename ByteForwardIterator, order _order>
 	struct _memorywriter : base_handler_trait<_order>
 	{

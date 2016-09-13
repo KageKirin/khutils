@@ -27,6 +27,13 @@ namespace khutils
 	using little_endian_streamreader = _streamreader<order::little>;
 	using big_endian_streamreader	= _streamreader<order::big>;
 
+	struct streamreader_trait
+	{
+		typedef streamreader			   native_endian_reader;
+		typedef little_endian_streamreader little_endian_reader;
+		typedef big_endian_streamreader	big_endian_reader;
+	};
+
 	template <order _order>
 	struct _streamreader : base_handler_trait<_order>
 	{

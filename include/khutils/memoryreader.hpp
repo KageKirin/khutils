@@ -28,6 +28,14 @@ namespace khutils
 	template <typename ByteForwardIterator>
 	using big_endian_memoryreader = _memoryreader<ByteForwardIterator, order::big>;
 
+	template <typename ByteForwardIterator>
+	struct memoryreader_trait
+	{
+		typedef memoryreader<ByteForwardIterator>				native_endian_reader;
+		typedef little_endian_memoryreader<ByteForwardIterator> little_endian_reader;
+		typedef big_endian_memoryreader<ByteForwardIterator>	big_endian_reader;
+	};
+
 	template <typename ByteForwardIterator, order _order>
 	struct _memoryreader : base_handler_trait<_order>
 	{

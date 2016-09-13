@@ -28,6 +28,13 @@ namespace khutils
 	using little_endian_filewriter = _filewriter<order::little>;
 	using big_endian_filewriter	= _filewriter<order::big>;
 
+	struct filewriter_trait
+	{
+		typedef filewriter				 native_endian_writer;
+		typedef little_endian_filewriter little_endian_writer;
+		typedef big_endian_filewriter	big_endian_writer;
+	};
+
 	template <order _order>
 	struct _filewriter : base_handler_trait<_order>
 	{

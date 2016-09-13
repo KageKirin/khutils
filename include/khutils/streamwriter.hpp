@@ -27,6 +27,13 @@ namespace khutils
 	using little_endian_streamwriter = _streamwriter<order::little>;
 	using big_endian_streamwriter	= _streamwriter<order::big>;
 
+	struct streamwriter_trait
+	{
+		typedef streamwriter			   native_endian_writer;
+		typedef little_endian_streamwriter little_endian_writer;
+		typedef big_endian_streamwriter	big_endian_writer;
+	};
+
 	template <order _order>
 	struct _streamwriter : base_handler_trait<_order>
 	{

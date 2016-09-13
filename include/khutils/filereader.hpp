@@ -28,6 +28,13 @@ namespace khutils
 	using little_endian_filereader = _filereader<order::little>;
 	using big_endian_filereader	= _filereader<order::big>;
 
+	struct filereader_trait
+	{
+		typedef filereader				 native_endian_reader;
+		typedef little_endian_filereader little_endian_reader;
+		typedef big_endian_filereader	big_endian_reader;
+	};
+
 	template <order _order>
 	struct _filereader : base_handler_trait<_order>
 	{
