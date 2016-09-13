@@ -95,6 +95,21 @@ namespace khutils
 	bool compare(const glm::ivec2& lhv, const glm::ivec2& rhv);
 	bool compare(const glm::ivec3& lhv, const glm::ivec3& rhv);
 	bool compare(const glm::ivec4& lhv, const glm::ivec4& rhv);
+	bool compare(const glm::uvec2& lhv, const glm::uvec2& rhv);
+	bool compare(const glm::uvec3& lhv, const glm::uvec3& rhv);
+	bool compare(const glm::uvec4& lhv, const glm::uvec4& rhv);
+	bool compare(const glm::i8vec2& lhv, const glm::i8vec2& rhv);
+	bool compare(const glm::i8vec3& lhv, const glm::i8vec3& rhv);
+	bool compare(const glm::i8vec4& lhv, const glm::i8vec4& rhv);
+	bool compare(const glm::u8vec2& lhv, const glm::u8vec2& rhv);
+	bool compare(const glm::u8vec3& lhv, const glm::u8vec3& rhv);
+	bool compare(const glm::u8vec4& lhv, const glm::u8vec4& rhv);
+	bool compare(const glm::i16vec2& lhv, const glm::i16vec2& rhv);
+	bool compare(const glm::i16vec3& lhv, const glm::i16vec3& rhv);
+	bool compare(const glm::i16vec4& lhv, const glm::i16vec4& rhv);
+	bool compare(const glm::u16vec2& lhv, const glm::u16vec2& rhv);
+	bool compare(const glm::u16vec3& lhv, const glm::u16vec3& rhv);
+	bool compare(const glm::u16vec4& lhv, const glm::u16vec4& rhv);
 
 	bool compareLiterally(const glm::quat& lhv, const glm::quat& rhv);
 	bool compareLiterally(const glm::vec2& lhv, const glm::vec2& rhv);
@@ -109,6 +124,21 @@ namespace khutils
 	bool compareLiterally(const glm::ivec2& lhv, const glm::ivec2& rhv);
 	bool compareLiterally(const glm::ivec3& lhv, const glm::ivec3& rhv);
 	bool compareLiterally(const glm::ivec4& lhv, const glm::ivec4& rhv);
+	bool compareLiterally(const glm::uvec2& lhv, const glm::uvec2& rhv);
+	bool compareLiterally(const glm::uvec3& lhv, const glm::uvec3& rhv);
+	bool compareLiterally(const glm::uvec4& lhv, const glm::uvec4& rhv);
+	bool compareLiterally(const glm::i8vec2& lhv, const glm::i8vec2& rhv);
+	bool compareLiterally(const glm::i8vec3& lhv, const glm::i8vec3& rhv);
+	bool compareLiterally(const glm::i8vec4& lhv, const glm::i8vec4& rhv);
+	bool compareLiterally(const glm::u8vec2& lhv, const glm::u8vec2& rhv);
+	bool compareLiterally(const glm::u8vec3& lhv, const glm::u8vec3& rhv);
+	bool compareLiterally(const glm::u8vec4& lhv, const glm::u8vec4& rhv);
+	bool compareLiterally(const glm::i16vec2& lhv, const glm::i16vec2& rhv);
+	bool compareLiterally(const glm::i16vec3& lhv, const glm::i16vec3& rhv);
+	bool compareLiterally(const glm::i16vec4& lhv, const glm::i16vec4& rhv);
+	bool compareLiterally(const glm::u16vec2& lhv, const glm::u16vec2& rhv);
+	bool compareLiterally(const glm::u16vec3& lhv, const glm::u16vec3& rhv);
+	bool compareLiterally(const glm::u16vec4& lhv, const glm::u16vec4& rhv);
 
 	template <>
 	bool compareEpsilon(const glm::quat& lhv, const glm::quat& rhv, glm::quat epsilon);
@@ -130,12 +160,43 @@ namespace khutils
 	bool compareEpsilon(const glm::dvec4& lhv, const glm::dvec4& rhv, glm::dvec4 epsilon);
 	template <>
 	bool compareEpsilon(const glm::dmat4& lhv, const glm::dmat4& rhv, glm::dmat4 epsilon);
+
 	template <>
 	bool compareEpsilon(const glm::ivec2& lhv, const glm::ivec2& rhv, glm::ivec2 epsilon);
 	template <>
 	bool compareEpsilon(const glm::ivec3& lhv, const glm::ivec3& rhv, glm::ivec3 epsilon);
 	template <>
 	bool compareEpsilon(const glm::ivec4& lhv, const glm::ivec4& rhv, glm::ivec4 epsilon);
+	template <>
+	bool compareEpsilon(const glm::uvec2& lhv, const glm::uvec2& rhv, glm::uvec2 epsilon);
+	template <>
+	bool compareEpsilon(const glm::uvec3& lhv, const glm::uvec3& rhv, glm::uvec3 epsilon);
+	template <>
+	bool compareEpsilon(const glm::uvec4& lhv, const glm::uvec4& rhv, glm::uvec4 epsilon);
+	template <>
+	bool compareEpsilon(const glm::i8vec2& lhv, const glm::i8vec2& rhv, glm::i8vec2 epsilon);
+	template <>
+	bool compareEpsilon(const glm::i8vec3& lhv, const glm::i8vec3& rhv, glm::i8vec3 epsilon);
+	template <>
+	bool compareEpsilon(const glm::i8vec4& lhv, const glm::i8vec4& rhv, glm::i8vec4 epsilon);
+	template <>
+	bool compareEpsilon(const glm::u8vec2& lhv, const glm::u8vec2& rhv, glm::u8vec2 epsilon);
+	template <>
+	bool compareEpsilon(const glm::u8vec3& lhv, const glm::u8vec3& rhv, glm::u8vec3 epsilon);
+	template <>
+	bool compareEpsilon(const glm::u8vec4& lhv, const glm::u8vec4& rhv, glm::u8vec4 epsilon);
+	template <>
+	bool compareEpsilon(const glm::i16vec2& lhv, const glm::i16vec2& rhv, glm::i16vec2 epsilon);
+	template <>
+	bool compareEpsilon(const glm::i16vec3& lhv, const glm::i16vec3& rhv, glm::i16vec3 epsilon);
+	template <>
+	bool compareEpsilon(const glm::i16vec4& lhv, const glm::i16vec4& rhv, glm::i16vec4 epsilon);
+	template <>
+	bool compareEpsilon(const glm::u16vec2& lhv, const glm::u16vec2& rhv, glm::u16vec2 epsilon);
+	template <>
+	bool compareEpsilon(const glm::u16vec3& lhv, const glm::u16vec3& rhv, glm::u16vec3 epsilon);
+	template <>
+	bool compareEpsilon(const glm::u16vec4& lhv, const glm::u16vec4& rhv, glm::u16vec4 epsilon);
 
 	bool operator==(const glm::quat& lhv, const glm::quat& rhv);
 	bool operator==(const glm::vec2& lhv, const glm::vec2& rhv);
@@ -147,9 +208,25 @@ namespace khutils
 	bool operator==(const glm::dvec3& lhv, const glm::dvec3& rhv);
 	bool operator==(const glm::dvec4& lhv, const glm::dvec4& rhv);
 	bool operator==(const glm::dmat4& lhv, const glm::dmat4& rhv);
+
 	bool operator==(const glm::ivec2& lhv, const glm::ivec2& rhv);
 	bool operator==(const glm::ivec3& lhv, const glm::ivec3& rhv);
 	bool operator==(const glm::ivec4& lhv, const glm::ivec4& rhv);
+	bool operator==(const glm::uvec2& lhv, const glm::uvec2& rhv);
+	bool operator==(const glm::uvec3& lhv, const glm::uvec3& rhv);
+	bool operator==(const glm::uvec4& lhv, const glm::uvec4& rhv);
+	bool operator==(const glm::i8vec2& lhv, const glm::i8vec2& rhv);
+	bool operator==(const glm::i8vec3& lhv, const glm::i8vec3& rhv);
+	bool operator==(const glm::i8vec4& lhv, const glm::i8vec4& rhv);
+	bool operator==(const glm::u8vec2& lhv, const glm::u8vec2& rhv);
+	bool operator==(const glm::u8vec3& lhv, const glm::u8vec3& rhv);
+	bool operator==(const glm::u8vec4& lhv, const glm::u8vec4& rhv);
+	bool operator==(const glm::i16vec2& lhv, const glm::i16vec2& rhv);
+	bool operator==(const glm::i16vec3& lhv, const glm::i16vec3& rhv);
+	bool operator==(const glm::i16vec4& lhv, const glm::i16vec4& rhv);
+	bool operator==(const glm::u16vec2& lhv, const glm::u16vec2& rhv);
+	bool operator==(const glm::u16vec3& lhv, const glm::u16vec3& rhv);
+	bool operator==(const glm::u16vec4& lhv, const glm::u16vec4& rhv);
 
 }	// namespace khutils
 
@@ -271,6 +348,126 @@ namespace khutils
 		  lhv.w == rhv.w;
 	}
 
+	bool compare(const glm::uvec2& lhv, const glm::uvec2& rhv)
+	{
+		return				   //
+		  lhv.x == rhv.x &&	//
+		  lhv.y == rhv.y;
+	}
+
+	bool compare(const glm::uvec3& lhv, const glm::uvec3& rhv)
+	{
+		return				   //
+		  lhv.x == rhv.x &&	//
+		  lhv.y == rhv.y &&	//
+		  lhv.z == rhv.z;
+	}
+
+	bool compare(const glm::uvec4& lhv, const glm::uvec4& rhv)
+	{
+		return				   //
+		  lhv.x == rhv.x &&	//
+		  lhv.y == rhv.y &&	//
+		  lhv.z == rhv.z &&	//
+		  lhv.w == rhv.w;
+	}
+
+	bool compare(const glm::i8vec2& lhv, const glm::i8vec2& rhv)
+	{
+		return				   //
+		  lhv.x == rhv.x &&	//
+		  lhv.y == rhv.y;
+	}
+
+	bool compare(const glm::i8vec3& lhv, const glm::i8vec3& rhv)
+	{
+		return				   //
+		  lhv.x == rhv.x &&	//
+		  lhv.y == rhv.y &&	//
+		  lhv.z == rhv.z;
+	}
+
+	bool compare(const glm::i8vec4& lhv, const glm::i8vec4& rhv)
+	{
+		return				   //
+		  lhv.x == rhv.x &&	//
+		  lhv.y == rhv.y &&	//
+		  lhv.z == rhv.z &&	//
+		  lhv.w == rhv.w;
+	}
+
+	bool compare(const glm::u8vec2& lhv, const glm::u8vec2& rhv)
+	{
+		return				   //
+		  lhv.x == rhv.x &&	//
+		  lhv.y == rhv.y;
+	}
+
+	bool compare(const glm::u8vec3& lhv, const glm::u8vec3& rhv)
+	{
+		return				   //
+		  lhv.x == rhv.x &&	//
+		  lhv.y == rhv.y &&	//
+		  lhv.z == rhv.z;
+	}
+
+	bool compare(const glm::u8vec4& lhv, const glm::u8vec4& rhv)
+	{
+		return				   //
+		  lhv.x == rhv.x &&	//
+		  lhv.y == rhv.y &&	//
+		  lhv.z == rhv.z &&	//
+		  lhv.w == rhv.w;
+	}
+
+	bool compare(const glm::i16vec2& lhv, const glm::i16vec2& rhv)
+	{
+		return				   //
+		  lhv.x == rhv.x &&	//
+		  lhv.y == rhv.y;
+	}
+
+	bool compare(const glm::i16vec3& lhv, const glm::i16vec3& rhv)
+	{
+		return				   //
+		  lhv.x == rhv.x &&	//
+		  lhv.y == rhv.y &&	//
+		  lhv.z == rhv.z;
+	}
+
+	bool compare(const glm::i16vec4& lhv, const glm::i16vec4& rhv)
+	{
+		return				   //
+		  lhv.x == rhv.x &&	//
+		  lhv.y == rhv.y &&	//
+		  lhv.z == rhv.z &&	//
+		  lhv.w == rhv.w;
+	}
+
+	bool compare(const glm::u16vec2& lhv, const glm::u16vec2& rhv)
+	{
+		return				   //
+		  lhv.x == rhv.x &&	//
+		  lhv.y == rhv.y;
+	}
+
+	bool compare(const glm::u16vec3& lhv, const glm::u16vec3& rhv)
+	{
+		return				   //
+		  lhv.x == rhv.x &&	//
+		  lhv.y == rhv.y &&	//
+		  lhv.z == rhv.z;
+	}
+
+	bool compare(const glm::u16vec4& lhv, const glm::u16vec4& rhv)
+	{
+		return				   //
+		  lhv.x == rhv.x &&	//
+		  lhv.y == rhv.y &&	//
+		  lhv.z == rhv.z &&	//
+		  lhv.w == rhv.w;
+	}
+
 	bool compareLiterally(const glm::quat& lhv, const glm::quat& rhv)
 	{
 		return								   //
@@ -371,6 +568,126 @@ namespace khutils
 	}
 
 	bool compareLiterally(const glm::ivec4& lhv, const glm::ivec4& rhv)
+	{
+		return								   //
+		  compareLiterally(lhv.x, rhv.x) &&	//
+		  compareLiterally(lhv.y, rhv.y) &&	//
+		  compareLiterally(lhv.z, rhv.z) &&	//
+		  compareLiterally(lhv.w, rhv.w);
+	}
+
+	bool compareLiterally(const glm::uvec2& lhv, const glm::uvec2& rhv)
+	{
+		return								   //
+		  compareLiterally(lhv.x, rhv.x) &&	//
+		  compareLiterally(lhv.y, rhv.y);
+	}
+
+	bool compareLiterally(const glm::uvec3& lhv, const glm::uvec3& rhv)
+	{
+		return								   //
+		  compareLiterally(lhv.x, rhv.x) &&	//
+		  compareLiterally(lhv.y, rhv.y) &&	//
+		  compareLiterally(lhv.z, rhv.z);
+	}
+
+	bool compareLiterally(const glm::uvec4& lhv, const glm::uvec4& rhv)
+	{
+		return								   //
+		  compareLiterally(lhv.x, rhv.x) &&	//
+		  compareLiterally(lhv.y, rhv.y) &&	//
+		  compareLiterally(lhv.z, rhv.z) &&	//
+		  compareLiterally(lhv.w, rhv.w);
+	}
+
+	bool compareLiterally(const glm::i8vec2& lhv, const glm::i8vec2& rhv)
+	{
+		return								   //
+		  compareLiterally(lhv.x, rhv.x) &&	//
+		  compareLiterally(lhv.y, rhv.y);
+	}
+
+	bool compareLiterally(const glm::i8vec3& lhv, const glm::i8vec3& rhv)
+	{
+		return								   //
+		  compareLiterally(lhv.x, rhv.x) &&	//
+		  compareLiterally(lhv.y, rhv.y) &&	//
+		  compareLiterally(lhv.z, rhv.z);
+	}
+
+	bool compareLiterally(const glm::i8vec4& lhv, const glm::i8vec4& rhv)
+	{
+		return								   //
+		  compareLiterally(lhv.x, rhv.x) &&	//
+		  compareLiterally(lhv.y, rhv.y) &&	//
+		  compareLiterally(lhv.z, rhv.z) &&	//
+		  compareLiterally(lhv.w, rhv.w);
+	}
+
+	bool compareLiterally(const glm::u8vec2& lhv, const glm::u8vec2& rhv)
+	{
+		return								   //
+		  compareLiterally(lhv.x, rhv.x) &&	//
+		  compareLiterally(lhv.y, rhv.y);
+	}
+
+	bool compareLiterally(const glm::u8vec3& lhv, const glm::u8vec3& rhv)
+	{
+		return								   //
+		  compareLiterally(lhv.x, rhv.x) &&	//
+		  compareLiterally(lhv.y, rhv.y) &&	//
+		  compareLiterally(lhv.z, rhv.z);
+	}
+
+	bool compareLiterally(const glm::u8vec4& lhv, const glm::u8vec4& rhv)
+	{
+		return								   //
+		  compareLiterally(lhv.x, rhv.x) &&	//
+		  compareLiterally(lhv.y, rhv.y) &&	//
+		  compareLiterally(lhv.z, rhv.z) &&	//
+		  compareLiterally(lhv.w, rhv.w);
+	}
+
+	bool compareLiterally(const glm::i16vec2& lhv, const glm::i16vec2& rhv)
+	{
+		return								   //
+		  compareLiterally(lhv.x, rhv.x) &&	//
+		  compareLiterally(lhv.y, rhv.y);
+	}
+
+	bool compareLiterally(const glm::i16vec3& lhv, const glm::i16vec3& rhv)
+	{
+		return								   //
+		  compareLiterally(lhv.x, rhv.x) &&	//
+		  compareLiterally(lhv.y, rhv.y) &&	//
+		  compareLiterally(lhv.z, rhv.z);
+	}
+
+	bool compareLiterally(const glm::i16vec4& lhv, const glm::i16vec4& rhv)
+	{
+		return								   //
+		  compareLiterally(lhv.x, rhv.x) &&	//
+		  compareLiterally(lhv.y, rhv.y) &&	//
+		  compareLiterally(lhv.z, rhv.z) &&	//
+		  compareLiterally(lhv.w, rhv.w);
+	}
+
+	bool compareLiterally(const glm::u16vec2& lhv, const glm::u16vec2& rhv)
+	{
+		return								   //
+		  compareLiterally(lhv.x, rhv.x) &&	//
+		  compareLiterally(lhv.y, rhv.y);
+	}
+
+	bool compareLiterally(const glm::u16vec3& lhv, const glm::u16vec3& rhv)
+	{
+		return								   //
+		  compareLiterally(lhv.x, rhv.x) &&	//
+		  compareLiterally(lhv.y, rhv.y) &&	//
+		  compareLiterally(lhv.z, rhv.z);
+	}
+
+	bool compareLiterally(const glm::u16vec4& lhv, const glm::u16vec4& rhv)
 	{
 		return								   //
 		  compareLiterally(lhv.x, rhv.x) &&	//
@@ -500,6 +817,141 @@ namespace khutils
 		  compareEpsilon(lhv.w, rhv.w);
 	}
 
+	template <>
+	bool compareEpsilon(const glm::uvec2& lhv, const glm::uvec2& rhv, glm::uvec2 epsilon)
+	{
+		return								 //
+		  compareEpsilon(lhv.x, rhv.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y);
+	}
+
+	template <>
+	bool compareEpsilon(const glm::uvec3& lhv, const glm::uvec3& rhv, glm::uvec3 epsilon)
+	{
+		return								 //
+		  compareEpsilon(lhv.x, rhv.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z);
+	}
+
+	template <>
+	bool compareEpsilon(const glm::uvec4& lhv, const glm::uvec4& rhv, glm::uvec4 epsilon)
+	{
+		return								 //
+		  compareEpsilon(lhv.x, rhv.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z) &&	//
+		  compareEpsilon(lhv.w, rhv.w);
+	}
+
+	template <>
+	bool compareEpsilon(const glm::i8vec2& lhv, const glm::i8vec2& rhv, glm::i8vec2 epsilon)
+	{
+		return								 //
+		  compareEpsilon(lhv.x, rhv.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y);
+	}
+
+	template <>
+	bool compareEpsilon(const glm::i8vec3& lhv, const glm::i8vec3& rhv, glm::i8vec3 epsilon)
+	{
+		return								 //
+		  compareEpsilon(lhv.x, rhv.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z);
+	}
+
+	template <>
+	bool compareEpsilon(const glm::i8vec4& lhv, const glm::i8vec4& rhv, glm::i8vec4 epsilon)
+	{
+		return								 //
+		  compareEpsilon(lhv.x, rhv.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z) &&	//
+		  compareEpsilon(lhv.w, rhv.w);
+	}
+
+	template <>
+	bool compareEpsilon(const glm::u8vec2& lhv, const glm::u8vec2& rhv, glm::u8vec2 epsilon)
+	{
+		return								 //
+		  compareEpsilon(lhv.x, rhv.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y);
+	}
+
+	template <>
+	bool compareEpsilon(const glm::u8vec3& lhv, const glm::u8vec3& rhv, glm::u8vec3 epsilon)
+	{
+		return								 //
+		  compareEpsilon(lhv.x, rhv.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z);
+	}
+
+	template <>
+	bool compareEpsilon(const glm::u8vec4& lhv, const glm::u8vec4& rhv, glm::u8vec4 epsilon)
+	{
+		return								 //
+		  compareEpsilon(lhv.x, rhv.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z) &&	//
+		  compareEpsilon(lhv.w, rhv.w);
+	}
+
+	template <>
+	bool compareEpsilon(const glm::i16vec2& lhv, const glm::i16vec2& rhv, glm::i16vec2 epsilon)
+	{
+		return								 //
+		  compareEpsilon(lhv.x, rhv.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y);
+	}
+
+	template <>
+	bool compareEpsilon(const glm::i16vec3& lhv, const glm::i16vec3& rhv, glm::i16vec3 epsilon)
+	{
+		return								 //
+		  compareEpsilon(lhv.x, rhv.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z);
+	}
+
+	template <>
+	bool compareEpsilon(const glm::i16vec4& lhv, const glm::i16vec4& rhv, glm::i16vec4 epsilon)
+	{
+		return								 //
+		  compareEpsilon(lhv.x, rhv.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z) &&	//
+		  compareEpsilon(lhv.w, rhv.w);
+	}
+
+	template <>
+	bool compareEpsilon(const glm::u16vec2& lhv, const glm::u16vec2& rhv, glm::u16vec2 epsilon)
+	{
+		return								 //
+		  compareEpsilon(lhv.x, rhv.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y);
+	}
+
+	template <>
+	bool compareEpsilon(const glm::u16vec3& lhv, const glm::u16vec3& rhv, glm::u16vec3 epsilon)
+	{
+		return								 //
+		  compareEpsilon(lhv.x, rhv.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z);
+	}
+
+	template <>
+	bool compareEpsilon(const glm::u16vec4& lhv, const glm::u16vec4& rhv, glm::u16vec4 epsilon)
+	{
+		return								 //
+		  compareEpsilon(lhv.x, rhv.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z) &&	//
+		  compareEpsilon(lhv.w, rhv.w);
+	}
+
 	bool operator==(const glm::quat& lhv, const glm::quat& rhv)
 	{
 		return compare(lhv, rhv);
@@ -561,6 +1013,81 @@ namespace khutils
 	}
 
 	bool operator==(const glm::ivec4& lhv, const glm::ivec4& rhv)
+	{
+		return compare(lhv, rhv);
+	}
+
+	bool operator==(const glm::uvec2& lhv, const glm::uvec2& rhv)
+	{
+		return compare(lhv, rhv);
+	}
+
+	bool operator==(const glm::uvec3& lhv, const glm::uvec3& rhv)
+	{
+		return compare(lhv, rhv);
+	}
+
+	bool operator==(const glm::uvec4& lhv, const glm::uvec4& rhv)
+	{
+		return compare(lhv, rhv);
+	}
+
+	bool operator==(const glm::i8vec2& lhv, const glm::i8vec2& rhv)
+	{
+		return compare(lhv, rhv);
+	}
+
+	bool operator==(const glm::i8vec3& lhv, const glm::i8vec3& rhv)
+	{
+		return compare(lhv, rhv);
+	}
+
+	bool operator==(const glm::i8vec4& lhv, const glm::i8vec4& rhv)
+	{
+		return compare(lhv, rhv);
+	}
+
+	bool operator==(const glm::u8vec2& lhv, const glm::u8vec2& rhv)
+	{
+		return compare(lhv, rhv);
+	}
+
+	bool operator==(const glm::u8vec3& lhv, const glm::u8vec3& rhv)
+	{
+		return compare(lhv, rhv);
+	}
+
+	bool operator==(const glm::u8vec4& lhv, const glm::u8vec4& rhv)
+	{
+		return compare(lhv, rhv);
+	}
+
+	bool operator==(const glm::i16vec2& lhv, const glm::i16vec2& rhv)
+	{
+		return compare(lhv, rhv);
+	}
+
+	bool operator==(const glm::i16vec3& lhv, const glm::i16vec3& rhv)
+	{
+		return compare(lhv, rhv);
+	}
+
+	bool operator==(const glm::i16vec4& lhv, const glm::i16vec4& rhv)
+	{
+		return compare(lhv, rhv);
+	}
+
+	bool operator==(const glm::u16vec2& lhv, const glm::u16vec2& rhv)
+	{
+		return compare(lhv, rhv);
+	}
+
+	bool operator==(const glm::u16vec3& lhv, const glm::u16vec3& rhv)
+	{
+		return compare(lhv, rhv);
+	}
+
+	bool operator==(const glm::u16vec4& lhv, const glm::u16vec4& rhv)
 	{
 		return compare(lhv, rhv);
 	}

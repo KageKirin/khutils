@@ -23,6 +23,21 @@ namespace boost
 		inline glm::ivec2 endian_reverse(glm::ivec2 x) BOOST_NOEXCEPT;
 		inline glm::ivec3 endian_reverse(glm::ivec3 x) BOOST_NOEXCEPT;
 		inline glm::ivec4 endian_reverse(glm::ivec4 x) BOOST_NOEXCEPT;
+		inline glm::uvec2 endian_reverse(glm::uvec2 x) BOOST_NOEXCEPT;
+		inline glm::uvec3 endian_reverse(glm::uvec3 x) BOOST_NOEXCEPT;
+		inline glm::uvec4 endian_reverse(glm::uvec4 x) BOOST_NOEXCEPT;
+		inline glm::i8vec2 endian_reverse(glm::i8vec2 x) BOOST_NOEXCEPT;
+		inline glm::i8vec3 endian_reverse(glm::i8vec3 x) BOOST_NOEXCEPT;
+		inline glm::i8vec4 endian_reverse(glm::i8vec4 x) BOOST_NOEXCEPT;
+		inline glm::u8vec2 endian_reverse(glm::u8vec2 x) BOOST_NOEXCEPT;
+		inline glm::u8vec3 endian_reverse(glm::u8vec3 x) BOOST_NOEXCEPT;
+		inline glm::u8vec4 endian_reverse(glm::u8vec4 x) BOOST_NOEXCEPT;
+		inline glm::i16vec2 endian_reverse(glm::i16vec2 x) BOOST_NOEXCEPT;
+		inline glm::i16vec3 endian_reverse(glm::i16vec3 x) BOOST_NOEXCEPT;
+		inline glm::i16vec4 endian_reverse(glm::i16vec4 x) BOOST_NOEXCEPT;
+		inline glm::u16vec2 endian_reverse(glm::u16vec2 x) BOOST_NOEXCEPT;
+		inline glm::u16vec3 endian_reverse(glm::u16vec3 x) BOOST_NOEXCEPT;
+		inline glm::u16vec4 endian_reverse(glm::u16vec4 x) BOOST_NOEXCEPT;
 		inline glm::mat2x2 endian_reverse(glm::mat2x2 x) BOOST_NOEXCEPT;
 		inline glm::mat2x3 endian_reverse(glm::mat2x3 x) BOOST_NOEXCEPT;
 		inline glm::mat2x4 endian_reverse(glm::mat2x4 x) BOOST_NOEXCEPT;
@@ -145,7 +160,142 @@ namespace boost
 
 		glm::ivec4 endian_reverse(glm::ivec4 x) BOOST_NOEXCEPT
 		{
-			return glm::dvec4{
+			return glm::ivec4{
+			  endian_reverse(x.x),
+			  endian_reverse(x.y),
+			  endian_reverse(x.z),
+			  endian_reverse(x.w)	//
+			};
+		}
+
+		glm::uvec2 endian_reverse(glm::uvec2 x) BOOST_NOEXCEPT
+		{
+			return glm::uvec2{
+			  endian_reverse(x.x),
+			  endian_reverse(x.y)	//
+			};
+		}
+
+		glm::uvec3 endian_reverse(glm::uvec3 x) BOOST_NOEXCEPT
+		{
+			return glm::uvec3{
+			  endian_reverse(x.x),
+			  endian_reverse(x.y),
+			  endian_reverse(x.z)	//
+			};
+		}
+
+		glm::uvec4 endian_reverse(glm::uvec4 x) BOOST_NOEXCEPT
+		{
+			return glm::uvec4{
+			  endian_reverse(x.x),
+			  endian_reverse(x.y),
+			  endian_reverse(x.z),
+			  endian_reverse(x.w)	//
+			};
+		}
+
+		glm::i8vec2 endian_reverse(glm::i8vec2 x) BOOST_NOEXCEPT
+		{
+			return glm::i8vec2{
+			  endian_reverse(x.x),
+			  endian_reverse(x.y)	//
+			};
+		}
+
+		glm::i8vec3 endian_reverse(glm::i8vec3 x) BOOST_NOEXCEPT
+		{
+			return glm::i8vec3{
+			  endian_reverse(x.x),
+			  endian_reverse(x.y),
+			  endian_reverse(x.z)	//
+			};
+		}
+
+		glm::i8vec4 endian_reverse(glm::i8vec4 x) BOOST_NOEXCEPT
+		{
+			return glm::i8vec4{
+			  endian_reverse(x.x),
+			  endian_reverse(x.y),
+			  endian_reverse(x.z),
+			  endian_reverse(x.w)	//
+			};
+		}
+
+		glm::u8vec2 endian_reverse(glm::u8vec2 x) BOOST_NOEXCEPT
+		{
+			return glm::u8vec2{
+			  endian_reverse(x.x),
+			  endian_reverse(x.y)	//
+			};
+		}
+
+		glm::u8vec3 endian_reverse(glm::u8vec3 x) BOOST_NOEXCEPT
+		{
+			return glm::u8vec3{
+			  endian_reverse(x.x),
+			  endian_reverse(x.y),
+			  endian_reverse(x.z)	//
+			};
+		}
+
+		glm::u8vec4 endian_reverse(glm::u8vec4 x) BOOST_NOEXCEPT
+		{
+			return glm::u8vec4{
+			  endian_reverse(x.x),
+			  endian_reverse(x.y),
+			  endian_reverse(x.z),
+			  endian_reverse(x.w)	//
+			};
+		}
+
+		glm::i16vec2 endian_reverse(glm::i16vec2 x) BOOST_NOEXCEPT
+		{
+			return glm::i16vec2{
+			  endian_reverse(x.x),
+			  endian_reverse(x.y)	//
+			};
+		}
+
+		glm::i16vec3 endian_reverse(glm::i16vec3 x) BOOST_NOEXCEPT
+		{
+			return glm::i16vec3{
+			  endian_reverse(x.x),
+			  endian_reverse(x.y),
+			  endian_reverse(x.z)	//
+			};
+		}
+
+		glm::i16vec4 endian_reverse(glm::i16vec4 x) BOOST_NOEXCEPT
+		{
+			return glm::i16vec4{
+			  endian_reverse(x.x),
+			  endian_reverse(x.y),
+			  endian_reverse(x.z),
+			  endian_reverse(x.w)	//
+			};
+		}
+
+		glm::u16vec2 endian_reverse(glm::u16vec2 x) BOOST_NOEXCEPT
+		{
+			return glm::u16vec2{
+			  endian_reverse(x.x),
+			  endian_reverse(x.y)	//
+			};
+		}
+
+		glm::u16vec3 endian_reverse(glm::u16vec3 x) BOOST_NOEXCEPT
+		{
+			return glm::u16vec3{
+			  endian_reverse(x.x),
+			  endian_reverse(x.y),
+			  endian_reverse(x.z)	//
+			};
+		}
+
+		glm::u16vec4 endian_reverse(glm::u16vec4 x) BOOST_NOEXCEPT
+		{
+			return glm::u16vec4{
 			  endian_reverse(x.x),
 			  endian_reverse(x.y),
 			  endian_reverse(x.z),

@@ -33,6 +33,26 @@ namespace khutils
 	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::ivec3, glm::ivec3);
 	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::ivec4, glm::ivec4);
 
+	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::uvec2, glm::uvec2);
+	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::uvec3, glm::uvec3);
+	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::uvec4, glm::uvec4);
+
+	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::i8vec2, glm::i8vec2);
+	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::i8vec3, glm::i8vec3);
+	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::i8vec4, glm::i8vec4);
+
+	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::u8vec2, glm::u8vec2);
+	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::u8vec3, glm::u8vec3);
+	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::u8vec4, glm::u8vec4);
+
+	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::i16vec2, glm::i16vec2);
+	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::i16vec3, glm::i16vec3);
+	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::i16vec4, glm::i16vec4);
+
+	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::u16vec2, glm::u16vec2);
+	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::u16vec3, glm::u16vec3);
+	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::u16vec4, glm::u16vec4);
+
 	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::mat2x2, glm::mat2x2);
 	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::mat2x3, glm::mat2x3);
 	KUTILS_OVERLOAD_WRITERSEQ_DECL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::mat2x4, glm::mat2x4);
@@ -139,6 +159,96 @@ namespace khutils
 									   write<int32_t>(t.y);
 									   write<int32_t>(t.z);
 									   write<int32_t>(t.w);
+								   }));
+
+	KUTILS_OVERLOAD_WRITERSEQ_IMPL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::uvec2, glm::uvec2, ({
+									   write<uint32_t>(t.x);
+									   write<uint32_t>(t.y);
+								   }));
+
+	KUTILS_OVERLOAD_WRITERSEQ_IMPL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::uvec3, glm::uvec3, ({
+									   write<uint32_t>(t.x);
+									   write<uint32_t>(t.y);
+									   write<uint32_t>(t.z);
+								   }));
+
+	KUTILS_OVERLOAD_WRITERSEQ_IMPL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::uvec4, glm::uvec4, ({
+									   write<uint32_t>(t.x);
+									   write<uint32_t>(t.y);
+									   write<uint32_t>(t.z);
+									   write<uint32_t>(t.w);
+								   }));
+
+	KUTILS_OVERLOAD_WRITERSEQ_IMPL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::i8vec2, glm::i8vec2, ({
+									   write<int8_t>(t.x);
+									   write<int8_t>(t.y);
+								   }));
+
+	KUTILS_OVERLOAD_WRITERSEQ_IMPL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::i8vec3, glm::i8vec3, ({
+									   write<int8_t>(t.x);
+									   write<int8_t>(t.y);
+									   write<int8_t>(t.z);
+								   }));
+
+	KUTILS_OVERLOAD_WRITERSEQ_IMPL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::i8vec4, glm::i8vec4, ({
+									   write<int8_t>(t.x);
+									   write<int8_t>(t.y);
+									   write<int8_t>(t.z);
+									   write<int8_t>(t.w);
+								   }));
+
+	KUTILS_OVERLOAD_WRITERSEQ_IMPL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::u8vec2, glm::u8vec2, ({
+									   write<uint8_t>(t.x);
+									   write<uint8_t>(t.y);
+								   }));
+
+	KUTILS_OVERLOAD_WRITERSEQ_IMPL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::u8vec3, glm::u8vec3, ({
+									   write<uint8_t>(t.x);
+									   write<uint8_t>(t.y);
+									   write<uint8_t>(t.z);
+								   }));
+
+	KUTILS_OVERLOAD_WRITERSEQ_IMPL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::u8vec4, glm::u8vec4, ({
+									   write<uint8_t>(t.x);
+									   write<uint8_t>(t.y);
+									   write<uint8_t>(t.z);
+									   write<uint8_t>(t.w);
+								   }));
+
+	KUTILS_OVERLOAD_WRITERSEQ_IMPL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::i16vec2, glm::i16vec2, ({
+									   write<int16_t>(t.x);
+									   write<int16_t>(t.y);
+								   }));
+
+	KUTILS_OVERLOAD_WRITERSEQ_IMPL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::i16vec3, glm::i16vec3, ({
+									   write<int16_t>(t.x);
+									   write<int16_t>(t.y);
+									   write<int16_t>(t.z);
+								   }));
+
+	KUTILS_OVERLOAD_WRITERSEQ_IMPL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::i16vec4, glm::i16vec4, ({
+									   write<int16_t>(t.x);
+									   write<int16_t>(t.y);
+									   write<int16_t>(t.z);
+									   write<int16_t>(t.w);
+								   }));
+
+	KUTILS_OVERLOAD_WRITERSEQ_IMPL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::u16vec2, glm::u16vec2, ({
+									   write<uint16_t>(t.x);
+									   write<uint16_t>(t.y);
+								   }));
+
+	KUTILS_OVERLOAD_WRITERSEQ_IMPL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::u16vec3, glm::u16vec3, ({
+									   write<uint16_t>(t.x);
+									   write<uint16_t>(t.y);
+									   write<uint16_t>(t.z);
+								   }));
+
+	KUTILS_OVERLOAD_WRITERSEQ_IMPL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::u16vec4, glm::u16vec4, ({
+									   write<uint16_t>(t.x);
+									   write<uint16_t>(t.y);
+									   write<uint16_t>(t.z);
+									   write<uint16_t>(t.w);
 								   }));
 
 	KUTILS_OVERLOAD_WRITERSEQ_IMPL(KUTILS_NATIVE_ENDIAN_WRITER_SEQ, glm::mat2x2, glm::mat2x2, ({

@@ -23,6 +23,26 @@ namespace khutils
 	const std::string to_string(const glm::ivec3& v);
 	const std::string to_string(const glm::ivec4& v);
 
+	const std::string to_string(const glm::uvec2& v);
+	const std::string to_string(const glm::uvec3& v);
+	const std::string to_string(const glm::uvec4& v);
+
+	const std::string to_string(const glm::i8vec2& v);
+	const std::string to_string(const glm::i8vec3& v);
+	const std::string to_string(const glm::i8vec4& v);
+
+	const std::string to_string(const glm::u8vec2& v);
+	const std::string to_string(const glm::u8vec3& v);
+	const std::string to_string(const glm::u8vec4& v);
+
+	const std::string to_string(const glm::i16vec2& v);
+	const std::string to_string(const glm::i16vec3& v);
+	const std::string to_string(const glm::i16vec4& v);
+
+	const std::string to_string(const glm::u16vec2& v);
+	const std::string to_string(const glm::u16vec3& v);
+	const std::string to_string(const glm::u16vec4& v);
+
 	std::ostream& operator<<(std::ostream& os, const glm::quat& q);
 	std::ostream& operator<<(std::ostream& os, const glm::vec2& v);
 	std::ostream& operator<<(std::ostream& os, const glm::vec3& v);
@@ -36,6 +56,21 @@ namespace khutils
 	std::ostream& operator<<(std::ostream& os, const glm::ivec2& v);
 	std::ostream& operator<<(std::ostream& os, const glm::ivec3& v);
 	std::ostream& operator<<(std::ostream& os, const glm::ivec4& v);
+	std::ostream& operator<<(std::ostream& os, const glm::uvec2& v);
+	std::ostream& operator<<(std::ostream& os, const glm::uvec3& v);
+	std::ostream& operator<<(std::ostream& os, const glm::uvec4& v);
+	std::ostream& operator<<(std::ostream& os, const glm::i8vec2& v);
+	std::ostream& operator<<(std::ostream& os, const glm::i8vec3& v);
+	std::ostream& operator<<(std::ostream& os, const glm::i8vec4& v);
+	std::ostream& operator<<(std::ostream& os, const glm::u8vec2& v);
+	std::ostream& operator<<(std::ostream& os, const glm::u8vec3& v);
+	std::ostream& operator<<(std::ostream& os, const glm::u8vec4& v);
+	std::ostream& operator<<(std::ostream& os, const glm::i16vec2& v);
+	std::ostream& operator<<(std::ostream& os, const glm::i16vec3& v);
+	std::ostream& operator<<(std::ostream& os, const glm::i16vec4& v);
+	std::ostream& operator<<(std::ostream& os, const glm::u16vec2& v);
+	std::ostream& operator<<(std::ostream& os, const glm::u16vec3& v);
+	std::ostream& operator<<(std::ostream& os, const glm::u16vec4& v);
 
 }	// namespace khutils
 
@@ -119,6 +154,8 @@ namespace khutils
 												fmt::format(linefmt, m[0][3], m[1][3], m[2][3], m[3][3]));
 	}
 
+	//////////////////////////////////////////////////////////////////////////
+
 	const std::string to_string(const glm::ivec2& v)
 	{
 		return "({0}, {1})\n"_format(v.x, v.y);
@@ -130,6 +167,81 @@ namespace khutils
 	}
 
 	const std::string to_string(const glm::ivec4& v)
+	{
+		return "({0}, {1}, {2}, {3})\n"_format(v.x, v.y, v.z, v.w);
+	}
+
+	const std::string to_string(const glm::uvec2& v)
+	{
+		return "({0}, {1})\n"_format(v.x, v.y);
+	}
+
+	const std::string to_string(const glm::uvec3& v)
+	{
+		return "({0}, {1}, {2})\n"_format(v.x, v.y, v.z);
+	}
+
+	const std::string to_string(const glm::uvec4& v)
+	{
+		return "({0}, {1}, {2}, {3})\n"_format(v.x, v.y, v.z, v.w);
+	}
+
+	const std::string to_string(const glm::i8vec2& v)
+	{
+		return "({0}, {1})\n"_format(v.x, v.y);
+	}
+
+	const std::string to_string(const glm::i8vec3& v)
+	{
+		return "({0}, {1}, {2})\n"_format(v.x, v.y, v.z);
+	}
+
+	const std::string to_string(const glm::i8vec4& v)
+	{
+		return "({0}, {1}, {2}, {3})\n"_format(v.x, v.y, v.z, v.w);
+	}
+
+	const std::string to_string(const glm::u8vec2& v)
+	{
+		return "({0}, {1})\n"_format(v.x, v.y);
+	}
+
+	const std::string to_string(const glm::u8vec3& v)
+	{
+		return "({0}, {1}, {2})\n"_format(v.x, v.y, v.z);
+	}
+
+	const std::string to_string(const glm::u8vec4& v)
+	{
+		return "({0}, {1}, {2}, {3})\n"_format(v.x, v.y, v.z, v.w);
+	}
+
+	const std::string to_string(const glm::i16vec2& v)
+	{
+		return "({0}, {1})\n"_format(v.x, v.y);
+	}
+
+	const std::string to_string(const glm::i16vec3& v)
+	{
+		return "({0}, {1}, {2})\n"_format(v.x, v.y, v.z);
+	}
+
+	const std::string to_string(const glm::i16vec4& v)
+	{
+		return "({0}, {1}, {2}, {3})\n"_format(v.x, v.y, v.z, v.w);
+	}
+
+	const std::string to_string(const glm::u16vec2& v)
+	{
+		return "({0}, {1})\n"_format(v.x, v.y);
+	}
+
+	const std::string to_string(const glm::u16vec3& v)
+	{
+		return "({0}, {1}, {2})\n"_format(v.x, v.y, v.z);
+	}
+
+	const std::string to_string(const glm::u16vec4& v)
 	{
 		return "({0}, {1}, {2}, {3})\n"_format(v.x, v.y, v.z, v.w);
 	}
@@ -186,6 +298,7 @@ namespace khutils
 		os << "glm::dmat4" << to_string(m);
 		return os;
 	}
+
 	std::ostream& operator<<(std::ostream& os, const glm::ivec2& v)
 	{
 		os << "glm::ivec2" << to_string(v);
@@ -199,6 +312,83 @@ namespace khutils
 	std::ostream& operator<<(std::ostream& os, const glm::ivec4& v)
 	{
 		os << "glm::ivec4" << to_string(v);
+		return os;
+	}
+	std::ostream& operator<<(std::ostream& os, const glm::uvec2& v)
+	{
+		os << "glm::uvec2" << to_string(v);
+		return os;
+	}
+	std::ostream& operator<<(std::ostream& os, const glm::uvec3& v)
+	{
+		os << "glm::uvec3" << to_string(v);
+		return os;
+	}
+	std::ostream& operator<<(std::ostream& os, const glm::uvec4& v)
+	{
+		os << "glm::uvec4" << to_string(v);
+		return os;
+	}
+
+	std::ostream& operator<<(std::ostream& os, const glm::i8vec2& v)
+	{
+		os << "glm::i8vec2" << to_string(v);
+		return os;
+	}
+	std::ostream& operator<<(std::ostream& os, const glm::i8vec3& v)
+	{
+		os << "glm::i8vec3" << to_string(v);
+		return os;
+	}
+	std::ostream& operator<<(std::ostream& os, const glm::i8vec4& v)
+	{
+		os << "glm::i8vec4" << to_string(v);
+		return os;
+	}
+	std::ostream& operator<<(std::ostream& os, const glm::u8vec2& v)
+	{
+		os << "glm::u8vec2" << to_string(v);
+		return os;
+	}
+	std::ostream& operator<<(std::ostream& os, const glm::u8vec3& v)
+	{
+		os << "glm::u8vec3" << to_string(v);
+		return os;
+	}
+	std::ostream& operator<<(std::ostream& os, const glm::u8vec4& v)
+	{
+		os << "glm::u8vec4" << to_string(v);
+		return os;
+	}
+
+	std::ostream& operator<<(std::ostream& os, const glm::i16vec2& v)
+	{
+		os << "glm::i16vec2" << to_string(v);
+		return os;
+	}
+	std::ostream& operator<<(std::ostream& os, const glm::i16vec3& v)
+	{
+		os << "glm::i16vec3" << to_string(v);
+		return os;
+	}
+	std::ostream& operator<<(std::ostream& os, const glm::i16vec4& v)
+	{
+		os << "glm::i16vec4" << to_string(v);
+		return os;
+	}
+	std::ostream& operator<<(std::ostream& os, const glm::u16vec2& v)
+	{
+		os << "glm::u16vec2" << to_string(v);
+		return os;
+	}
+	std::ostream& operator<<(std::ostream& os, const glm::u16vec3& v)
+	{
+		os << "glm::u16vec3" << to_string(v);
+		return os;
+	}
+	std::ostream& operator<<(std::ostream& os, const glm::u16vec4& v)
+	{
+		os << "glm::u16vec4" << to_string(v);
 		return os;
 	}
 
