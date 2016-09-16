@@ -1,6 +1,8 @@
 ﻿#ifndef KHUTILS_GLM_ISNAN_HPP_INC
 #define KHUTILS_GLM_ISNAN_HPP_INC
 
+#include <fbxsdk.h>
+
 #include <glm/fwd.hpp>
 
 namespace khutils
@@ -24,6 +26,20 @@ namespace khutils
 }	// namespace khutils
 
 #if defined(KHUTILS_GLM_ISNAN_IMPL)
+
+#define GLM_SWIZZLE
+#define GLM_FORCE_RADIANS
+#define GLM_PRECISION_HIGHP_FLOAT
+
+#include "khutils/glm/glm_isnan.hpp"
+
+#include "khutils/assertion.hpp"
+#include "khutils/logging.hpp"
+
+#include <CppLinq/cpplinq.hpp>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 namespace khutils
 {
@@ -66,14 +82,6 @@ namespace khutils
 		check_NaN(q.y);
 		check_NaN(q.z);
 		check_NaN(q.w);
-	}
-
-	void check_NaN(const FbxVector4& v)
-	{
-		check_NaN(v[0]);
-		check_NaN(v[1]);
-		check_NaN(v[2]);
-		check_NaN(v[3]);
 	}
 
 	void check_NaN(const glm::vec3& v)

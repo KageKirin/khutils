@@ -5,7 +5,7 @@
 
 #include "khutils/glm/glm_to_string.hpp"
 
-#include <glm/fwd.hpp>
+#include <glm/glm.hpp>
 #include <string>
 #include <tuple>
 #include <vector>
