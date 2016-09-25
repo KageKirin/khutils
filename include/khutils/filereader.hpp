@@ -130,6 +130,11 @@ namespace khutils
 		{
 			return ftell(m_file.get());
 		}
+
+		void jumpToOffset(size_t pos)
+		{
+			fseek(m_file.get(), pos, SEEK_SET);
+		}
 	};
 
 }	// namespace khutils

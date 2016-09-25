@@ -130,6 +130,11 @@ namespace khutils
 		{
 			return m_is.tellg();
 		}
+
+		void jumpToOffset(size_t pos)
+		{
+			m_is.seekg(pos);
+		}
 	};
 
 }	// namespace khutils

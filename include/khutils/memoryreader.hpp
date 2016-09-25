@@ -148,6 +148,11 @@ namespace khutils
 		{
 			return std::distance(m_begin, getCurrent());
 		}
+
+		void jumpToOffset(size_t pos)
+		{
+			m_current = m_begin + pos;
+		}
 	};
 
 }	// namespace khutils
