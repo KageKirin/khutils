@@ -62,17 +62,17 @@ namespace khutils
 			return (r);
 		}
 
-		//! fetches ReadT from file WITHOUT incrementing position, then
-		//! endian-swaps and converts it into OutT
+		//! fetches ReadT from file WITHOUT incrementing position,
+		//! then endian-swaps and converts it into OutT
 		//! optional convert function can be used to upsample ReadT into bytewise
 		//! bigger OutT
 		//! e.g. to convert read U16 as F32
 		template <typename OutT, typename ReadT = OutT>
 		OutT fetch(SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto pos = ftell(m_file.get());
-			OutT t   = read<OutT, ReadT>(swapConv);
-			fseek(m_file.get(), pos, SEEK_SET);
+			auto curPos = getCurrentOffset();
+			OutT t		= read<OutT, ReadT>(swapConv);
+			jumpToOffset(curPos);
 			return t;
 		}
 
@@ -86,10 +86,10 @@ namespace khutils
 		OutT fetchAt(size_t readPos,
 					 SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto pos = ftell(m_file.get());
-			fseek(m_file.get(), readPos, SEEK_SET);
+			auto curPos = getCurrentOffset();
+			jumpToOffset(readPos);
 			OutT t = read<OutT, ReadT>(swapConv);
-			fseek(m_file.get(), pos, SEEK_SET);
+			jumpToOffset(curPos);
 			return t;
 		}
 
@@ -107,8 +107,8 @@ namespace khutils
 			return t;
 		}
 
-		//! fetches count * ReadT from file WITHOUT incrementing position, then
-		//! endian-swaps and converts it into OutT
+		//! fetches count * ReadT from file WITHOUT incrementing position,
+		//! then endian-swaps and converts it into OutT
 		//! optional convert function can be used to upsample ReadT into bytewise
 		//! bigger OutT
 		//! e.g. to convert read U16 as F32
@@ -117,15 +117,15 @@ namespace khutils
 								SwapConversionFuncT<OutT, ReadT> swapConv
 								= base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto			  pos = ftell(m_file.get());
-			std::vector<OutT> t   = read<OutT, ReadT>(count, swapConv);
-			fseek(m_file.get(), pos, SEEK_SET);
+			auto			  curPos = getCurrentOffset();
+			std::vector<OutT> t		 = read<OutT, ReadT>(count, swapConv);
+			jumpToOffset(curPos);
 			return t;
 		}
 
 		//! fetches count * ReadT from file at given position WITHOUT incrementing
-		//! position, then
-		//! endian-swaps and converts it into OutT
+		//! position,
+		//! then endian-swaps and converts it into OutT
 		//! optional convert function can be used to upsample ReadT into bytewise
 		//! bigger OutT
 		//! e.g. to convert read U16 as F32
@@ -135,26 +135,26 @@ namespace khutils
 								  SwapConversionFuncT<OutT, ReadT> swapConv
 								  = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto pos = ftell(m_file.get());
-			fseek(m_file.get(), readPos, SEEK_SET);
+			auto curPos = getCurrentOffset();
+			jumpToOffset(readPos);
 			std::vector<OutT> t = read<OutT, ReadT>(count, swapConv);
-			fseek(m_file.get(), pos, SEEK_SET);
+			jumpToOffset(curPos);
 			return t;
 		}
 
 		template <typename _SkipT>
 		void skip(size_t count = 1)
 		{
-			auto pos = ftell(m_file.get());
-			fseek(m_file.get(), pos + sizeof(_SkipT) * count, SEEK_SET);
+			auto curPos = getCurrentOffset();
+			jumpToOffset(curPos + sizeof(_SkipT) * count);
 		}
 
 		template <size_t _Alignment>
 		void			 alignToNext()
 		{
-			auto pos			= ftell(m_file.get());
-			auto nextAlignedPos = ((pos / _Alignment) + 1) * _Alignment;
-			skip<char>(nextAlignedPos - pos);
+			auto curPos			= getCurrentOffset();
+			auto nextAlignedPos = ((curPos / _Alignment) + 1) * _Alignment;
+			skip<char>(nextAlignedPos - curPos);
 		}
 
 		const std::shared_ptr<FILE>& getFile()

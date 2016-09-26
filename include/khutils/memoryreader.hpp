@@ -77,23 +77,22 @@ namespace khutils
 			return swapConv(r);
 		}
 
-		//! fetches ReadT from data WITHOUT incrementing position, then
-		//! endian-swaps and converts it into OutT
+		//! fetches ReadT from data WITHOUT incrementing position,
+		//! then endian-swaps and converts it into OutT
 		//! optional convert function can be used to upsample ReadT into bytewise
 		//! bigger OutT
 		//! e.g. to convert read U16 as F32
 		template <typename OutT, typename ReadT = OutT>
 		OutT fetch(SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto pos  = m_current;
-			OutT t	= read<OutT, ReadT>(swapConv);
-			m_current = pos;
+			auto curPos = m_current;
+			OutT t		= read<OutT, ReadT>(swapConv);
+			m_current   = curPos;
 			return t;
 		}
 
 		//! fetches ReadT from data at given position WITHOUT incrementing position,
-		//! then
-		//! endian-swaps and converts it into OutT
+		//! then endian-swaps and converts it into OutT
 		//! optional convert function can be used to upsample ReadT into bytewise
 		//! bigger OutT
 		//! e.g. to convert read U16 as F32
@@ -101,10 +100,10 @@ namespace khutils
 		OutT fetchAt(size_t readPos,
 					 SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto pos  = m_current;
-			m_current = m_begin + readPos;
-			OutT t	= read<OutT, ReadT>(swapConv);
-			m_current = pos;
+			auto curPos = m_current;
+			m_current   = m_begin + readPos;
+			OutT t		= read<OutT, ReadT>(swapConv);
+			m_current   = curPos;
 			return t;
 		}
 
@@ -132,15 +131,15 @@ namespace khutils
 								SwapConversionFuncT<OutT, ReadT> swapConv
 								= base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto			  pos = m_current;
-			std::vector<OutT> t   = read<OutT, ReadT>(count, swapConv);
-			m_current			  = pos;
+			auto			  curPos = m_current;
+			std::vector<OutT> t		 = read<OutT, ReadT>(count, swapConv);
+			m_current				 = curPos;
 			return t;
 		}
 
 		//! fetches count * ReadT from data at given position WITHOUT incrementing
-		//! position, then
-		//! endian-swaps and converts it into OutT
+		//! position,
+		//! then endian-swaps and converts it into OutT
 		//! optional convert function can be used to upsample ReadT into bytewise
 		//! bigger OutT
 		//! e.g. to convert read U16 as F32
@@ -150,10 +149,10 @@ namespace khutils
 								  SwapConversionFuncT<OutT, ReadT> swapConv
 								  = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto pos			= m_current;
+			auto curPos			= m_current;
 			m_current			= m_begin + readPos;
 			std::vector<OutT> t = read<OutT, ReadT>(count, swapConv);
-			m_current			= pos;
+			m_current			= curPos;
 			return t;
 		}
 

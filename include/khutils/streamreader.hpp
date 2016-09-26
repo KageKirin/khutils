@@ -61,23 +61,23 @@ namespace khutils
 			return swapConv(r);
 		}
 
-		//! fetches ReadT from istream WITHOUT incrementing position, then
-		//! endian-swaps and converts it into OutT
+		//! fetches ReadT from istream WITHOUT incrementing position,
+		//! then endian-swaps and converts it into OutT
 		//! optional convert function can be used to upsample ReadT into bytewise
 		//! bigger OutT
 		//! e.g. to convert read U16 as F32
 		template <typename OutT, typename ReadT = OutT>
 		OutT fetch(SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto pos = m_is.tellg();
-			OutT t   = read<OutT, ReadT>(swapConv);
-			m_is.seekg(pos);
+			auto curPos = getCurrentOffset();
+			OutT t		= read<OutT, ReadT>(swapConv);
+			jumpToOffset(curPos);
 			return t;
 		}
 
 		//! fetches ReadT from istream at given position WITHOUT incrementing
-		//! position, then
-		//! endian-swaps and converts it into OutT
+		//! position,
+		//! then endian-swaps and converts it into OutT
 		//! optional convert function can be used to upsample ReadT into bytewise
 		//! bigger OutT
 		//! e.g. to convert read U16 as F32
@@ -85,10 +85,10 @@ namespace khutils
 		OutT fetchAt(size_t readPos,
 					 SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto pos = m_is.tellg();
-			m_is.seekg(readPos);
+			auto curPos = getCurrentOffset();
+			jumpToOffset(readPos);
 			OutT t = read<OutT, ReadT>(swapConv);
-			m_is.seekg(pos);
+			jumpToOffset(curPos);
 			return t;
 		}
 
@@ -107,8 +107,8 @@ namespace khutils
 			return t;
 		}
 
-		//! fetches count * ReadT from istream WITHOUT incrementing position, then
-		//! endian-swaps and converts it into count * OutT
+		//! fetches count * ReadT from istream WITHOUT incrementing position,
+		//! then endian-swaps and converts it into count * OutT
 		//! optional convert function can be used to upsample ReadT into bytewise
 		//! bigger OutT
 		//! e.g. to convert read U16 as F32
@@ -117,15 +117,15 @@ namespace khutils
 								SwapConversionFuncT<OutT, ReadT> swapConv
 								= base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto			  pos = m_is.tellg();
-			std::vector<OutT> t   = read<OutT, ReadT>(count, swapConv);
-			m_is.seekg(pos);
+			auto			  curPos = getCurrentOffset();
+			std::vector<OutT> t		 = read<OutT, ReadT>(count, swapConv);
+			jumpToOffset(curPos);
 			return t;
 		}
 
 		//! fetches count * ReadT from istream at given position WITHOUT incrementing
-		//! position, then
-		//! endian-swaps and converts it into count * OutT
+		//! position,
+		//! then endian-swaps and converts it into count * OutT
 		//! optional convert function can be used to upsample ReadT into bytewise
 		//! bigger OutT
 		//! e.g. to convert read U16 as F32
@@ -135,10 +135,10 @@ namespace khutils
 								  SwapConversionFuncT<OutT, ReadT> swapConv
 								  = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto pos = m_is.tellg();
-			m_is.seekg(readPos);
+			auto curPos = getCurrentOffset();
+			jumpToOffset(readPos);
 			std::vector<OutT> t = read<OutT, ReadT>(count, swapConv);
-			m_is.seekg(pos);
+			jumpToOffset(curPos);
 			return t;
 		}
 
@@ -151,10 +151,10 @@ namespace khutils
 		template <size_t _Alignment>
 		void			 alignToNext()
 		{
-			auto pos			= m_is.tellg();
-			auto nextAlignedPos = ((pos / _Alignment) + 1) * _Alignment;
+			auto curPos			= getCurrentOffset();
+			auto nextAlignedPos = ((curPos / _Alignment) + 1) * _Alignment;
 
-			skip<char>(nextAlignedPos - pos);
+			skip<char>(nextAlignedPos - curPos);
 		}
 
 		std::istream& getStream()
