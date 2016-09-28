@@ -11,6 +11,9 @@ namespace khutils
 	template <typename T>
 	void Assert(const T& var, const T& val, const char* _file, const int _line);
 
+	template <typename T>
+	void AssertNot(const T& var, const T& val, const char* _file, const int _line);
+
 	template <typename T, typename Expression>
 	void Assert(const T& var, Expression expression, const char* _file, const int _line);
 
@@ -27,6 +30,7 @@ namespace khutils
 
 #define KHUTILS_ASSERT(cond) khutils::Assert(bool((cond)), __FILE__, __LINE__);
 #define KHUTILS_ASSERT_EQUALS(variable, value) khutils::Assert((variable), (value), __FILE__, __LINE__);
+#define KHUTILS_ASSERT_NOT(variable, value) khutils::AssertNot((variable), (value), __FILE__, __LINE__);
 #define KHUTILS_ASSERT_NULLPTR(pointer) khutils::AssertNullPtr((pointer), __FILE__, __LINE__);
 #define KHUTILS_ASSERT_PTR(pointer) khutils::AssertValidPtr((pointer), __FILE__, __LINE__);
 #define KHUTILS_ASSERT_SPTR(pointer) khutils::AssertValidSharedPtr((pointer), __FILE__, __LINE__);
@@ -64,6 +68,22 @@ namespace khutils
 		{
 			using namespace snowhouse;
 			ConfigurableAssert<DefaultFailureHandler>::That(var, Is().EqualTo(val), _file, _line);
+		}
+		catch (...)
+		{
+			logger::error() << "assertion in " << _file << " at line " << _line;
+			throw;
+		}
+	}
+
+	template <typename T>
+	void AssertNot(const T& var, const T& val, const char* _file, const int _line)
+	{
+		CASSERT(var != val);
+		try
+		{
+			using namespace snowhouse;
+			ConfigurableAssert<DefaultFailureHandler>::That(var, Is().Not().EqualTo(val), _file, _line);
 		}
 		catch (...)
 		{
