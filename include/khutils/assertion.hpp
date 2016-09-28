@@ -40,6 +40,19 @@ namespace khutils
 		khutils::Assert((variable), (expr), __FILE__, __LINE__);                                                       \
 	};
 
+#define KHUTILS_ASSERT_GREATER(variable, val) KHUTILS_ASSERT_EXPR(variable, Is().GreaterThan(val))
+#define KHUTILS_ASSERT_GREATEREQ(variable, val) KHUTILS_ASSERT_EXPR(variable, Is().GreaterThanOrEqual(val))
+#define KHUTILS_ASSERT_LESSER(variable, val) KHUTILS_ASSERT_EXPR(variable, Is().LessThan(val))
+#define KHUTILS_ASSERT_LESSEREQ(variable, val) KHUTILS_ASSERT_EXPR(variable, Is().LessThanOrEqualTo(val))
+#define KHUTILS_ASSERT_IN_RANGE(variable, valm, valM)                                                                  \
+	KHUTILS_ASSERT_EXPR(variable, Is().GreaterThanOrEqualTo(valm).And().LessThanOrEqualTo(valM))
+#define KHUTILS_ASSERT_IN_RANGE_EX(variable, valm, valM)                                                               \
+	KHUTILS_ASSERT_EXPR(variable, Is().GreaterThan(valm).And().LessThan(valM))
+#define KHUTILS_ASSERT_IN_RANGE_LO(variable, valm, valM)                                                               \
+	KHUTILS_ASSERT_EXPR(variable, Is().GreaterThan(valm).And().LessThanOrEqualTo(valM))
+#define KHUTILS_ASSERT_IN_RANGE_HO(variable, valm, valM)                                                               \
+	KHUTILS_ASSERT_EXPR(variable, Is().GreaterThanOrEqualTo(valm).And().LessThan(valM))
+
 
 #if defined(KHUTILS_ASSERTION_INLINE) || defined(KHUTILS_ASSERTION_IMPL)
 
