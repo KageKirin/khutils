@@ -85,7 +85,7 @@ namespace khutils
 		auto	   curIt = begin(s);
 		const auto endIt = end(s);
 
-		std::string outStr;
+		std::wstring outStr;
 		while (curIt != endIt)
 		{
 			// check single-byte
@@ -95,7 +95,7 @@ namespace khutils
 			if (sjis_to_utf8::validSjisCode(curCode))
 			{
 				uint16_t utf8Code = sjis_to_utf8::sjisToUtf8(curCode);
-				outStr += utf8CodeToString(utf8Code);
+				outStr += wchar_t(utf8Code);
 				continue;
 			}
 			else if (curIt == endIt)
@@ -110,16 +110,14 @@ namespace khutils
 			if (sjis_to_utf8::validSjisCode(curCode))
 			{
 				uint16_t utf8Code = sjis_to_utf8::sjisToUtf8(curCode);
-				outStr += utf8CodeToString(utf8Code);
+				outStr += wchar_t(utf8Code);
 				continue;
 			}
 
-			outStr += " ";
-
-			logger::debug() << outStr;
+			outStr += L" ";
 		}
 
-		return outStr;
+		return to_utf8string(outStr);
 	}
 
 }	// namespace khutils
