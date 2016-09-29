@@ -25,9 +25,11 @@ namespace khutils
 #include "khutils/utf8string.hpp"
 
 #include <boost/nowide/convert.hpp>
+#include <iconv.h>
 
 #include <codecvt>
 #include <locale>
+#include <vector>
 
 namespace khutils
 {
@@ -51,73 +53,20 @@ namespace khutils
 		return conversion.to_bytes(s);
 	}
 
-	namespace sjis_to_utf8
-	{
-		extern uint16_t sjisToUtf8(uint16_t code);
-		extern uint16_t utf8ToSjis(uint16_t code);
-		extern bool validSjisCode(uint16_t code);
-		extern bool validUtf8Code(uint16_t code);
-	}	// sjis_to_utf8
-
-	inline std::string utf8CodeToString(uint16_t code)
-	{
-		std::string output("");
-		if (code < 0x80)
-		{
-			output += char(code);
-		}
-		else if (code < 0x800)
-		{
-			output += char(0xC0 | (code >> 6));
-			output += char(0x80 | (code & 0x3f));
-		}
-		else
-		{
-			output += char(0xE0 | (code >> 12));
-			output += char(0x80 | ((code & 0xfff) >> 6));
-			output += char(0x80 | (code & 0x3f));
-		}
-		return output;
-	}
-
 	std::string sjis_to_utf8string(const std::string& s)
 	{
-		auto	   curIt = begin(s);
-		const auto endIt = end(s);
+		std::vector<char> buffer(s.size() * 4);	// just to be on the safe side
 
-		std::wstring outStr;
-		while (curIt != endIt)
-		{
-			// check single-byte
-			uint16_t curCode = uint16_t(*curIt);
-			curIt++;
+		const char* src	= s.c_str();
+		char*		dst	= &buffer[0];
+		size_t		srclen = s.size();
+		size_t		dstlen = buffer.size();
 
-			if (sjis_to_utf8::validSjisCode(curCode))
-			{
-				uint16_t utf8Code = sjis_to_utf8::sjisToUtf8(curCode);
-				outStr += wchar_t(utf8Code);
-				continue;
-			}
-			else if (curIt == endIt)
-			{
-				break;
-			}
+		iconv_t conv = iconv_open("UTF-8", "SHIFT_JIS");
+		iconv(conv, const_cast<char**>(&src), &srclen, &dst, &dstlen);
+		iconv_close(conv);
 
-			// check double-byte
-			curCode = (curCode << 8) | uint16_t(*curIt);
-			curIt++;
-
-			if (sjis_to_utf8::validSjisCode(curCode))
-			{
-				uint16_t utf8Code = sjis_to_utf8::sjisToUtf8(curCode);
-				outStr += wchar_t(utf8Code);
-				continue;
-			}
-
-			outStr += L" ";
-		}
-
-		return to_utf8string(outStr);
+		return std::string(buffer.data(), buffer.size());
 	}
 
 }	// namespace khutils
