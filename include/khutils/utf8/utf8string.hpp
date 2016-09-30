@@ -22,7 +22,7 @@ namespace khutils
 #if defined(KHUTILS_UTF8STRING_IMPL)
 
 #include "khutils/logging.hpp"
-#include "khutils/utf8string.hpp"
+#include "khutils/utf8/utf8string.hpp"
 
 #include <boost/nowide/convert.hpp>
 #include <iconv.h>
