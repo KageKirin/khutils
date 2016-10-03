@@ -109,6 +109,35 @@ namespace khutils
 			write(t.data(), t.size(), swapConv);
 		}
 
+		//! puts WriteT from data WITHOUT incrementing position,
+		//! then endian-swaps and converts it into OutT
+		//! optional convert function can be used to upsample ReadT into bytewise
+		//! bigger InT
+		//! e.g. to convert read U16 as F32
+		template <typename WriteT, typename InT = WriteT>
+		void put(InT t, SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
+		{
+			auto curPos = m_current;
+			write<WriteT, InT>(swapConv);
+			m_current = curPos;
+		}
+
+		//! puts WriteT from data at given position WITHOUT incrementing position,
+		//! then endian-swaps and converts it into InT
+		//! optional convert function can be used to upsample ReadT into bytewise
+		//! bigger InT
+		//! e.g. to convert read U16 as F32
+		template <typename WriteT, typename InT = WriteT>
+		void putAt(InT	t,
+				   size_t writePos,
+				   SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
+		{
+			auto curPos = m_current;
+			m_current   = m_begin + writePos;
+			write<WriteT, InT>(t, swapConv);
+			m_current = curPos;
+		}
+
 		template <typename _SkipT>
 		void skip(size_t count = 1)
 		{
