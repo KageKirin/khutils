@@ -43,6 +43,7 @@ namespace khutils
 		ByteForwardIterator m_begin;
 		ByteForwardIterator m_end;
 		ByteForwardIterator m_current;
+		static_assert(sizeof(decltype(*m_begin)) == 1);
 
 		_memorywriter()						= delete;
 		_memorywriter(const _memorywriter&) = default;

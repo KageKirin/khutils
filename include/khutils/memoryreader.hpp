@@ -1,9 +1,12 @@
 ﻿#ifndef KHUTILS_MEMORYREADER_HPP_INC
 #define KHUTILS_MEMORYREADER_HPP_INC
 
+#define KHUTILS_ASSERTION_INLINE
+
 //! file has dependency on boost.endian
 //! include wisely to keep compile times minimal
 
+#include "khutils/assertion.hpp"
 #include "khutils/base_handler.hpp"
 #include "khutils/typeconversion.hpp"
 
@@ -42,6 +45,7 @@ namespace khutils
 		ByteForwardIterator m_begin;
 		ByteForwardIterator m_end;
 		ByteForwardIterator m_current;
+		static_assert(sizeof(decltype(*m_begin)) == 1);
 
 		_memoryreader()						= delete;
 		_memoryreader(const _memoryreader&) = default;
