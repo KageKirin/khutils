@@ -7,47 +7,77 @@
 
 namespace glm
 {
-	//! eulerAngles2
-	//! computes eulerAngles from quaternion using atan2 to avoid losing range
-	//! beyond +/- PI/2
-	//! @see
-	//! https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+
+	//////////////////////////////////////////////////////////////////////////
+	//! eulerAngles_projection
+	//! computes eulerAngles by projecting rotated standard vector into plane
+	//! perpendicular to PYR axis
+
 	template <typename T, precision P>
-	GLM_FUNC_QUALIFIER tvec3<T, P> eulerAngles2(tquat<T, P> const& q)
+	GLM_FUNC_QUALIFIER tvec3<T, P> eulerAngles_projection(tquat<T, P> const& q)
 	{
-		return tvec3<T, P>(pitch2(q), yaw2(q), roll2(q));
+		return tvec3<T, P>(pitch_projection(q), yaw_projection(q), roll_projection(q));
 	}
 
 	template <typename T, precision P>
-	GLM_FUNC_QUALIFIER T roll2(tquat<T, P> const& q)
+	GLM_FUNC_QUALIFIER T roll_projection(tquat<T, P> const& q)
 	{
-		return T(atan2(							   //
-		  T(2) * q.w * q.x + q.y * q.z,			   //
-		  T(1) - T(2) * (q.x * q.x + q.y * q.y)	//
-		  ));
+		// roll axis (Z) -> XY plane
+		tvec3<T, P> v(T(1), T(0), T(0));
+		tvec3<T, P> v_r = rotate(q, v);
+
+		T angle = acos(dot(normalize(v.xy()), normalize(v_r.xy())));
+
+		if (v_r == v || v_r == -v)
+		{
+			return angle;
+		}
+
+		tvec3<T, P> n = cross(v, normalize(tvec3<T, P>(v_r.x, v_r.y, 0)));
+		angle *= sign(n.z);
+		return angle;
 	}
 
 	template <typename T, precision P>
-	GLM_FUNC_QUALIFIER T pitch2(tquat<T, P> const& q)
+	GLM_FUNC_QUALIFIER T pitch_projection(tquat<T, P> const& q)
 	{
-		return T(atan2(							   //
-		  T(2) * (q.w * q.z + q.x * q.y),		   //
-		  T(1) - T(2) * (q.y * q.y + q.z * q.z)	//
-		  ));
+		// pitch axis (X) -> YZ plane
+		tvec3<T, P> v(T(0), T(1), T(0));
+		tvec3<T, P> v_r = rotate(q, v);
+
+		T angle = acos(dot(normalize(v.yz()), normalize(v_r.yz())));
+
+		if (v_r == v || v_r == -v)
+		{
+			return angle;
+		}
+
+		tvec3<T, P> n = cross(v, normalize(tvec3<T, P>(0, v_r.y, v_r.z)));
+		angle *= sign(n.x);
+		return angle;
 	}
 
 	template <typename T, precision P>
-	GLM_FUNC_QUALIFIER T yaw2(tquat<T, P> const& q)
+	GLM_FUNC_QUALIFIER T yaw_projection(tquat<T, P> const& q)
 	{
-		return asin(T(2) * (q.w * q.y - q.z * q.x));
+		// yaw axis (Y) -> XZ plane
+		tvec3<T, P> v(T(1), T(0), T(0));
+		tvec3<T, P> v_r = rotate(q, v);
+
+		T angle = acos(dot(normalize(v.xz()), normalize(v_r.xz())));
+
+		if (v_r == v || v_r == -v)
+		{
+			return angle;
+		}
+
+		tvec3<T, P> n = cross(v, normalize(tvec3<T, P>(v_r.x, 0, v_r.z)));
+		angle *= sign(n.y);
+		return angle;
 	}
+
+	//////////////////////////////////////////////////////////////////////////
 
 }	// namespace glm
-
-// formulas from wikipedia, replaced with this table
-// q.w <=> q0
-// q.x <=> q1
-// q.y <=> q2
-// q.z <=> q3
 
 #endif	// ! KHUTILS_GLM_EULER_ANGLES_HPP_INC
