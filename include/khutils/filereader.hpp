@@ -152,9 +152,9 @@ namespace khutils
 		template <size_t _Alignment>
 		void			 alignToNext()
 		{
-			auto curPos			= getCurrentOffset();
-			auto nextAlignedPos = ((curPos / _Alignment) + 1) * _Alignment;
-			skip<char>(nextAlignedPos - curPos);
+			auto pos			= getCurrentOffset();
+			auto nextAlignedPos = pos + (pos % _Alignment);
+			skip<char>(nextAlignedPos - pos);
 		}
 
 		const std::shared_ptr<FILE>& getFile()

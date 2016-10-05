@@ -151,9 +151,8 @@ namespace khutils
 		template <size_t _Alignment>
 		void			 alignToNext()
 		{
-			auto pos			= std::distance(m_begin, m_current);
-			auto nextAlignedPos = ((pos / _Alignment) + 1) * _Alignment;
-
+			auto pos			= getCurrentOffset();
+			auto nextAlignedPos = pos + (pos % _Alignment);
 			skip<char>(nextAlignedPos - pos);
 		}
 
