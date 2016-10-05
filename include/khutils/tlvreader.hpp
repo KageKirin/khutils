@@ -2,6 +2,7 @@
 #define KHUTILS_TLV_READER_HPP_INC
 
 #include "khutils/tlv.hpp"
+#include <algorithm>
 
 namespace khutils
 {
@@ -17,7 +18,9 @@ namespace khutils
 			auto cur	= this->template getCurrentOffset();
 			auto tag	= this->template fetchAt<typename TLVelementT::tag_type>(cur + TLVelementT::tag_offset);
 			auto length = this->template fetchAt<typename TLVelementT::length_type>(cur + TLVelementT::length_offset);
-			auto elem   = tlv_element_type(this->template read<uint8_t>(size_t(length)));
+
+			auto readLength = TLVelementT::alignment + length;
+			auto elem		= tlv_element_type(this->template read<uint8_t>(size_t(readLength)));
 			this->template alignToNext<TLVelementT::alignment>();
 			return elem;
 		}
