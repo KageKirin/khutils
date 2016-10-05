@@ -59,7 +59,7 @@ namespace khutils
 		{
 			ReadT r;
 			fread(&r, sizeof(char), sizeof(ReadT), m_file.get());
-			return (r);
+			return swapConv(r);
 		}
 
 		//! fetches ReadT from file WITHOUT incrementing position,
