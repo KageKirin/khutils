@@ -116,6 +116,11 @@ namespace khutils
 		{
 			return ftell(m_file.get());
 		}
+
+		bool isEnd()
+		{
+			return feof(m_file.get());
+		}
 	};
 
 }	// namespace khutils

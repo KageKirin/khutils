@@ -170,6 +170,11 @@ namespace khutils
 		{
 			m_is.seekg(pos);
 		}
+
+		bool isEnd()
+		{
+			return m_is.eof();
+		}
 	};
 
 }	// namespace khutils

@@ -115,6 +115,11 @@ namespace khutils
 		{
 			return m_os.tellp();
 		}
+
+		bool isEnd()
+		{
+			return m_os.eof();
+		}
 	};
 
 }	// namespace khutils

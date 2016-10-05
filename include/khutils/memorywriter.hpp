@@ -165,6 +165,11 @@ namespace khutils
 		{
 			return std::distance(m_begin, getCurrent());
 		}
+
+		bool isEnd()
+		{
+			return m_current == m_end;
+		}
 	};
 
 }	// namespace khutils

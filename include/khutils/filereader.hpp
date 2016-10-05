@@ -171,6 +171,11 @@ namespace khutils
 		{
 			fseek(m_file.get(), pos, SEEK_SET);
 		}
+
+		bool isEnd()
+		{
+			return feof(m_file.get());
+		}
 	};
 
 }	// namespace khutils

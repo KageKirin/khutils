@@ -55,6 +55,7 @@ namespace khutils
 			, m_end(end)
 			, m_current(m_begin)
 		{
+			KHUTILS_ASSERT_NOT(begin, end);
 		}
 
 		_memoryreader& operator=(const _memoryreader&) = default;
@@ -190,6 +191,11 @@ namespace khutils
 		void jumpToOffset(size_t pos)
 		{
 			m_current = m_begin + pos;
+		}
+
+		bool isEnd()
+		{
+			return m_current == m_end;
 		}
 	};
 
