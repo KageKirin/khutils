@@ -19,8 +19,8 @@ namespace khutils
 			auto tag	= this->template fetchAt<typename TLVelementT::tag_type>(cur + TLVelementT::tag_offset);
 			auto length = this->template fetchAt<typename TLVelementT::length_type>(cur + TLVelementT::length_offset);
 
-			auto readLength = TLVelementT::alignment + length;
-			auto elem		= tlv_element_type(this->template read<uint8_t>(size_t(readLength)));
+			auto elem = tlv_element_type(this->template read<uint8_t>(size_t(TLVelementT::alignment)),
+										 this->template read<uint8_t>(size_t(length)));
 			this->template alignToNext<TLVelementT::alignment>();
 			return elem;
 		}

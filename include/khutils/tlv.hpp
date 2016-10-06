@@ -5,6 +5,7 @@
 #include "khutils/typeconversion.hpp"
 #include <boost/endian/conversion.hpp>
 
+#include <array>
 #include <cstdint>
 #include <vector>
 
@@ -24,23 +25,26 @@ namespace khutils
 		static constexpr boost::endian::order endianity		= _order;
 
 	protected:
+		value_type				 m_header;
 		value_type				 m_data;
 		const tag_type* const	m_tagp;
 		const length_type* const m_sizep;
 
 	public:
-		TLVelement(const std::vector<uint8_t>& data)
-			: m_data(data)
-			, m_tagp(reinterpret_cast<tag_type*>(&m_data.at(tag_offset)))
-			, m_sizep(reinterpret_cast<length_type*>(&m_data.at(length_offset)))
+		TLVelement(const value_type& header, const value_type& data)
+			: m_header(header)
+			, m_data(data)
+			, m_tagp(reinterpret_cast<tag_type*>(&m_header.at(tag_offset)))
+			, m_sizep(reinterpret_cast<length_type*>(&m_header.at(length_offset)))
 		{
 		}
 
 		TLVelement(tag_type tag, length_type size)
-			: m_data(sizeof(tag_type) + tag_offset + sizeof(length_type) + length_offset
-					 + ((sizeof(tag_type) + tag_offset + sizeof(length_type) + length_offset) % alignment))
-			, m_tagp(reinterpret_cast<tag_type*>(&m_data.at(tag_offset)))
-			, m_sizep(reinterpret_cast<length_type*>(&m_data.at(length_offset)))
+			: m_header(sizeof(tag_type) + tag_offset + sizeof(length_type) + length_offset
+					   + ((sizeof(tag_type) + tag_offset + sizeof(length_type) + length_offset) % alignment))
+			, m_data()
+			, m_tagp(reinterpret_cast<tag_type*>(&m_header.at(tag_offset)))
+			, m_sizep(reinterpret_cast<length_type*>(&m_header.at(length_offset)))
 		{
 		}
 
@@ -72,7 +76,7 @@ namespace khutils
 
 		value_type::const_iterator value_begin() const
 		{
-			return m_data.begin() + alignment;
+			return m_data.begin();
 		}
 
 		value_type::const_iterator value_end() const
