@@ -84,13 +84,6 @@ namespace khutils
 			return builder_.Finish();
 		}
 
-		inline flatbuffers::Offset<MapEntry> CreateMapEntryDirect(flatbuffers::FlatBufferBuilder& _fbb,
-																  const char*					  key  = nullptr,
-																  const std::vector<uint8_t>*	 data = nullptr)
-		{
-			return CreateMapEntry(_fbb, key ? _fbb.CreateString(key) : 0, data ? _fbb.CreateVector<uint8_t>(*data) : 0);
-		}
-
 		/// container for map entries
 		struct Map FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
 		{
@@ -135,12 +128,6 @@ namespace khutils
 			MapBuilder builder_(_fbb);
 			builder_.add_entries(entries);
 			return builder_.Finish();
-		}
-
-		inline flatbuffers::Offset<Map> CreateMapDirect(flatbuffers::FlatBufferBuilder&					  _fbb,
-														const std::vector<flatbuffers::Offset<MapEntry>>* entries = nullptr)
-		{
-			return CreateMap(_fbb, entries ? _fbb.CreateVector<flatbuffers::Offset<MapEntry>>(*entries) : 0);
 		}
 
 	}	// namespace data_map
