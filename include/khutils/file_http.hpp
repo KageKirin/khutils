@@ -1,5 +1,15 @@
-﻿#ifndef KHUTILS_FILE_HTTP_HPP_INC
+#ifndef KHUTILS_FILE_HTTP_HPP_INC
 #define KHUTILS_FILE_HTTP_HPP_INC
+
+#include <string>
+
+namespace khutils
+{
+	std::string getServerName(const std::string& url);
+	std::string getServerPath(const std::string& url);
+	std::string getServerPathHash(const std::string& url);
+	std::string getServerPathWithHash(const std::string& url);
+} // namespace khutils
 
 #if defined(KHUTILS_FILE_HTTP_IMPL)
 
@@ -16,6 +26,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <cassert>
 
 namespace khutils
 {
@@ -23,24 +34,58 @@ namespace khutils
 	using namespace fmt::literals;
 
 	//////////////////////////////////////////////////////////////////////////
-	//!!! totally fixed on 1 server and path system for now
-	//!!! TODO: make configurable
+	//! URI regex as specified in original RFC
+	//! @see: https://tools.ietf.org/html/rfc3986#appendix-B
+	static constexpr char URI_pattern[] = R"(^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?)";
+	static const std::regex reURI(URI_pattern);
 
-	static const std::string serverName = "10.33.82.234";
-
-	// total hack to adjust file path to test server
-	std::string patchUrl(const std::string& url)
+	std::string getServerName(const std::string& url)
 	{
-		std::regex expression(R"(3davt/files/)");
+		std::smatch match;
+		bool matchOK = std::regex_match(url, match, reURI);
+		assert(matchOK);
+		assert(match.size() > 4);
 
-		return std::regex_replace(url, expression, "");
+		return match[4];
+	}
+
+	std::string getServerPath(const std::string& url)
+	{
+		std::smatch match;
+		bool matchOK = std::regex_match(url, match, reURI);
+		assert(matchOK);
+		assert(match.size() > 5);
+
+		return match[5];
+	}
+
+	std::string getServerPathHash(const std::string& url)
+	{
+		std::smatch match;
+		bool matchOK = std::regex_match(url, match, reURI);
+		assert(matchOK);
+		assert(match.size() > 9);
+
+		return match[9];
+	}
+
+	std::string getServerPathWithHash(const std::string& url)
+	{
+		std::smatch match;
+		bool matchOK = std::regex_match(url, match, reURI);
+		assert(matchOK);
+		assert(match.size() > 9);
+
+		return match[5].str() + match[8].str();
 	}
 
 	//! modeled after
 	//! http://www.boost.org/doc/libs/1_47_0/doc/html/boost_asio/example/iostreams/http_client.cpp
-	void openHttpSocket(ip::tcp::iostream& s, const std::string& url_)
+	//! only work on http, NOT https
+	void openHttpSocket(ip::tcp::iostream& s, const std::string& url)
 	{
-		std::string url = patchUrl(url_);
+		auto serverName = getServerName(url);
+		auto resourcePath = getServerPathWithHash(url);
 
 		s.expires_from_now(boost::posix_time::seconds(60));
 
@@ -49,11 +94,11 @@ namespace khutils
 		if (!s)
 		{
 			static std::string errorMsg;
-			errorMsg = "Could not open URL " + url + " . Unresolved host.";
+			errorMsg = "Could not open URL " + url + " . Unresolved host. " + serverName;
 			throw FatalImportException(errorMsg);
 		}
 
-		s << "GET " << url << " HTTP/1.0\r\n";
+		s << "GET " << resourcePath << " HTTP/1.0\r\n";
 		s << "Host: " << serverName << "\r\n";
 		s << "Accept: */*\r\n";
 		s << "Connection: close\r\n\r\n";
@@ -69,14 +114,14 @@ namespace khutils
 		if (!s || http_version.substr(0, 5) != "HTTP/")
 		{
 			static std::string errorMsg;
-			errorMsg = "Could not open URL 'http://{}{}'. Invalid response."_format(serverName, url);
+			errorMsg = "Could not open URL '{}'. Invalid response. {}"_format(url, status_message);
 			throw FatalImportException(errorMsg);
 		}
 
 		if (status_code != 200)
 		{
 			static std::string errorMsg;
-			errorMsg = "Could not open URL 'http://{}{}'. Status code {} not 200."_format(serverName, url, status_code);
+			errorMsg = "Could not open URL '{}'. Status code {} not 200. {}"_format(url, status_code, status_message);
 			throw FatalImportException(errorMsg);
 		}
 
