@@ -1,4 +1,4 @@
-﻿#ifndef KHUTILS_FLATBUFFER_MULTIMAP_HPP_INC
+#ifndef KHUTILS_FLATBUFFER_MULTIMAP_HPP_INC
 #define KHUTILS_FLATBUFFER_MULTIMAP_HPP_INC
 
 #include "khutils/datamultimap_generated.h"

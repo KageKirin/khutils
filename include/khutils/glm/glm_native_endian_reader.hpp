@@ -1,4 +1,4 @@
-﻿#ifndef KHUTILS_GLM_NATIVE_ENDIAN_READER_HPP_INC
+#ifndef KHUTILS_GLM_NATIVE_ENDIAN_READER_HPP_INC
 #define KHUTILS_GLM_NATIVE_ENDIAN_READER_HPP_INC
 
 #include "khutils/glm/glm_endian_reverse.hpp"

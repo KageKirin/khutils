@@ -1,4 +1,4 @@
-﻿#ifndef KHUTILS_BASE_HANDLER_HPP_INC
+#ifndef KHUTILS_BASE_HANDLER_HPP_INC
 #define KHUTILS_BASE_HANDLER_HPP_INC
 
 #include "khutils/typeconversion.hpp"

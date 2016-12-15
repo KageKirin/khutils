@@ -1,4 +1,4 @@
-﻿#ifndef KHUTILS_TYPECONVERSION_HPP_INC
+#ifndef KHUTILS_TYPECONVERSION_HPP_INC
 #define KHUTILS_TYPECONVERSION_HPP_INC
 
 #include <boost/config.hpp>

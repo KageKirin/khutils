@@ -1,4 +1,4 @@
-﻿#ifndef KHUTILS_GLM_TO_FBX_HPP_INC
+#ifndef KHUTILS_GLM_TO_FBX_HPP_INC
 #define KHUTILS_GLM_TO_FBX_HPP_INC
 
 #include <fbxsdk.h>

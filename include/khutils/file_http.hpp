@@ -9,7 +9,7 @@ namespace khutils
 	std::string getServerPath(const std::string& url);
 	std::string getServerPathHash(const std::string& url);
 	std::string getServerPathWithHash(const std::string& url);
-} // namespace khutils
+}	// namespace khutils
 
 #if defined(KHUTILS_FILE_HTTP_IMPL)
 
@@ -22,11 +22,11 @@ namespace khutils
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/filesystem/path.hpp>
 
+#include <cassert>
 #include <regex>
 #include <sstream>
 #include <string>
 #include <vector>
-#include <cassert>
 
 namespace khutils
 {
@@ -36,13 +36,13 @@ namespace khutils
 	//////////////////////////////////////////////////////////////////////////
 	//! URI regex as specified in original RFC
 	//! @see: https://tools.ietf.org/html/rfc3986#appendix-B
-	static constexpr char URI_pattern[] = R"(^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?)";
+	static constexpr char   URI_pattern[] = R"(^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?)";
 	static const std::regex reURI(URI_pattern);
 
 	std::string getServerName(const std::string& url)
 	{
 		std::smatch match;
-		bool matchOK = std::regex_match(url, match, reURI);
+		bool		matchOK = std::regex_match(url, match, reURI);
 		assert(matchOK);
 		assert(match.size() > 4);
 
@@ -52,7 +52,7 @@ namespace khutils
 	std::string getServerPath(const std::string& url)
 	{
 		std::smatch match;
-		bool matchOK = std::regex_match(url, match, reURI);
+		bool		matchOK = std::regex_match(url, match, reURI);
 		assert(matchOK);
 		assert(match.size() > 5);
 
@@ -62,7 +62,7 @@ namespace khutils
 	std::string getServerPathHash(const std::string& url)
 	{
 		std::smatch match;
-		bool matchOK = std::regex_match(url, match, reURI);
+		bool		matchOK = std::regex_match(url, match, reURI);
 		assert(matchOK);
 		assert(match.size() > 9);
 
@@ -72,7 +72,7 @@ namespace khutils
 	std::string getServerPathWithHash(const std::string& url)
 	{
 		std::smatch match;
-		bool matchOK = std::regex_match(url, match, reURI);
+		bool		matchOK = std::regex_match(url, match, reURI);
 		assert(matchOK);
 		assert(match.size() > 9);
 
@@ -84,7 +84,7 @@ namespace khutils
 	//! only work on http, NOT https
 	void openHttpSocket(ip::tcp::iostream& s, const std::string& url)
 	{
-		auto serverName = getServerName(url);
+		auto serverName   = getServerName(url);
 		auto resourcePath = getServerPathWithHash(url);
 
 		s.expires_from_now(boost::posix_time::seconds(60));

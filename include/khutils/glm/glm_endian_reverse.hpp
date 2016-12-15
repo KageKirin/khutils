@@ -1,4 +1,4 @@
-﻿#ifndef KHUTILS_GLM_ENDIAN_REVERSE_HPP_INC
+#ifndef KHUTILS_GLM_ENDIAN_REVERSE_HPP_INC
 #define KHUTILS_GLM_ENDIAN_REVERSE_HPP_INC
 
 #include <boost/config.hpp>

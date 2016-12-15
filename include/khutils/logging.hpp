@@ -45,12 +45,12 @@ namespace khutils
 
 #if defined(KHUTILS_COLOR_LOG)
 #include <rang.hpp>
-#define LOG_COLOR_OK 		<< rang::fg::green
-#define LOG_COLOR_WARNING	<< rang::fg::yellow
-#define LOG_COLOR_ERROR		<< rang::fg::red
-#define LOG_COLOR_FAT_WARNING	<< rang::bg::yellow << rang::fg::gray << rang::style::bold
-#define LOG_COLOR_FAT_ERROR		<< rang::bg::red << rang::fg::gray << rang::style::bold << rang::style::blink
-#define LOG_COLOR_RESET		<< rang::style::reset
+#define LOG_COLOR_OK << rang::fg::green
+#define LOG_COLOR_WARNING << rang::fg::yellow
+#define LOG_COLOR_ERROR << rang::fg::red
+#define LOG_COLOR_FAT_WARNING << rang::bg::yellow << rang::fg::gray << rang::style::bold
+#define LOG_COLOR_FAT_ERROR << rang::bg::red << rang::fg::gray << rang::style::bold << rang::style::blink
+#define LOG_COLOR_RESET << rang::style::reset
 #else
 #define LOG_COLOR_OK
 #define LOG_COLOR_WARNING
@@ -58,7 +58,7 @@ namespace khutils
 #define LOG_COLOR_FAT_WARNING
 #define LOG_COLOR_FAT_ERROR
 #define LOG_COLOR_RESET
-#endif //defined(KHUTILS_COLOR_LOG)
+#endif	// defined(KHUTILS_COLOR_LOG)
 
 // clang-format off
 std::ostream&  khutils::logger::null()

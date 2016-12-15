@@ -1,4 +1,4 @@
-﻿#ifndef KHUTILS_ASSERTION_HPP_INC
+#ifndef KHUTILS_ASSERTION_HPP_INC
 #define KHUTILS_ASSERTION_HPP_INC
 
 #include <bandit/assertion_frameworks/snowhouse/snowhouse/snowhouse.h>

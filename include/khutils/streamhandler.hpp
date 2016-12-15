@@ -1,4 +1,4 @@
-﻿#ifndef KHUTILS_STREAMHANDLER_HPP_INC
+#ifndef KHUTILS_STREAMHANDLER_HPP_INC
 #define KHUTILS_STREAMHANDLER_HPP_INC
 
 #include "khutils/streamreader.hpp"

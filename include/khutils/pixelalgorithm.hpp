@@ -1,4 +1,4 @@
-﻿#ifndef KHUTILS_PIXEL_ALGORITHM_HPP_INC
+#ifndef KHUTILS_PIXEL_ALGORITHM_HPP_INC
 #define KHUTILS_PIXEL_ALGORITHM_HPP_INC
 
 //! file has dependency on boost.endian

@@ -1,4 +1,4 @@
-﻿#ifndef KHUTILS_TLV_READER_HPP_INC
+#ifndef KHUTILS_TLV_READER_HPP_INC
 #define KHUTILS_TLV_READER_HPP_INC
 
 #include "khutils/tlv.hpp"

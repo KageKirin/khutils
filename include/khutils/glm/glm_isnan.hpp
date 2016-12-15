@@ -1,4 +1,4 @@
-﻿#ifndef KHUTILS_GLM_ISNAN_HPP_INC
+#ifndef KHUTILS_GLM_ISNAN_HPP_INC
 #define KHUTILS_GLM_ISNAN_HPP_INC
 
 #include <fbxsdk.h>

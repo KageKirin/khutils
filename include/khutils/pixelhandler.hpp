@@ -1,4 +1,4 @@
-﻿#ifndef KHUTILS_PIXELHANDLER_HPP_INC
+#ifndef KHUTILS_PIXELHANDLER_HPP_INC
 #define KHUTILS_PIXELHANDLER_HPP_INC
 
 #include "khutils/pixelreader.hpp"

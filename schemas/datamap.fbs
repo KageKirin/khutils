@@ -5,15 +5,17 @@ namespace khutils.data_map;
 /// maps a key to a value
 /// key: string
 /// value: data
-table MapEntry {
+table MapEntry
+{
 key:
-  string(key);
+	string(key);
 data:
-  [ubyte];
+	[ubyte];
 }
 
 /// container for map entries
-table Map {
+table Map
+{
 entries:
-  [MapEntry];
+	[MapEntry];
 }

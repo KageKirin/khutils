@@ -1,4 +1,4 @@
-﻿#ifndef KHUTILS_COMPARISON_HPP_INC
+#ifndef KHUTILS_COMPARISON_HPP_INC
 #define KHUTILS_COMPARISON_HPP_INC
 
 #include <cstdint>

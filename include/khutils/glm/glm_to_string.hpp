@@ -1,4 +1,4 @@
-﻿#ifndef KHUTILS_GLM_TO_STRING_HPP_INC
+#ifndef KHUTILS_GLM_TO_STRING_HPP_INC
 #define KHUTILS_GLM_TO_STRING_HPP_INC
 
 #include <glm/fwd.hpp>

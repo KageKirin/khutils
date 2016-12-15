@@ -1,4 +1,4 @@
-﻿#ifndef KHUTILS_MEMORYHANDLER_HPP_INC
+#ifndef KHUTILS_MEMORYHANDLER_HPP_INC
 #define KHUTILS_MEMORYHANDLER_HPP_INC
 
 #include "khutils/memoryreader.hpp"

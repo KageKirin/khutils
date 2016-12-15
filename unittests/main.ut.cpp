@@ -1,4 +1,4 @@
-﻿#include <bandit/bandit.h>
+#include <bandit/bandit.h>
 #include <cstdlib>
 
 using namespace bandit;

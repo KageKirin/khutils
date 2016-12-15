@@ -1,4 +1,4 @@
-﻿#ifndef KHUTILS_TLV_HPP_INC
+#ifndef KHUTILS_TLV_HPP_INC
 #define KHUTILS_TLV_HPP_INC
 
 //! must come first and in this order

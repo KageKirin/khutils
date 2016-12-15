@@ -1,4 +1,4 @@
-﻿#ifndef KHUTILS_UTF8STRING_HPP_INC
+#ifndef KHUTILS_UTF8STRING_HPP_INC
 #define KHUTILS_UTF8STRING_HPP_INC
 
 #include <string>

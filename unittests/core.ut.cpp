@@ -1,4 +1,4 @@
-﻿#include "khutils/assertion.hpp"
+#include "khutils/assertion.hpp"
 #include "khutils/logging.hpp"
 #include "khutils/runtime_exceptions.hpp"
 #include "khutils/spiritual_cast.hpp"

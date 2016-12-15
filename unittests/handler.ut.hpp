@@ -1,4 +1,4 @@
-﻿#ifndef KHUTILS_UNITTESTS_HANDLER_UT_HPP_INC
+#ifndef KHUTILS_UNITTESTS_HANDLER_UT_HPP_INC
 #define KHUTILS_UNITTESTS_HANDLER_UT_HPP_INC
 
 #include "khutils/glm/glm_endian_reverse.hpp"
