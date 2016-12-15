@@ -1,29 +1,15 @@
 #####################################################################
 # include this file in your master makefile
 
-#### flatbuffer
-generate_flatbuffers:	\
-	generate_flatbuffer_headers	\
-	generate_flatbuffer_embedded_schemas	\
-	;
 
-generate_flatbuffer_headers: \
-	generate_flatbuffer_khutils_headers \
-	;
-	@echo "generated khutils flatbuffer headers"
-
-generate_flatbuffer_khutils_headers:
+gen_flatbuffer_khutils_headers:
 	@$(PROJECT_SCAFFOLDING)/tools/bin/darwin/flatc --cpp --scoped-enums -o $(PROJECT_SCAFFOLDING)/thirdparty/khutils/include/khutils/ -I $(PROJECT_SCAFFOLDING)/thirdparty/khutils/schemas $(PROJECT_SCAFFOLDING)/thirdparty/khutils/schemas/map.fbs
 	@$(PROJECT_SCAFFOLDING)/tools/bin/darwin/flatc --cpp --scoped-enums -o $(PROJECT_SCAFFOLDING)/thirdparty/khutils/include/khutils/ -I $(PROJECT_SCAFFOLDING)/thirdparty/khutils/schemas $(PROJECT_SCAFFOLDING)/thirdparty/khutils/schemas/multimap.fbs
 	@$(PROJECT_SCAFFOLDING)/tools/bin/darwin/flatc --cpp --scoped-enums -o $(PROJECT_SCAFFOLDING)/thirdparty/khutils/include/khutils/ -I $(PROJECT_SCAFFOLDING)/thirdparty/khutils/schemas $(PROJECT_SCAFFOLDING)/thirdparty/khutils/schemas/datamap.fbs
 	@$(PROJECT_SCAFFOLDING)/tools/bin/darwin/flatc --cpp --scoped-enums -o $(PROJECT_SCAFFOLDING)/thirdparty/khutils/include/khutils/ -I $(PROJECT_SCAFFOLDING)/thirdparty/khutils/schemas $(PROJECT_SCAFFOLDING)/thirdparty/khutils/schemas/datamultimap.fbs
+	clang-format -i $(PROJECT_SCAFFOLDING)/thirdparty/khutils/include/khutils/*_generated.h
 
-generate_flatbuffer_embedded_schemas: \
-	generate_flatbuffer_embedded_khutils_schemas \
-	;
-	@echo "generated khutils flatbuffer embedded schema headers"
-
-generate_flatbuffer_embedded_khutils_schemas:
+gen_flatbuffer_embedded_khutils_schemas:
 	@xxd -i $(PROJECT_SCAFFOLDING)/thirdparty/khutils/schemas/map.fbs $(PROJECT_SCAFFOLDING)/thirdparty/khutils/include/khutils/map_embedded_schema.xxd.h
 	@xxd -i $(PROJECT_SCAFFOLDING)/thirdparty/khutils/schemas/multimap.fbs $(PROJECT_SCAFFOLDING)/thirdparty/khutils/include/khutils/multimap_embedded_schema.xxd.h
 	@xxd -i $(PROJECT_SCAFFOLDING)/thirdparty/khutils/schemas/datamap.fbs $(PROJECT_SCAFFOLDING)/thirdparty/khutils/include/khutils/datamap_embedded_schema.xxd.h
@@ -32,13 +18,4 @@ generate_flatbuffer_embedded_khutils_schemas:
 	@$(PROJECT_SCAFFOLDING)/tools/bin/darwin/bin2c -f $(PROJECT_SCAFFOLDING)/thirdparty/khutils/schemas/multimap.fbs -o $(PROJECT_SCAFFOLDING)/thirdparty/khutils/include/khutils/multimap_embedded_schema.bin.h -n multimap_embedded_schema
 	@$(PROJECT_SCAFFOLDING)/tools/bin/darwin/bin2c -f $(PROJECT_SCAFFOLDING)/thirdparty/khutils/schemas/datamap.fbs -o $(PROJECT_SCAFFOLDING)/thirdparty/khutils/include/khutils/datamap_embedded_schema.bin.h -n datamap_embedded_schema
 	@$(PROJECT_SCAFFOLDING)/tools/bin/darwin/bin2c -f $(PROJECT_SCAFFOLDING)/thirdparty/khutils/schemas/datamultimap.fbs -o $(PROJECT_SCAFFOLDING)/thirdparty/khutils/include/khutils/datamultimap_embedded_schema.bin.h -n datamultimap_embedded_schema
-
-
-generate: \
-	generate_request_lexer	\
-	generate_flatbuffers;
-	# rule to run source generation commands
-	# flatbuffer (fbc), yacc/bison, lex/flex, re2c, etc
-	# TODO: customize if needed
-	@echo "pre-generated khutils files"
 
