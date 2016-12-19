@@ -1,7 +1,12 @@
 #ifndef KHUTILS_FILE_HTTP_HPP_INC
 #define KHUTILS_FILE_HTTP_HPP_INC
 
+#include <cctype>
+#include <sstream>
 #include <string>
+#include <vector>
+
+#include <boost/asio/ip/tcp.hpp>
 
 namespace khutils
 {
@@ -9,6 +14,11 @@ namespace khutils
 	std::string getServerPath(const std::string& url);
 	std::string getServerPathHash(const std::string& url);
 	std::string getServerPathWithHash(const std::string& url);
+
+	void openHttpSocket(boost::asio::ip::tcp::iostream& s, const std::string& url);
+	std::stringstream openHttpFile(const std::string& url);
+	std::vector<uint8_t> openHttpFileBuffer(const std::string& url);
+
 }	// namespace khutils
 
 #if defined(KHUTILS_FILE_HTTP_IMPL)
@@ -84,6 +94,8 @@ namespace khutils
 	//! only work on http, NOT https
 	void openHttpSocket(ip::tcp::iostream& s, const std::string& url)
 	{
+		logger::debug() << "openHttpSocket() to " << url;
+
 		auto serverName   = getServerName(url);
 		auto resourcePath = getServerPathWithHash(url);
 
@@ -146,6 +158,24 @@ namespace khutils
 		ret << s.rdbuf();
 		return ret;
 	}
+
+	std::vector<uint8_t> openHttpFileBuffer(const std::string& url)
+	{
+		ip::tcp::iostream s;
+		openHttpSocket(s, url);
+
+		// return response body
+		std::vector<uint8_t> ret;
+		while (s.good())
+		{
+			uint8_t c;
+			s.read((char*)&c, 1);
+			logger::debug() << c;
+			ret.push_back(c);
+		}
+		return ret;
+	}
+
 
 	//////////////////////////////////////////////////////////////////////////
 
