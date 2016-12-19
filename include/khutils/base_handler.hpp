@@ -22,6 +22,8 @@ namespace khutils
 	template <order _order>
 	struct base_handler_trait
 	{
+		static const order m_order;
+
 		template <typename T>
 		static T read_swap(T from)
 		{
@@ -58,6 +60,9 @@ namespace khutils
 			return write_swap(convert<OutT, InT>(_val));
 		}
 	};
+
+	template <order _order>
+	const order		base_handler_trait<_order>::m_order(_order);
 
 }	// namespace khutils
 
