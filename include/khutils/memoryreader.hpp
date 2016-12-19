@@ -39,23 +39,45 @@ namespace khutils
 		typedef big_endian_memoryreader<ByteForwardIterator>	big_endian_reader;
 	};
 
+	template <typename ByteForwardIterator>
+	struct _memoryreader_state
+	{
+		ByteForwardIterator begin;
+		ByteForwardIterator end;
+		ByteForwardIterator current;
+
+		_memoryreader_state() = delete;
+		_memoryreader_state(ByteForwardIterator alpha, ByteForwardIterator omega)
+			: begin(alpha), current(alpha), end(omega)
+		{
+		}
+		_memoryreader_state(const _memoryreader_state&) = default;
+		_memoryreader_state(_memoryreader_state&&)		= default;
+
+		_memoryreader_state& operator=(const _memoryreader_state&) = default;
+		_memoryreader_state& operator=(_memoryreader_state&&) = default;
+	};
+
 	template <typename ByteForwardIterator, order _order>
 	struct _memoryreader : base_handler_trait<_order>
 	{
-		ByteForwardIterator m_begin;
-		ByteForwardIterator m_end;
-		ByteForwardIterator m_current;
-		static_assert(sizeof(decltype(*m_begin)) == 1);
+		std::reference_wrapper<_memoryreader_state<ByteForwardIterator>> m_ih;
+		static_assert(sizeof(decltype(*(m_ih.get().begin))) == 1);
 
 		_memoryreader()						= delete;
 		_memoryreader(const _memoryreader&) = default;
 		_memoryreader(_memoryreader&&)		= default;
-		_memoryreader(ByteForwardIterator begin, ByteForwardIterator end)
-			: m_begin(begin)	//
-			, m_end(end)
-			, m_current(m_begin)
+		_memoryreader(_memoryreader_state<ByteForwardIterator>& ih) : m_ih(ih)	//
 		{
-			KHUTILS_ASSERT_NOT(begin, end);
+			KHUTILS_ASSERT_NOT(ih.begin, ih.end);
+		}
+		_memoryreader(std::reference_wrapper<_memoryreader_state<ByteForwardIterator>>& ih) : m_ih(ih)
+		{
+			KHUTILS_ASSERT_NOT(ih.begin, ih.end);
+		}
+		_memoryreader(std::reference_wrapper<_memoryreader_state<ByteForwardIterator>>&& ih) : m_ih(ih)
+		{
+			KHUTILS_ASSERT_NOT(ih.begin, ih.end);
 		}
 
 		_memoryreader& operator=(const _memoryreader&) = default;
@@ -72,11 +94,11 @@ namespace khutils
 			char* rawdata = reinterpret_cast<char*>(&r);
 			for (size_t i = 0; i < sizeof(ReadT); ++i)
 			{
-				if (m_current != m_end)
+				if (m_ih.get().current != m_ih.get().end)
 				{
-					rawdata[i] = *(m_current);
+					rawdata[i] = *(m_ih.get().current);
 				}
-				++m_current;
+				++m_ih.get().current;
 			}
 
 			return swapConv(r);
@@ -90,9 +112,9 @@ namespace khutils
 		template <typename OutT, typename ReadT = OutT>
 		OutT fetch(SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto curPos = m_current;
-			OutT t		= read<OutT, ReadT>(swapConv);
-			m_current   = curPos;
+			auto curPos  = m_ih.get().current;
+			OutT t		 = read<OutT, ReadT>(swapConv);
+			m_ih.get().current = curPos;
 			return t;
 		}
 
@@ -105,10 +127,10 @@ namespace khutils
 		OutT fetchAt(size_t readPos,
 					 SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto curPos = m_current;
-			m_current   = m_begin + readPos;
-			OutT t		= read<OutT, ReadT>(swapConv);
-			m_current   = curPos;
+			auto curPos  = m_ih.get().current;
+			m_ih.current = m_ih.get().begin + readPos;
+			OutT t		 = read<OutT, ReadT>(swapConv);
+			m_ih.get().current = curPos;
 			return t;
 		}
 
@@ -136,9 +158,9 @@ namespace khutils
 								SwapConversionFuncT<OutT, ReadT> swapConv
 								= base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto			  curPos = m_current;
+			auto			  curPos = m_ih.get().current;
 			std::vector<OutT> t		 = read<OutT, ReadT>(count, swapConv);
-			m_current				 = curPos;
+			m_ih.get().current			 = curPos;
 			return t;
 		}
 
@@ -154,10 +176,10 @@ namespace khutils
 								  SwapConversionFuncT<OutT, ReadT> swapConv
 								  = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto curPos			= m_current;
-			m_current			= m_begin + readPos;
+			auto curPos			= m_ih.get().current;
+			m_ih.get().current		= m_ih.get().begin + readPos;
 			std::vector<OutT> t = read<OutT, ReadT>(count, swapConv);
-			m_current			= curPos;
+			m_ih.get().current		= curPos;
 			return t;
 		}
 
@@ -166,7 +188,7 @@ namespace khutils
 		{
 			for (size_t i = 0; i < (sizeof(_SkipT) * count); ++i)
 			{
-				++m_current;
+				++m_ih.get().current;
 			}
 		}
 
@@ -180,22 +202,22 @@ namespace khutils
 
 		ByteForwardIterator getCurrent()
 		{
-			return m_current;
+			return m_ih.get().current;
 		}
 
 		size_t getCurrentOffset()
 		{
-			return std::distance(m_begin, getCurrent());
+			return std::distance(m_ih.get().begin, getCurrent());
 		}
 
 		void jumpToOffset(size_t pos)
 		{
-			m_current = m_begin + pos;
+			m_ih.get().current = m_ih.get().begin + pos;
 		}
 
 		bool isEnd()
 		{
-			return m_current == m_end;
+			return m_ih.get().current == m_ih.get().end;
 		}
 	};
 

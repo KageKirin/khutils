@@ -37,22 +37,45 @@ namespace khutils
 		typedef big_endian_memorywriter<ByteForwardIterator>	big_endian_writer;
 	};
 
+	template <typename ByteForwardIterator>
+	struct _memorywriter_state
+	{
+		ByteForwardIterator begin;
+		ByteForwardIterator end;
+		ByteForwardIterator current;
+
+		_memorywriter_state() = delete;
+		_memorywriter_state(ByteForwardIterator alpha, ByteForwardIterator omega)
+			: begin(alpha), current(alpha), end(omega)
+		{
+		}
+		_memorywriter_state(const _memorywriter_state&) = default;
+		_memorywriter_state(_memorywriter_state&&)		= default;
+
+		_memorywriter_state& operator=(const _memorywriter_state&) = default;
+		_memorywriter_state& operator=(_memorywriter_state&&) = default;
+	};
+
 	template <typename ByteForwardIterator, order _order>
 	struct _memorywriter : base_handler_trait<_order>
 	{
-		ByteForwardIterator m_begin;
-		ByteForwardIterator m_end;
-		ByteForwardIterator m_current;
-		static_assert(sizeof(decltype(*m_begin)) == 1);
+		std::reference_wrapper<_memorywriter_state<ByteForwardIterator>> m_ih;
+		static_assert(sizeof(decltype(*(m_ih.get().begin))) == 1);
 
 		_memorywriter()						= delete;
 		_memorywriter(const _memorywriter&) = default;
 		_memorywriter(_memorywriter&&)		= default;
-		_memorywriter(ByteForwardIterator begin, ByteForwardIterator end)
-			: m_begin(begin)	//
-			, m_end(end)
-			, m_current(m_begin)
+		_memorywriter(_memorywriter_state<ByteForwardIterator>& ih) : m_ih(ih)
 		{
+			KHUTILS_ASSERT_NOT(ih.begin, ih.end);
+		}
+		_memorywriter(std::reference_wrapper<_memorywriter_state<ByteForwardIterator>>& ih) : m_ih(ih)
+		{
+			KHUTILS_ASSERT_NOT(ih.get().begin, ih.get().end);
+		}
+		_memorywriter(std::reference_wrapper<_memorywriter_state<ByteForwardIterator>>&& ih) : m_ih(ih)
+		{
+			KHUTILS_ASSERT_NOT(ih.get().begin, ih.get().end);
 		}
 
 		_memorywriter& operator=(const _memorywriter&) = default;
@@ -63,11 +86,11 @@ namespace khutils
 		{
 			for (size_t i = 0; i < count; ++i)
 			{
-				if (m_current != m_end)
+				if (m_ih.get().current != m_ih.get().end)
 				{
-					*(m_current) = rawdata[i];
+					*(m_ih.get().current) = rawdata[i];
 				}
-				++m_current;
+				++m_ih.get().current;
 			}
 		}
 
@@ -118,9 +141,9 @@ namespace khutils
 		template <typename WriteT, typename InT = WriteT>
 		void put(InT t, SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
 		{
-			auto curPos = m_current;
+			auto curPos = m_ih.get().current;
 			write<WriteT, InT>(swapConv);
-			m_current = curPos;
+			m_ih.get().current = curPos;
 		}
 
 		//! puts WriteT from data at given position WITHOUT incrementing position,
@@ -133,10 +156,10 @@ namespace khutils
 				   size_t writePos,
 				   SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
 		{
-			auto curPos = m_current;
-			m_current   = m_begin + writePos;
+			auto curPos  = m_ih.get().current;
+			m_ih.get().current = m_ih.get().begin + writePos;
 			write<WriteT, InT>(t, swapConv);
-			m_current = curPos;
+			m_ih.get().current = curPos;
 		}
 
 		template <typename _SkipT>
@@ -144,7 +167,7 @@ namespace khutils
 		{
 			for (size_t i = 0; i < (sizeof(_SkipT) * count); ++i)
 			{
-				++m_current;
+				++m_ih.get().current;
 			}
 		}
 
@@ -158,17 +181,17 @@ namespace khutils
 
 		ByteForwardIterator getCurrent()
 		{
-			return m_current;
+			return m_ih.get().current;
 		}
 
 		size_t getCurrentOffset()
 		{
-			return std::distance(m_begin, getCurrent());
+			return std::distance(m_ih.begin, getCurrent());
 		}
 
 		bool isEnd()
 		{
-			return m_current == m_end;
+			return m_ih.get().current == m_ih.get().end;
 		}
 	};
 
