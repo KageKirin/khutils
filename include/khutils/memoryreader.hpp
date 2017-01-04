@@ -61,6 +61,7 @@ namespace khutils
 	template <typename ByteForwardIterator, order _order>
 	struct _memoryreader : base_handler_trait<_order>
 	{
+		typedef _memoryreader_state<ByteForwardIterator> state;
 		std::reference_wrapper<_memoryreader_state<ByteForwardIterator>> m_ih;
 		static_assert(sizeof(decltype(*(m_ih.get().begin))) == 1);
 
@@ -79,9 +80,10 @@ namespace khutils
 		{
 			KHUTILS_ASSERT_NOT(ih.begin, ih.end);
 		}
-
+		
 		_memoryreader& operator=(const _memoryreader&) = default;
 		_memoryreader& operator=(_memoryreader&&) = default;
+		
 
 		//! reads ReadT from data, then endian-swaps and converts it into OutT
 		//! optional convert function can be used to upsample ReadT into bytewise

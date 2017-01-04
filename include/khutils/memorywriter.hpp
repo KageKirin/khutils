@@ -59,6 +59,7 @@ namespace khutils
 	template <typename ByteForwardIterator, order _order>
 	struct _memorywriter : base_handler_trait<_order>
 	{
+		typedef _memorywriter_state<ByteForwardIterator> state;
 		std::reference_wrapper<_memorywriter_state<ByteForwardIterator>> m_ih;
 		static_assert(sizeof(decltype(*(m_ih.get().begin))) == 1);
 
