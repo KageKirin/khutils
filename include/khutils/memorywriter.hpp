@@ -40,7 +40,7 @@ namespace khutils
 	template <typename ByteForwardIterator>
 	struct _memorywriter_state
 	{
-		ByteForwardIterator begin;
+		const ByteForwardIterator begin;
 		ByteForwardIterator end;
 		ByteForwardIterator current;
 

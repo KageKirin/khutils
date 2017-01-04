@@ -42,8 +42,8 @@ namespace khutils
 	template <typename ByteForwardIterator>
 	struct _memoryreader_state
 	{
-		ByteForwardIterator begin;
-		ByteForwardIterator end;
+		const ByteForwardIterator begin;
+		const ByteForwardIterator end;
 		ByteForwardIterator current;
 
 		_memoryreader_state() = delete;
