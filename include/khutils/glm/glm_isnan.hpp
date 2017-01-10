@@ -1,17 +1,16 @@
 #ifndef KHUTILS_GLM_ISNAN_HPP_INC
 #define KHUTILS_GLM_ISNAN_HPP_INC
 
+#include "../isnan.hpp"
 #include <glm/fwd.hpp>
 
 namespace khutils
 {
-	void check_NaN(const double& d);
 	void check_NaN(const glm::dvec3& v);
 	void check_NaN(const glm::dvec4& v);
 	void check_NaN(const glm::dmat4& mat);
 	void check_NaN(const glm::dquat& q);
 
-	void check_NaN(const float& d);
 	void check_NaN(const glm::vec3& v);
 	void check_NaN(const glm::vec4& v);
 	void check_NaN(const glm::mat4& mat);
@@ -23,38 +22,21 @@ namespace khutils
 
 #ifndef GLM_SWIZZLE
 #define GLM_SWIZZLE 1
-#endif // !GLM_SWIZZLE
+#endif	// !GLM_SWIZZLE
 
 #ifndef GLM_FORCE_RADIANS
 #define GLM_FORCE_RADIANS 1
-#endif // !GLM_FORCE_RADIANS
+#endif	// !GLM_FORCE_RADIANS
 
 #ifndef GLM_PRECISION_HIGHP_FLOAT
 #define GLM_PRECISION_HIGHP_FLOAT 1
-#endif // !GLM_PRECISION_HIGHP_FLOAT
-
-#include "khutils/glm/glm_isnan.hpp"
-
-#include "khutils/assertion.hpp"
-#include "khutils/logging.hpp"
-
-#include <CppLinq/cpplinq.hpp>
+#endif	// !GLM_PRECISION_HIGHP_FLOAT
 
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
 namespace khutils
 {
-	void check_NaN(const float& d)
-	{
-		KHUTILS_ASSERT(!isnan(d));
-	}
-
-	void check_NaN(const double& d)
-	{
-		KHUTILS_ASSERT(!isnan(d));
-	}
-
 	void check_NaN(const glm::dvec3& v)
 	{
 		check_NaN(v.x);

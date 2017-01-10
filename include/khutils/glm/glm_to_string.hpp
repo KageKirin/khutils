@@ -81,7 +81,6 @@ namespace khutils
 #define GLM_PRECISION_HIGHP_FLOAT
 #include <fmt/format.h>
 
-#include "khutils/glm/glm_to_string.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
