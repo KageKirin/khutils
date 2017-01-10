@@ -44,7 +44,7 @@ namespace khutils
 	{
 		const ByteForwardIterator begin;
 		const ByteForwardIterator end;
-		ByteForwardIterator current;
+		ByteForwardIterator		  current;
 
 		_memoryreader_state() = delete;
 		_memoryreader_state(ByteForwardIterator alpha, ByteForwardIterator omega)
@@ -61,7 +61,7 @@ namespace khutils
 	template <typename ByteForwardIterator, order _order>
 	struct _memoryreader : base_handler_trait<_order>
 	{
-		typedef _memoryreader_state<ByteForwardIterator> state;
+		typedef _memoryreader_state<ByteForwardIterator>				 state;
 		std::reference_wrapper<_memoryreader_state<ByteForwardIterator>> m_ih;
 		static_assert(sizeof(decltype(*(m_ih.get().begin))) == 1);
 
@@ -80,10 +80,10 @@ namespace khutils
 		{
 			KHUTILS_ASSERT_NOT(ih.begin, ih.end);
 		}
-		
+
 		_memoryreader& operator=(const _memoryreader&) = default;
 		_memoryreader& operator=(_memoryreader&&) = default;
-		
+
 
 		//! reads ReadT from data, then endian-swaps and converts it into OutT
 		//! optional convert function can be used to upsample ReadT into bytewise
@@ -114,8 +114,8 @@ namespace khutils
 		template <typename OutT, typename ReadT = OutT>
 		OutT fetch(SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto curPos  = m_ih.get().current;
-			OutT t		 = read<OutT, ReadT>(swapConv);
+			auto curPos		   = m_ih.get().current;
+			OutT t			   = read<OutT, ReadT>(swapConv);
 			m_ih.get().current = curPos;
 			return t;
 		}
@@ -129,9 +129,9 @@ namespace khutils
 		OutT fetchAt(size_t readPos,
 					 SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
-			auto curPos  = m_ih.get().current;
-			m_ih.current = m_ih.get().begin + readPos;
-			OutT t		 = read<OutT, ReadT>(swapConv);
+			auto curPos		   = m_ih.get().current;
+			m_ih.current	   = m_ih.get().begin + readPos;
+			OutT t			   = read<OutT, ReadT>(swapConv);
 			m_ih.get().current = curPos;
 			return t;
 		}
@@ -162,7 +162,7 @@ namespace khutils
 		{
 			auto			  curPos = m_ih.get().current;
 			std::vector<OutT> t		 = read<OutT, ReadT>(count, swapConv);
-			m_ih.get().current			 = curPos;
+			m_ih.get().current		 = curPos;
 			return t;
 		}
 
@@ -179,9 +179,9 @@ namespace khutils
 								  = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
 			auto curPos			= m_ih.get().current;
-			m_ih.get().current		= m_ih.get().begin + readPos;
+			m_ih.get().current  = m_ih.get().begin + readPos;
 			std::vector<OutT> t = read<OutT, ReadT>(count, swapConv);
-			m_ih.get().current		= curPos;
+			m_ih.get().current  = curPos;
 			return t;
 		}
 

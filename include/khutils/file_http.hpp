@@ -170,7 +170,7 @@ namespace khutils
 		{
 			uint8_t c;
 			s.read((char*)&c, 1);
-			//logger::debug() << c;
+			// logger::debug() << c;
 			ret.push_back(c);
 		}
 		return ret;

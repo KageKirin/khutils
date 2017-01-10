@@ -41,8 +41,8 @@ namespace khutils
 	struct _memorywriter_state
 	{
 		const ByteForwardIterator begin;
-		ByteForwardIterator end;
-		ByteForwardIterator current;
+		ByteForwardIterator		  end;
+		ByteForwardIterator		  current;
 
 		_memorywriter_state() = delete;
 		_memorywriter_state(ByteForwardIterator alpha, ByteForwardIterator omega)
@@ -59,7 +59,7 @@ namespace khutils
 	template <typename ByteForwardIterator, order _order>
 	struct _memorywriter : base_handler_trait<_order>
 	{
-		typedef _memorywriter_state<ByteForwardIterator> state;
+		typedef _memorywriter_state<ByteForwardIterator>				 state;
 		std::reference_wrapper<_memorywriter_state<ByteForwardIterator>> m_ih;
 		static_assert(sizeof(decltype(*(m_ih.get().begin))) == 1);
 
@@ -157,7 +157,7 @@ namespace khutils
 				   size_t writePos,
 				   SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
 		{
-			auto curPos  = m_ih.get().current;
+			auto curPos		   = m_ih.get().current;
 			m_ih.get().current = m_ih.get().begin + writePos;
 			write<WriteT, InT>(t, swapConv);
 			m_ih.get().current = curPos;
