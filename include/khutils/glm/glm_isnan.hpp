@@ -1,8 +1,6 @@
 #ifndef KHUTILS_GLM_ISNAN_HPP_INC
 #define KHUTILS_GLM_ISNAN_HPP_INC
 
-#include <fbxsdk.h>
-
 #include <glm/fwd.hpp>
 
 namespace khutils
@@ -19,17 +17,21 @@ namespace khutils
 	void check_NaN(const glm::mat4& mat);
 	void check_NaN(const glm::quat& q);
 
-	void check_NaN(const FbxVector4& v);
-	void check_NaN(const FbxAMatrix& m);
-	void check_NaN(const FbxMatrix::kDouble44& m);
-
 }	// namespace khutils
 
 #if defined(KHUTILS_GLM_ISNAN_IMPL)
 
-#define GLM_SWIZZLE
-#define GLM_FORCE_RADIANS
-#define GLM_PRECISION_HIGHP_FLOAT
+#ifndef GLM_SWIZZLE
+#define GLM_SWIZZLE 1
+#endif // !GLM_SWIZZLE
+
+#ifndef GLM_FORCE_RADIANS
+#define GLM_FORCE_RADIANS 1
+#endif // !GLM_FORCE_RADIANS
+
+#ifndef GLM_PRECISION_HIGHP_FLOAT
+#define GLM_PRECISION_HIGHP_FLOAT 1
+#endif // !GLM_PRECISION_HIGHP_FLOAT
 
 #include "khutils/glm/glm_isnan.hpp"
 
@@ -115,29 +117,6 @@ namespace khutils
 		check_NaN(q.w);
 	}
 
-	void check_NaN(const FbxVector4& v)
-	{
-		check_NaN(v[0]);
-		check_NaN(v[1]);
-		check_NaN(v[2]);
-		check_NaN(v[3]);
-	}
-
-	void check_NaN(const FbxAMatrix& m)
-	{
-		check_NaN(m.Double44());
-	}
-
-	void check_NaN(const FbxMatrix::kDouble44& m)
-	{
-		for (size_t x = 0; x < 4; ++x)
-		{
-			for (size_t y = 0; y < 4; ++y)
-			{
-				check_NaN(m[x][y]);
-			}
-		}
-	}
 }	// namespace khutils
 
 #endif	// defined (KHUTILS_GLM_ISNAN_IMPL)
