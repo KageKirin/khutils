@@ -10,6 +10,7 @@
 #define KHUTILS_SPIRITUAL_CAST_IMPL
 #define KHUTILS_SPIRITUAL_COMPARE_IMPL
 #define KHUTILS_UTF8STRING_IMPL
+#define KHUTILS_CYCLIC_REDUNDANCY_IMPL
 
 
 #include "khutils/algorithm_index.hpp"
@@ -43,7 +44,7 @@
 #include "khutils/typeconversion.hpp"
 #include "khutils/utf8/utf8string.hpp"
 #include "khutils/writer_overload.hpp"
-
+#include "khutils/cyclic_redundancy.hpp"
 
 //!! file.hpp and file_http.hpp conflict (on purpose!)
 //!! include either and define its _IMPL
