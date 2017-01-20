@@ -11,8 +11,16 @@ namespace khutils
 	{
 
 		struct MapEntry;
+		struct MapEntryT;
 
 		struct Map;
+		struct MapT;
+
+		struct MapEntryT : public flatbuffers::NativeTable
+		{
+			std::string key;
+			std::string value;
+		};
 
 		/// simple simili-map type for Flatbuffers
 		/// maps a key to a value
@@ -20,6 +28,10 @@ namespace khutils
 		/// value: string
 		struct MapEntry FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
 		{
+			static FLATBUFFERS_CONSTEXPR const char* GetFullyQualifiedName()
+			{
+				return "khutils.string_map.MapEntry";
+			}
 			enum
 			{
 				VT_KEY   = 4,
@@ -47,6 +59,7 @@ namespace khutils
 					   && verifier.Verify(key()) && VerifyField<flatbuffers::uoffset_t>(verifier, VT_VALUE)
 					   && verifier.Verify(value()) && verifier.EndTable();
 			}
+			std::unique_ptr<MapEntryT> UnPack() const;
 		};
 
 		struct MapEntryBuilder
@@ -91,9 +104,20 @@ namespace khutils
 			return CreateMapEntry(_fbb, key ? _fbb.CreateString(key) : 0, value ? _fbb.CreateString(value) : 0);
 		}
 
+		inline flatbuffers::Offset<MapEntry> CreateMapEntry(flatbuffers::FlatBufferBuilder& _fbb, const MapEntryT* _o);
+
+		struct MapT : public flatbuffers::NativeTable
+		{
+			std::vector<std::unique_ptr<MapEntryT>> entries;
+		};
+
 		/// container for map entries
 		struct Map FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
 		{
+			static FLATBUFFERS_CONSTEXPR const char* GetFullyQualifiedName()
+			{
+				return "khutils.string_map.Map";
+			}
 			enum
 			{
 				VT_ENTRIES = 4
@@ -107,6 +131,7 @@ namespace khutils
 				return VerifyTableStart(verifier) && VerifyField<flatbuffers::uoffset_t>(verifier, VT_ENTRIES)
 					   && verifier.Verify(entries()) && verifier.VerifyVectorOfTables(entries()) && verifier.EndTable();
 			}
+			std::unique_ptr<MapT> UnPack() const;
 		};
 
 		struct MapBuilder
@@ -141,6 +166,54 @@ namespace khutils
 														const std::vector<flatbuffers::Offset<MapEntry>>* entries = nullptr)
 		{
 			return CreateMap(_fbb, entries ? _fbb.CreateVector<flatbuffers::Offset<MapEntry>>(*entries) : 0);
+		}
+
+		inline flatbuffers::Offset<Map> CreateMap(flatbuffers::FlatBufferBuilder& _fbb, const MapT* _o);
+
+		inline std::unique_ptr<MapEntryT> MapEntry::UnPack() const
+		{
+			auto _o = new MapEntryT();
+			{
+				auto _e = key();
+				if (_e)
+					_o->key = _e->str();
+			};
+			{
+				auto _e = value();
+				if (_e)
+					_o->value = _e->str();
+			};
+			return std::unique_ptr<MapEntryT>(_o);
+		}
+
+		inline flatbuffers::Offset<MapEntry> CreateMapEntry(flatbuffers::FlatBufferBuilder& _fbb, const MapEntryT* _o)
+		{
+			return CreateMapEntry(_fbb, _fbb.CreateString(_o->key), _o->value.size() ? _fbb.CreateString(_o->value) : 0);
+		}
+
+		inline std::unique_ptr<MapT> Map::UnPack() const
+		{
+			auto _o = new MapT();
+			{
+				auto _e = entries();
+				if (_e)
+				{
+					for (flatbuffers::uoffset_t _i = 0; _i < _e->size(); _i++)
+					{
+						_o->entries.push_back(_e->Get(_i)->UnPack());
+					}
+				}
+			};
+			return std::unique_ptr<MapT>(_o);
+		}
+
+		inline flatbuffers::Offset<Map> CreateMap(flatbuffers::FlatBufferBuilder& _fbb, const MapT* _o)
+		{
+			return CreateMap(_fbb,
+							 _o->entries.size() ?
+							   _fbb.CreateVector<flatbuffers::Offset<MapEntry>>(
+								 _o->entries.size(), [&](size_t i) { return CreateMapEntry(_fbb, _o->entries[i].get()); }) :
+							   0);
 		}
 
 	}	// namespace string_map
