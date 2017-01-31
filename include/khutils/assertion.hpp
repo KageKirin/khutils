@@ -4,6 +4,10 @@
 #include <bandit/assertion_frameworks/snowhouse/snowhouse/snowhouse.h>
 #include <memory>
 
+#ifdef KHUTILS_ASSERTION_WITH_VALUE_PTR
+#include <value_ptr/value_ptr.hpp>
+#endif //KHUTILS_ASSERTION_WITH_VALUE_PTR
+
 namespace khutils
 {
 	void Assert(const bool cond, const char* _file, const int _line);
@@ -25,7 +29,15 @@ namespace khutils
 
 	template <typename T>
 	void AssertValidSharedPtr(const std::shared_ptr<T>& ptr, const char* _file, const int _line);
-
+	
+	template <typename T>
+	void AssertValidUniquePtr(const std::unique_ptr<T>& ptr, const char* _file, const int _line);
+	
+#ifdef KHUTILS_ASSERTION_WITH_VALUE_PTR
+	template <typename T>
+	void AssertValidValuePtr(const smart_pointer::value_ptr<T>& ptr, const char* _file, const int _line);
+#endif //KHUTILS_ASSERTION_WITH_VALUE_PTR
+	
 }	// namespace khutils
 
 #define KHUTILS_ASSERT(cond) khutils::Assert(bool((cond)), __FILE__, __LINE__);
@@ -34,6 +46,8 @@ namespace khutils
 #define KHUTILS_ASSERT_NULLPTR(pointer) khutils::AssertNullPtr((pointer), __FILE__, __LINE__);
 #define KHUTILS_ASSERT_PTR(pointer) khutils::AssertValidPtr((pointer), __FILE__, __LINE__);
 #define KHUTILS_ASSERT_SPTR(pointer) khutils::AssertValidSharedPtr((pointer), __FILE__, __LINE__);
+#define KHUTILS_ASSERT_UPTR(pointer) khutils::AssertValidUniquePtr((pointer), __FILE__, __LINE__);
+
 #define KHUTILS_ASSERT_EXPR(variable, expr)                                                                            \
 	{                                                                                                                  \
 		using namespace snowhouse;                                                                                     \
@@ -53,6 +67,9 @@ namespace khutils
 #define KHUTILS_ASSERT_IN_RANGE_HO(variable, valm, valM)                                                               \
 	KHUTILS_ASSERT_EXPR(variable, Is().GreaterThanOrEqualTo(valm).And().LessThan(valM))
 
+#ifdef KHUTILS_ASSERTION_WITH_VALUE_PTR
+#define KHUTILS_ASSERT_VPTR(pointer) khutils::AssertValidValuePtr((pointer), __FILE__, __LINE__);
+#endif //KHUTILS_ASSERTION_WITH_VALUE_PTR
 
 #if defined(KHUTILS_ASSERTION_INLINE) || defined(KHUTILS_ASSERTION_IMPL)
 
@@ -167,6 +184,42 @@ namespace khutils
 			throw;
 		}
 	}
+	
+	template <typename T>
+	void AssertValidUniquePtr(const std::unique_ptr<T>& ptr, const char* _file, const int _line)
+	{
+		CASSERT((bool)ptr);
+		try
+		{
+			using namespace snowhouse;
+			ConfigurableAssert<DefaultFailureHandler>::That((bool)ptr, IsTrue(), _file, _line);
+		}
+		catch (...)
+		{
+			logger::error() << "assertion in " << _file << " at line " << _line;
+			throw;
+		}
+	}
+	
+	
+#ifdef KHUTILS_ASSERTION_WITH_VALUE_PTR
+	template <typename T>
+	void AssertValidValuePtr(const smart_pointer::value_ptr<T>& ptr, const char* _file, const int _line)
+	{
+		CASSERT((bool)ptr);
+		try
+		{
+			using namespace snowhouse;
+			ConfigurableAssert<DefaultFailureHandler>::That((bool)ptr, IsTrue(), _file, _line);
+		}
+		catch (...)
+		{
+			logger::error() << "assertion in " << _file << " at line " << _line;
+			throw;
+		}
+	}
+#endif //KHUTILS_ASSERTION_WITH_VALUE_PTR
+
 }	// namespace khutils
 
 #endif	// defined(KHUTILS_ASSERTION_INLINE) || defined(KHUTILS_ASSERTION_IMPL)
