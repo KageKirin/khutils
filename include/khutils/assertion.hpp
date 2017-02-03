@@ -30,8 +30,8 @@ namespace khutils
 	template <typename T>
 	void AssertValidSharedPtr(const std::shared_ptr<T>& ptr, const char* _file, const int _line);
 	
-	template <typename T>
-	void AssertValidUniquePtr(const std::unique_ptr<T>& ptr, const char* _file, const int _line);
+	template <typename T, typename D>
+	void AssertValidUniquePtr(const std::unique_ptr<T, D>& ptr, const char* _file, const int _line);
 	
 #ifdef KHUTILS_ASSERTION_WITH_VALUE_PTR
 	template <typename T>
@@ -185,8 +185,8 @@ namespace khutils
 		}
 	}
 	
-	template <typename T>
-	void AssertValidUniquePtr(const std::unique_ptr<T>& ptr, const char* _file, const int _line)
+	template <typename T, typename D>
+	void AssertValidUniquePtr(const std::unique_ptr<T, D>& ptr, const char* _file, const int _line)
 	{
 		CASSERT((bool)ptr);
 		try
