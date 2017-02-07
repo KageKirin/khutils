@@ -7,6 +7,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <cstdio>
 
 namespace khutils
 {
@@ -69,6 +70,12 @@ namespace khutils
 		{
 			flatbuffers::Verifier verifier(m_buffer.data(), m_buffer.size());
 			return ptr()->Verify(verifier);
+		}
+
+		inline void dump(FILE* fptr)
+		{
+			KHUTILS_ASSERT_PTR(fptr);
+			fwrite(raw(), size(), 1, fptr);
 		}
 	};
 
