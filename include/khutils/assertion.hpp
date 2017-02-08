@@ -6,7 +6,7 @@
 
 #ifdef KHUTILS_ASSERTION_WITH_VALUE_PTR
 #include <value_ptr/value_ptr.hpp>
-#endif //KHUTILS_ASSERTION_WITH_VALUE_PTR
+#endif	// KHUTILS_ASSERTION_WITH_VALUE_PTR
 
 namespace khutils
 {
@@ -29,15 +29,15 @@ namespace khutils
 
 	template <typename T>
 	void AssertValidSharedPtr(const std::shared_ptr<T>& ptr, const char* _file, const int _line);
-	
+
 	template <typename T, typename D>
 	void AssertValidUniquePtr(const std::unique_ptr<T, D>& ptr, const char* _file, const int _line);
-	
+
 #ifdef KHUTILS_ASSERTION_WITH_VALUE_PTR
 	template <typename T>
 	void AssertValidValuePtr(const smart_pointer::value_ptr<T>& ptr, const char* _file, const int _line);
-#endif //KHUTILS_ASSERTION_WITH_VALUE_PTR
-	
+#endif	// KHUTILS_ASSERTION_WITH_VALUE_PTR
+
 }	// namespace khutils
 
 #define KHUTILS_ASSERT(cond) khutils::Assert(bool((cond)), __FILE__, __LINE__);
@@ -69,7 +69,7 @@ namespace khutils
 
 #ifdef KHUTILS_ASSERTION_WITH_VALUE_PTR
 #define KHUTILS_ASSERT_VPTR(pointer) khutils::AssertValidValuePtr((pointer), __FILE__, __LINE__);
-#endif //KHUTILS_ASSERTION_WITH_VALUE_PTR
+#endif	// KHUTILS_ASSERTION_WITH_VALUE_PTR
 
 #if defined(KHUTILS_ASSERTION_INLINE) || defined(KHUTILS_ASSERTION_IMPL)
 
@@ -184,7 +184,7 @@ namespace khutils
 			throw;
 		}
 	}
-	
+
 	template <typename T, typename D>
 	void AssertValidUniquePtr(const std::unique_ptr<T, D>& ptr, const char* _file, const int _line)
 	{
@@ -200,8 +200,8 @@ namespace khutils
 			throw;
 		}
 	}
-	
-	
+
+
 #ifdef KHUTILS_ASSERTION_WITH_VALUE_PTR
 	template <typename T>
 	void AssertValidValuePtr(const smart_pointer::value_ptr<T>& ptr, const char* _file, const int _line)
@@ -218,7 +218,7 @@ namespace khutils
 			throw;
 		}
 	}
-#endif //KHUTILS_ASSERTION_WITH_VALUE_PTR
+#endif	// KHUTILS_ASSERTION_WITH_VALUE_PTR
 
 }	// namespace khutils
 
