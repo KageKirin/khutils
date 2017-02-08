@@ -31,6 +31,7 @@ namespace khutils
 		};
 
 		/// simple simili-map type for Flatbuffers
+		/// map entry
 		/// maps a key to a value
 		/// key: string
 		/// value: data

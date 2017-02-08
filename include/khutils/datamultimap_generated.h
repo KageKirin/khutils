@@ -32,6 +32,7 @@ namespace khutils
 			}
 		};
 
+		/// simple simili-multimap type for Flatbuffers
 		/// container for random data
 		struct Data FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
 		{
@@ -111,7 +112,7 @@ namespace khutils
 			}
 		};
 
-		/// simple simili-multimap type for Flatbuffers
+		/// map entry
 		/// maps a key to a number of values
 		/// key: string
 		/// values: array of Data

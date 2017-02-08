@@ -1,15 +1,14 @@
+namespace khutils.hashstring_map;
 
-namespace khutils.string_map;
-
-/// simple simili-map type for Flatbuffers
+/// simple hash LUT for Flatbuffers
 
 /// map entry
 /// maps a key to a value
-/// key: string
+/// key: hash
 /// value: string
 table MapEntry
 {
-	key : string(key);
+	key : ulong(key, hash: "fnv1_64");
 	value : string;
 }
 
