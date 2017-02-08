@@ -6,8 +6,8 @@
 #include <flatbuffers/flatbuffers.h>
 
 #include <cstdint>
-#include <vector>
 #include <cstdio>
+#include <vector>
 
 namespace khutils
 {
@@ -24,6 +24,14 @@ namespace khutils
 
 	public:
 		FlatbufferContainer() = delete;
+		FlatbufferContainer(std::vector<uint8_t>&& buffer) : m_buffer(buffer)
+		{
+			KHUTILS_ASSERT(verify());
+			if (!verify())
+			{
+				throw FatalImportException("bad flatbuffer");
+			}
+		}
 		FlatbufferContainer(const std::vector<uint8_t>& buffer) : m_buffer(buffer)
 		{
 			KHUTILS_ASSERT(verify());
@@ -32,8 +40,12 @@ namespace khutils
 				throw FatalImportException("bad flatbuffer");
 			}
 		}
-		FlatbufferContainer(uint8_t* data, size_t length)
+		FlatbufferContainer(const uint8_t* data, size_t length)
 			: FlatbufferContainer(std::vector<uint8_t>(data, data + length))
+		{
+		}
+		FlatbufferContainer(const flatbuffers::FlatBufferBuilder& builder)
+			: FlatbufferContainer(builder.GetBufferPointer(), builder.GetSize())
 		{
 		}
 		// no need to verify buffer, as it already has been verified when creating rhv
