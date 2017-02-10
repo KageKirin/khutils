@@ -151,10 +151,10 @@ namespace khutils
 	std::map<std::string, std::vector<std::string>>::value_type from_flatbuffer(const string_multimap::MapEntry* ff)
 	{
 		KHUTILS_ASSERT_PTR(ff);
-		KHUTILS_ASSERT_PTR(ff->key());
+		KHUTILS_ASSERT_PTR(ff->id());
 		KHUTILS_ASSERT_PTR(ff->values());
 
-		std::map<std::string, std::vector<std::string>>::value_type rr{ff->key()->str(), {}};
+		std::map<std::string, std::vector<std::string>>::value_type rr{ff->id()->str(), {}};
 		rr.second.resize(ff->values()->size());
 
 		std::transform(ff->values()->begin(), ff->values()->end(), rr.second.begin(), [](const auto& _v) {
@@ -222,10 +222,10 @@ namespace khutils
 	std::map<std::string, std::vector<std::vector<uint8_t>>>::value_type from_flatbuffer(const data_multimap::MapEntry* ff)
 	{
 		KHUTILS_ASSERT_PTR(ff);
-		KHUTILS_ASSERT_PTR(ff->key());
+		KHUTILS_ASSERT_PTR(ff->id());
 		KHUTILS_ASSERT_PTR(ff->values());
 
-		std::map<std::string, std::vector<std::vector<uint8_t>>>::value_type rr{ff->key()->str(), {}};
+		std::map<std::string, std::vector<std::vector<uint8_t>>>::value_type rr{ff->id()->str(), {}};
 		rr.second.resize(ff->values()->size());
 
 		std::transform(ff->values()->begin(), ff->values()->end(), rr.second.begin(), [](const auto& _v) {

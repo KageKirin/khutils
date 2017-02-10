@@ -23,7 +23,7 @@ namespace khutils
 			{
 				return "khutils.string_multimap.MapEntryT";
 			}
-			std::string				 key;
+			std::string				 id;
 			std::vector<std::string> values;
 			MapEntryT()
 			{
@@ -33,7 +33,7 @@ namespace khutils
 		/// simple simili-multimap type for Flatbuffers
 		/// map entry
 		/// maps a key to a number of values
-		/// key: string
+		/// id: string
 		/// values: array of strings
 		struct MapEntry FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
 		{
@@ -44,20 +44,20 @@ namespace khutils
 			}
 			enum
 			{
-				VT_KEY	= 4,
+				VT_ID	 = 4,
 				VT_VALUES = 6
 			};
-			const flatbuffers::String* key() const
+			const flatbuffers::String* id() const
 			{
-				return GetPointer<const flatbuffers::String*>(VT_KEY);
+				return GetPointer<const flatbuffers::String*>(VT_ID);
 			}
 			bool KeyCompareLessThan(const MapEntry* o) const
 			{
-				return *key() < *o->key();
+				return *id() < *o->id();
 			}
 			int KeyCompareWithValue(const char* val) const
 			{
-				return strcmp(key()->c_str(), val);
+				return strcmp(id()->c_str(), val);
 			}
 			const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>* values() const
 			{
@@ -65,8 +65,8 @@ namespace khutils
 			}
 			bool Verify(flatbuffers::Verifier& verifier) const
 			{
-				return VerifyTableStart(verifier) && VerifyFieldRequired<flatbuffers::uoffset_t>(verifier, VT_KEY)
-					   && verifier.Verify(key()) && VerifyField<flatbuffers::uoffset_t>(verifier, VT_VALUES)
+				return VerifyTableStart(verifier) && VerifyFieldRequired<flatbuffers::uoffset_t>(verifier, VT_ID)
+					   && verifier.Verify(id()) && VerifyField<flatbuffers::uoffset_t>(verifier, VT_VALUES)
 					   && verifier.Verify(values()) && verifier.VerifyVectorOfStrings(values()) && verifier.EndTable();
 			}
 			MapEntryT* UnPack(const flatbuffers::resolver_function_t* resolver = nullptr) const;
@@ -79,9 +79,9 @@ namespace khutils
 		{
 			flatbuffers::FlatBufferBuilder& fbb_;
 			flatbuffers::uoffset_t			start_;
-			void add_key(flatbuffers::Offset<flatbuffers::String> key)
+			void add_id(flatbuffers::Offset<flatbuffers::String> id)
 			{
-				fbb_.AddOffset(MapEntry::VT_KEY, key);
+				fbb_.AddOffset(MapEntry::VT_ID, id);
 			}
 			void add_values(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>> values)
 			{
@@ -95,29 +95,29 @@ namespace khutils
 			flatbuffers::Offset<MapEntry> Finish()
 			{
 				auto o = flatbuffers::Offset<MapEntry>(fbb_.EndTable(start_, 2));
-				fbb_.Required(o, MapEntry::VT_KEY);	// key
+				fbb_.Required(o, MapEntry::VT_ID);	// id
 				return o;
 			}
 		};
 
 		inline flatbuffers::Offset<MapEntry>
 		CreateMapEntry(flatbuffers::FlatBufferBuilder&													  _fbb,
-					   flatbuffers::Offset<flatbuffers::String>											  key	= 0,
+					   flatbuffers::Offset<flatbuffers::String>											  id	 = 0,
 					   flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>> values = 0)
 		{
 			MapEntryBuilder builder_(_fbb);
 			builder_.add_values(values);
-			builder_.add_key(key);
+			builder_.add_id(id);
 			return builder_.Finish();
 		}
 
 		inline flatbuffers::Offset<MapEntry> CreateMapEntryDirect(flatbuffers::FlatBufferBuilder& _fbb,
-																  const char*					  key = nullptr,
+																  const char*					  id = nullptr,
 																  const std::vector<flatbuffers::Offset<flatbuffers::String>>* values
 																  = nullptr)
 		{
 			return CreateMapEntry(_fbb,
-								  key ? _fbb.CreateString(key) : 0,
+								  id ? _fbb.CreateString(id) : 0,
 								  values ? _fbb.CreateVector<flatbuffers::Offset<flatbuffers::String>>(*values) : 0);
 		}
 
@@ -132,7 +132,7 @@ namespace khutils
 			{
 				return "khutils.string_multimap.MapT";
 			}
-			std::vector<std::unique_ptr<MapEntryT>> entries;
+			std::vector<smart_pointer::value_ptr<MapEntryT>> entries;
 			MapT()
 			{
 			}
@@ -208,9 +208,9 @@ namespace khutils
 			(void)resolver;
 			auto _o = new MapEntryT();
 			{
-				auto _e = key();
+				auto _e = id();
 				if (_e)
-					_o->key = _e->str();
+					_o->id = _e->str();
 			};
 			{
 				auto _e = values();
@@ -237,7 +237,7 @@ namespace khutils
 															const flatbuffers::rehasher_function_t* rehasher)
 		{
 			(void)rehasher;
-			return CreateMapEntry(_fbb, _fbb.CreateString(_o->key), _o->values.size() ? _fbb.CreateVectorOfStrings(_o->values) : 0);
+			return CreateMapEntry(_fbb, _fbb.CreateString(_o->id), _o->values.size() ? _fbb.CreateVectorOfStrings(_o->values) : 0);
 		}
 
 		inline MapT* Map::UnPack(const flatbuffers::resolver_function_t* resolver) const
@@ -250,7 +250,7 @@ namespace khutils
 				{
 					for (flatbuffers::uoffset_t _i = 0; _i < _e->size(); _i++)
 					{
-						_o->entries.push_back(std::unique_ptr<MapEntryT>(_e->Get(_i)->UnPack(resolver)));
+						_o->entries.push_back(smart_pointer::value_ptr<MapEntryT>(_e->Get(_i)->UnPack(resolver)));
 					}
 				}
 			};

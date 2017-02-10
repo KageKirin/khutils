@@ -4,16 +4,14 @@ namespace khutils.hashstring_map;
 
 /// map entry
 /// maps a key to a value
-/// key: hash
+/// id: hash
 /// value: string
-table MapEntry
-{
-	key : ulong(key, hash: "fnv1_64");
-	value : string;
+table MapEntry {
+	id: ulong(key, hash: "fnv1_64");
+	value: string;
 }
 
 /// container for map entries
-table Map
-{
-	entries : [MapEntry];
+table Map {
+	entries: [MapEntry];
 }

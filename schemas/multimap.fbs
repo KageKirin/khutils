@@ -5,16 +5,14 @@ namespace khutils.string_multimap;
 
 /// map entry
 /// maps a key to a number of values
-/// key: string
+/// id: string
 /// values: array of strings
-table MapEntry
-{
-	key : string(key);
-	values : [string];
+table MapEntry {
+	id: string(key);
+	values: [string];
 }
 
 /// container for multimap entries
-table Map
-{
-	entries : [MapEntry];
+table Map {
+	entries: [MapEntry];
 }

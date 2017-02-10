@@ -126,10 +126,10 @@ namespace khutils
 	std::map<std::string, std::string>::value_type from_flatbuffer(const string_map::MapEntry* ff)
 	{
 		KHUTILS_ASSERT_PTR(ff);
-		KHUTILS_ASSERT_PTR(ff->key());
+		KHUTILS_ASSERT_PTR(ff->id());
 		KHUTILS_ASSERT_PTR(ff->value());
 
-		return std::map<std::string, std::string>::value_type{ff->key()->str(), ff->value()->str()};
+		return std::map<std::string, std::string>::value_type{ff->id()->str(), ff->value()->str()};
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -175,10 +175,10 @@ namespace khutils
 	std::map<std::string, std::vector<uint8_t>>::value_type from_flatbuffer(const data_map::MapEntry* ff)
 	{
 		KHUTILS_ASSERT_PTR(ff);
-		KHUTILS_ASSERT_PTR(ff->key());
+		KHUTILS_ASSERT_PTR(ff->id());
 		KHUTILS_ASSERT_PTR(ff->data());
 
-		return std::map<std::string, std::vector<uint8_t>>::value_type{ff->key()->str(),
+		return std::map<std::string, std::vector<uint8_t>>::value_type{ff->id()->str(),
 																	   {ff->data()->begin(), ff->data()->end()}};
 	}
 

@@ -9,18 +9,16 @@ namespace khutils.string_map;
 
 /// map entry
 /// maps a key to a value
-/// key: string
+/// id: string
 /// value: string
-table MapEntry
-{
-	key : string(key);
-	value : string;
+table MapEntry {
+	id: string(key);
+	value: string;
 }
 
 /// container for map entries
-table Map
-{
-	entries : [MapEntry];
+table Map {
+	entries: [MapEntry];
 }
 
 )");

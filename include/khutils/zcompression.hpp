@@ -10,7 +10,7 @@ namespace khutils
 	// inflate (decompress)
 
 	struct ZInflateContext;
-	std::vector<uint8_t> z_inflate(const std::vector<uint8_t>& cmprData,  size_t maxDecompressedSize, const ZInflateContext&);
+	std::vector<uint8_t> z_inflate(const std::vector<uint8_t>& cmprData, size_t maxDecompressedSize, const ZInflateContext&);
 
 	//-------------------------------------------------------------------------
 	// deflate (compress)
@@ -89,17 +89,17 @@ namespace khutils
 	std::vector<uint8_t> z_inflate(const std::vector<uint8_t>& cmprData, size_t outSize, const ZInflateContext&)
 	{
 		std::vector<uint8_t> outBuf(outSize, 0);
-		auto err = uncompress(&outBuf.front(), &outSize, cmprData.data(), cmprData.size());
-		//TODO handle error!
+		auto				 err = uncompress(&outBuf.front(), &outSize, cmprData.data(), cmprData.size());
+		// TODO handle error!
 		outBuf.resize(outSize);
 		return outBuf;
 	}
 	std::vector<uint8_t> z_deflate(const std::vector<uint8_t>& data, const ZDeflateContext&)
 	{
-		size_t outSize = compressBound(data.size());
+		size_t				 outSize = compressBound(data.size());
 		std::vector<uint8_t> outBuf(outSize, 0);
-		auto err = compress2(&outBuf.front(), &outSize, data.data(), data.size(), 9);
-		//TODO handle error!
+		auto				 err = compress2(&outBuf.front(), &outSize, data.data(), data.size(), 9);
+		// TODO handle error!
 		outBuf.resize(outSize);
 		return outBuf;
 	}
@@ -116,24 +116,23 @@ namespace khutils
 
 namespace khutils
 {
-	std::vector<uint8_t> z_inflate(const std::vector<uint8_t>& cmprData,  size_t outSize, const ZInflateContext&)
+	std::vector<uint8_t> z_inflate(const std::vector<uint8_t>& cmprData, size_t outSize, const ZInflateContext&)
 	{
 		std::vector<uint8_t> outBuf(outSize, 0);
 		outSize = ZSTD_decompress(&outBuf.front(), outSize, cmprData.data(), cmprData.size());
-		//TODO handle error!
+		// TODO handle error!
 		outBuf.resize(outSize);
 		return outBuf;
 	}
 
 	std::vector<uint8_t> z_deflate(const std::vector<uint8_t>& data, const ZDeflateContext&)
 	{
-		size_t outSize = ZSTD_compressBound(data.size());
-		std::vector<uint8_t> outBuf(outSize, 0);
+		size_t				 outSize = ZSTD_compressBound(data.size());
+		std::vector<uint8_t> outBuf(2 * outSize, 0);
 		outSize = ZSTD_compress(&outBuf.front(), outSize, data.data(), data.size(), 9);
-		//TODO handle error!
+		// TODO handle error!
 		outBuf.resize(outSize);
 		return outBuf;
-
 	}
 
 }	// namespace khutils
@@ -148,7 +147,7 @@ namespace khutils
 
 namespace khutils
 {
-	std::vector<uint8_t> z_inflate(const std::vector<uint8_t>& cmprData,  size_t outSize, const ZInflateContext&)
+	std::vector<uint8_t> z_inflate(const std::vector<uint8_t>& cmprData, size_t outSize, const ZInflateContext&)
 	{
 	}
 
