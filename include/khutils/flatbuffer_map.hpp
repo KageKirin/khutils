@@ -178,8 +178,7 @@ namespace khutils
 		KHUTILS_ASSERT_PTR(ff->id());
 		KHUTILS_ASSERT_PTR(ff->data());
 
-		return std::map<std::string, std::vector<uint8_t>>::value_type{ff->id()->str(),
-																	   {ff->data()->begin(), ff->data()->end()}};
+		return std::map<std::string, std::vector<uint8_t>>::value_type{ff->id()->str(), {ff->data()->begin(), ff->data()->end()}};
 	}
 
 	//////////////////////////////////////////////////////////////////////////

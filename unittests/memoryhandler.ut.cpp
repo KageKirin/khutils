@@ -29,12 +29,12 @@ auto desc_containerGroup = [](auto desc, auto startIt, auto endIt) {
 		before_each([&]() { std::for_each(startIt, endIt, [](auto& elem) { elem = 0x0; }); });
 
 		memorywriter<decltype(startIt)>::state mw_state{startIt, endIt};
-		auto get_memorywriter = [&]() {	//
+		auto								   get_memorywriter = [&]() {	//
 			return memorywriter<decltype(startIt)>{mw_state};
 		};
-		
+
 		memoryreader<decltype(startIt)>::state mr_state{startIt, endIt};
-		auto get_memoryreader = [&]() {	//
+		auto								   get_memoryreader = [&]() {	//
 			return memoryreader<decltype(startIt)>{mr_state};
 		};
 
@@ -46,12 +46,12 @@ auto desc_containerGroup = [](auto desc, auto startIt, auto endIt) {
 												   get_memoryreader);
 
 		little_endian_memorywriter<decltype(startIt)>::state lmw_state{startIt, endIt};
-		auto get_little_endian_memorywriter = [&]() {	//
+		auto												 get_little_endian_memorywriter = [&]() {	//
 			return little_endian_memorywriter<decltype(startIt)>{lmw_state};
 		};
-		
+
 		little_endian_memoryreader<decltype(startIt)>::state lmr_state{startIt, endIt};
-		auto get_little_endian_memoryreader = [&]() {	//
+		auto												 get_little_endian_memoryreader = [&]() {	//
 			return little_endian_memoryreader<decltype(startIt)>{lmr_state};
 		};
 
@@ -63,12 +63,12 @@ auto desc_containerGroup = [](auto desc, auto startIt, auto endIt) {
 																 get_little_endian_memoryreader);
 
 		big_endian_memorywriter<decltype(startIt)>::state bmw_state{startIt, endIt};
-		auto get_big_endian_memorywriter = [&]() {	//
+		auto											  get_big_endian_memorywriter = [&]() {	//
 			return big_endian_memorywriter<decltype(startIt)>{bmw_state};
 		};
-		
+
 		big_endian_memoryreader<decltype(startIt)>::state bmr_state{startIt, endIt};
-		auto get_big_endian_memoryreader = [&]() {	//
+		auto											  get_big_endian_memoryreader = [&]() {	//
 			return big_endian_memoryreader<decltype(startIt)>{bmr_state};
 		};
 

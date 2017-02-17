@@ -17,6 +17,7 @@
 #include "khutils/assertion.hpp"
 #include "khutils/base_handler.hpp"
 #include "khutils/comparison.hpp"
+#include "khutils/cyclic_redundancy.hpp"
 #include "khutils/filehandler.hpp"
 #include "khutils/filereader.hpp"
 #include "khutils/filewriter.hpp"
@@ -44,7 +45,6 @@
 #include "khutils/typeconversion.hpp"
 #include "khutils/utf8/utf8string.hpp"
 #include "khutils/writer_overload.hpp"
-#include "khutils/cyclic_redundancy.hpp"
 
 //!! file.hpp and file_http.hpp conflict (on purpose!)
 //!! include either and define its _IMPL
