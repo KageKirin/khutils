@@ -25,14 +25,13 @@ namespace khutils
 		FlatbufferContainer() = delete;
 		FlatbufferContainer(std::vector<uint8_t>&& buffer) : m_buffer(buffer)
 		{
-		//	KHUTILS_ASSERT(verify());
-		//	if (!verify())
-		//	{
-		//		throw FatalImportException("bad flatbuffer");
-		//	}
+			//	KHUTILS_ASSERT(verify());
+			//	if (!verify())
+			//	{
+			//		throw FatalImportException("bad flatbuffer");
+			//	}
 		}
-		FlatbufferContainer(const std::vector<uint8_t>& buffer)
-			: FlatbufferContainer(std::vector<uint8_t>{buffer})
+		FlatbufferContainer(const std::vector<uint8_t>& buffer) : FlatbufferContainer(std::vector<uint8_t>{buffer})
 		{
 		}
 		FlatbufferContainer(const uint8_t* data, size_t length)
@@ -43,7 +42,7 @@ namespace khutils
 			: FlatbufferContainer(builder.GetBufferPointer(), builder.GetSize())
 		{
 		}
-		//FlatbufferContainer(const _T* ptr){}
+		// FlatbufferContainer(const _T* ptr){}
 		// no need to verify buffer, as it already has been verified when creating rhv
 		FlatbufferContainer(const FlatbufferContainer& rhv) = default;
 		FlatbufferContainer(FlatbufferContainer&& rhv)		= default;
@@ -80,7 +79,7 @@ namespace khutils
 			return ptr()->Verify(verifier);
 		}
 
-		inline void dump(FILE* fptr)
+		inline void dump(FILE* fptr) const
 		{
 			KHUTILS_ASSERT_PTR(fptr);
 			fwrite(raw(), size(), 1, fptr);
