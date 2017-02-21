@@ -1,7 +1,7 @@
 #ifndef KHUTILS_INTERPOLATION_HPP_INC
 #define KHUTILS_INTERPOLATION_HPP_INC
 
-#include <map>
+#include <boost/container/flat_map.hpp>
 
 namespace khutils
 {
@@ -14,7 +14,7 @@ namespace khutils
 	{
 		typedef K key_type;
 		typedef T value_type;
-		typedef std::map<K, T> key_value_map;	// bonus feature: keys are sorted
+		typedef boost::container::flat_map<K, T> key_value_map;	// bonus feature: keys are sorted
 
 		key_value_map m_keyValueMap;
 
