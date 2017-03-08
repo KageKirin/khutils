@@ -1,4 +1,4 @@
-	#ifndef KHUTILS_FLATBUFFER_CONTAINER_HPP_INC
+#ifndef KHUTILS_FLATBUFFER_CONTAINER_HPP_INC
 #define KHUTILS_FLATBUFFER_CONTAINER_HPP_INC
 
 #include "khutils/assertion.hpp"
@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <vector>
+
 
 namespace khutils
 {
@@ -100,7 +101,7 @@ namespace khutils
 	public:
 		FlatbufferHandler() = delete;
 
-		FlatbufferHandler(uint8_t* data, size_t length) : m_data(data), m_length(length)
+		FlatbufferHandler(const uint8_t* data, size_t length) : m_data(data), m_length(length)
 		{
 			KHUTILS_ASSERT_PTR(m_data);
 			KHUTILS_ASSERT(m_length > 0);
