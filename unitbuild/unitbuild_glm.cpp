@@ -24,7 +24,9 @@
 #include "khutils/glm/glm_native_endian_reader.hpp"
 #include "khutils/glm/glm_native_endian_writer.hpp"
 #include "khutils/glm/glm_reader.hpp"
-#include "khutils/glm/glm_to_fbx.hpp"
 #include "khutils/glm/glm_to_string.hpp"
 #include "khutils/glm/glm_utility.hpp"
 #include "khutils/glm/glm_writer.hpp"
+#ifdef KHUTILS_WITH_FBXSDK
+#include "khutils/glm/glm_to_fbx.hpp"
+#endif	// KHUTILS_WITH_FBXSDK
