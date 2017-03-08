@@ -55,7 +55,7 @@ namespace khutils
 	};
 
 #define KHUTILS_ASSERT_GREATER(variable, val) KHUTILS_ASSERT_EXPR(variable, Is().GreaterThan(val))
-#define KHUTILS_ASSERT_GREATEREQ(variable, val) KHUTILS_ASSERT_EXPR(variable, Is().GreaterThanOrEqual(val))
+#define KHUTILS_ASSERT_GREATEREQ(variable, val) KHUTILS_ASSERT_EXPR(variable, Is().GreaterThanOrEqualTo(val))
 #define KHUTILS_ASSERT_LESSER(variable, val) KHUTILS_ASSERT_EXPR(variable, Is().LessThan(val))
 #define KHUTILS_ASSERT_LESSEREQ(variable, val) KHUTILS_ASSERT_EXPR(variable, Is().LessThanOrEqualTo(val))
 #define KHUTILS_ASSERT_IN_RANGE(variable, valm, valM)                                                                  \
