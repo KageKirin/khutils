@@ -67,6 +67,10 @@ namespace khutils
 #define KHUTILS_ASSERT_IN_RANGE_HO(variable, valm, valM)                                                               \
 	KHUTILS_ASSERT_EXPR(variable, Is().GreaterThanOrEqualTo(valm).And().LessThan(valM))
 
+#define KHUTILS_ASSERT_CNTR_EMPTY(container) KHUTILS_ASSERT_EQUALS(container.empty(), true)
+#define KHUTILS_ASSERT_CNTR_NOT_EMPTY(container) KHUTILS_ASSERT_EQUALS(container.empty(), false)
+
+
 #ifdef KHUTILS_ASSERTION_WITH_VALUE_PTR
 #define KHUTILS_ASSERT_VPTR(pointer) khutils::AssertValidValuePtr((pointer), __FILE__, __LINE__);
 #endif	// KHUTILS_ASSERTION_WITH_VALUE_PTR
