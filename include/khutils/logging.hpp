@@ -19,6 +19,7 @@ namespace khutils
 		static std::ostream& debug();
 		static std::ostream& big_fat_warning();
 		static std::ostream& big_fat_error();
+		static std::ostream& highlight();
 
 		// overload template for specific classes
 		template <typename _T>
@@ -50,6 +51,7 @@ namespace khutils
 #define LOG_COLOR_ERROR << rang::fg::red
 #define LOG_COLOR_FAT_WARNING << rang::bg::yellow << rang::fg::gray << rang::style::bold
 #define LOG_COLOR_FAT_ERROR << rang::bg::red << rang::fg::gray << rang::style::bold << rang::style::blink
+#define LOG_COLOR_HIGHLIGHT << rang::fg::yellow << rang::style::italic
 #define LOG_COLOR_RESET << rang::style::reset
 #else
 #define LOG_COLOR_OK
@@ -57,6 +59,7 @@ namespace khutils
 #define LOG_COLOR_ERROR
 #define LOG_COLOR_FAT_WARNING
 #define LOG_COLOR_FAT_ERROR
+#define LOG_COLOR_HIGHLIGHT
 #define LOG_COLOR_RESET
 #endif	// defined(KHUTILS_COLOR_LOG)
 
@@ -188,6 +191,12 @@ std::ostream& khutils::logger::big_fat_error()
 		LOG_COLOR_RESET
 		<< std::endl;
 
+	return std::clog;
+}
+
+std::ostream& khutils::logger::highlight()
+{
+	std::clog << std::endl LOG_COLOR_RESET LOG_COLOR_HIGHLIGHT;
 	return std::clog;
 }
 
