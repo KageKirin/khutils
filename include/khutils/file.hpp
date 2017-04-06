@@ -38,6 +38,7 @@ namespace khutils
 		std::ifstream ifs(filename);
 		if (!ifs)
 		{
+			khutils::logger::error() << "Failed to open " << filename << std::endl;
 			static std::string errorMsg;
 			errorMsg = "Could not open " + filename;
 			throw FatalImportException(errorMsg);
@@ -53,6 +54,7 @@ namespace khutils
 		std::ifstream ifs(filename);
 		if (!ifs)
 		{
+			khutils::logger::error() << "Failed to open " << filename << std::endl;
 			static std::string errorMsg;
 			errorMsg = "Could not open " + filename;
 			throw FatalImportException(errorMsg);
@@ -73,6 +75,7 @@ namespace khutils
 		std::ofstream ofs(filename);
 		if (!ofs)
 		{
+			khutils::logger::error() << "Failed to open " << filename << std::endl;
 			static std::string errorMsg;
 			errorMsg = "Could not open " + filename;
 			throw FatalExportException(errorMsg);
