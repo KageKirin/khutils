@@ -12,7 +12,7 @@ namespace khutils
 	template <typename ByteForwardIterator>
 	uint32_t computeCRC32(ByteForwardIterator begin, ByteForwardIterator end)
 	{
-		static_assert(sizeof(decltype(*begin)) == 1);
+		static_assert(sizeof(decltype(*begin)) == 1, "not a 1 byte sized datatype");
 
 		const auto& crc32_table = getCRC32Table();
 
