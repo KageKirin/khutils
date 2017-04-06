@@ -76,9 +76,18 @@ namespace khutils
 
 #if defined(KHUTILS_GLM_TO_STRING_IMPL)
 
-#define GLM_SWIZZLE
+#ifndef GLM_FORCE_SWIZZLE
+#define GLM_FORCE_SWIZZLE
+#endif	// !GLM_FORCE_SWIZZLE
+
+#ifndef GLM_FORCE_RADIANS
 #define GLM_FORCE_RADIANS
+#endif	// !GLM_FORCE_RADIANS
+
+#ifndef GLM_PRECISION_HIGHP_FLOAT
 #define GLM_PRECISION_HIGHP_FLOAT
+#endif	// !GLM_PRECISION_HIGHP_FLOAT
+
 #include <fmt/format.h>
 
 #include <glm/glm.hpp>
