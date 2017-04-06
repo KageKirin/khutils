@@ -225,10 +225,13 @@ namespace khutils
 			{
 				auto _e = data();
 				if (_e)
+				{
+					_o->data.resize(_e->size());
 					for (flatbuffers::uoffset_t _i = 0; _i < _e->size(); _i++)
 					{
-						_o->data.push_back(_e->Get(_i));
+						_o->data[_i] = _e->Get(_i);
 					}
+				}
 			};
 		}
 
@@ -264,10 +267,13 @@ namespace khutils
 			{
 				auto _e = entries();
 				if (_e)
+				{
+					_o->entries.resize(_e->size());
 					for (flatbuffers::uoffset_t _i = 0; _i < _e->size(); _i++)
 					{
-						_o->entries.push_back(smart_pointer::value_ptr<MapEntryT>(_e->Get(_i)->UnPack(_resolver)));
+						_o->entries[_i] = smart_pointer::value_ptr<MapEntryT>(_e->Get(_i)->UnPack(_resolver));
 					}
+				}
 			};
 		}
 
