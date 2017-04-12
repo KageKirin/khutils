@@ -7,6 +7,7 @@
 #include "khutils/assertion.hpp"
 #include "khutils/pixelhandler.hpp"
 
+#include <boost/range/irange.hpp>
 #include <functional>
 #include <vector>
 
@@ -19,9 +20,9 @@ namespace khutils
 		KHUTILS_ASSERT_EQUALS(reader.m_width * reader.m_height, writer.m_width * writer.m_height);
 		KHUTILS_ASSERT_EQUALS(std::distance(reader.begin(), reader.end()), std::distance(writer.begin(), writer.end()));
 
-		for (size_t yy = 0; yy < reader.m_height; ++yy)
+		for (auto yy : boost::irange((size_t)0, reader.m_height, (size_t)1))
 		{
-			for (size_t xx = 0; xx < reader.m_width; ++xx)
+			for (auto xx : boost::irange((size_t)0, reader.m_width, (size_t)1))
 			{
 				writer.pokeAt(kernel(reader.peekAt(xx, yy), xx, yy), xx, yy);
 			}
