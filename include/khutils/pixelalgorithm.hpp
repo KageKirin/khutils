@@ -20,13 +20,14 @@ namespace khutils
 		KHUTILS_ASSERT_EQUALS(reader.m_width * reader.m_height, writer.m_width * writer.m_height);
 		KHUTILS_ASSERT_EQUALS(std::distance(reader.begin(), reader.end()), std::distance(writer.begin(), writer.end()));
 
-		for (auto yy : boost::irange((size_t)0, reader.m_height, (size_t)1))
-		{
-			for (auto xx : boost::irange((size_t)0, reader.m_width, (size_t)1))
-			{
-				writer.pokeAt(kernel(reader.peekAt(xx, yy), xx, yy), xx, yy);
-			}
-		}
+		auto yy = boost::irange((size_t)0, reader.m_height, (size_t)1);
+		auto xx = boost::irange((size_t)0, reader.m_width, (size_t)1);
+
+		std::for_each(yy.begin(), yy.end(), [&xx, &writer, &reader, &kernel](auto _yy) {
+			std::for_each(xx.begin(), xx.end(), [&writer, &reader, &kernel, &_yy](auto _xx) {
+				writer.pokeAt(kernel(reader.peekAt(_xx, _yy), _xx, _yy), _xx, _yy);
+			});
+		});
 	}
 
 }	// namespace khutils
