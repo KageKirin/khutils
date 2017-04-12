@@ -23,8 +23,18 @@ namespace khutils
 		auto yy = boost::irange((size_t)0, reader.m_height, (size_t)1);
 		auto xx = boost::irange((size_t)0, reader.m_width, (size_t)1);
 
-		std::for_each(yy.begin(), yy.end(), [&xx, &writer, &reader, &kernel](auto _yy) {
-			std::for_each(xx.begin(), xx.end(), [&writer, &reader, &kernel, &_yy](auto _xx) {
+		std::for_each(
+#if __cplusplus == 201703L
+			std::execution::par,
+#endif //__cplusplus == 201703L
+			yy.begin(), yy.end(), [&xx, &writer, &reader, &kernel](auto _yy) {
+
+			std::for_each(
+#if __cplusplus == 201703L
+				std::execution::par,
+#endif //__cplusplus == 201703L
+				xx.begin(), xx.end(), [&writer, &reader, &kernel, &_yy](auto _xx) {
+
 				writer.pokeAt(kernel(reader.peekAt(_xx, _yy), _xx, _yy), _xx, _yy);
 			});
 		});
