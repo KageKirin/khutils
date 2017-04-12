@@ -21,7 +21,7 @@ namespace khutils
 
 		for (size_t yy = 0; yy < reader.m_height; ++yy)
 		{
-			for (size_t xx = 0; xx < reader.m_height; ++xx)
+			for (size_t xx = 0; xx < reader.m_width; ++xx)
 			{
 				writer.pokeAt(kernel(reader.peekAt(xx, yy), xx, yy), xx, yy);
 			}
