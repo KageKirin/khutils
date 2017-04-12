@@ -9,7 +9,11 @@
 
 #include <boost/range/irange.hpp>
 #include <functional>
+#include <algorithm>
 #include <vector>
+#if __cplusplus == 201703L
+#include <execution>
+#endif //__cplusplus == 201703L
 
 namespace khutils
 {
@@ -22,21 +26,20 @@ namespace khutils
 
 		auto yy = boost::irange((size_t)0, reader.m_height, (size_t)1);
 		auto xx = boost::irange((size_t)0, reader.m_width, (size_t)1);
+		auto xxyy = std::vector<std::tuple<size_t, size_t>>(xx.size() * yy.size());
+		std::for_each(yy.begin(), yy.end(), [&xx, &xxyy](auto _yy) {
+			std::for_each(xx.begin(), xx.end(), [&xx, &_yy, &xxyy](auto _xx){
+				xxyy[_yy * xx.size() + _xx] = {_xx, _yy};
+			});
+		});
 
 		std::for_each(
 #if __cplusplus == 201703L
 			std::execution::par,
 #endif //__cplusplus == 201703L
-			yy.begin(), yy.end(), [&xx, &writer, &reader, &kernel](auto _yy) {
+			xxyy.begin(), xxyy.end(), [&writer, &reader, &kernel](auto _xy) {
 
-			std::for_each(
-#if __cplusplus == 201703L
-				std::execution::par,
-#endif //__cplusplus == 201703L
-				xx.begin(), xx.end(), [&writer, &reader, &kernel, &_yy](auto _xx) {
-
-				writer.pokeAt(kernel(reader.peekAt(_xx, _yy), _xx, _yy), _xx, _yy);
-			});
+			writer.pokeAt(kernel(reader.peekAt(std::get<0>(_xy), std::get<1>(_xy)), std::get<0>(_xy), std::get<1>(_xy)), std::get<0>(_xy), std::get<1>(_xy));
 		});
 	}
 
