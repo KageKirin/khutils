@@ -7,13 +7,13 @@
 #include "khutils/assertion.hpp"
 #include "khutils/pixelhandler.hpp"
 
+#include <algorithm>
 #include <boost/range/irange.hpp>
 #include <functional>
-#include <algorithm>
 #include <vector>
-#if __cplusplus == 201703L
+#if __cplusplus >= 201703L
 #include <execution>
-#endif //__cplusplus == 201703L
+#endif	//__cplusplus >= 201703L
 
 namespace khutils
 {
@@ -24,23 +24,27 @@ namespace khutils
 		KHUTILS_ASSERT_EQUALS(reader.m_width * reader.m_height, writer.m_width * writer.m_height);
 		KHUTILS_ASSERT_EQUALS(std::distance(reader.begin(), reader.end()), std::distance(writer.begin(), writer.end()));
 
-		auto yy = boost::irange((size_t)0, reader.m_height, (size_t)1);
-		auto xx = boost::irange((size_t)0, reader.m_width, (size_t)1);
+		auto yy   = boost::irange((size_t)0, reader.m_height, (size_t)1);
+		auto xx   = boost::irange((size_t)0, reader.m_width, (size_t)1);
 		auto xxyy = std::vector<std::tuple<size_t, size_t>>(xx.size() * yy.size());
 		std::for_each(yy.begin(), yy.end(), [&xx, &xxyy](auto _yy) {
-			std::for_each(xx.begin(), xx.end(), [&xx, &_yy, &xxyy](auto _xx){
+			std::for_each(xx.begin(), xx.end(), [&xx, &_yy, &xxyy](auto _xx) {
 				xxyy[_yy * xx.size() + _xx] = {_xx, _yy};
 			});
 		});
 
 		std::for_each(
-#if __cplusplus == 201703L
-			std::execution::par,
-#endif //__cplusplus == 201703L
-			xxyy.begin(), xxyy.end(), [&writer, &reader, &kernel](auto _xy) {
+#if __cplusplus >= 201703L
+		  std::execution::par,
+#endif	//__cplusplus >= 201703L
+		  xxyy.begin(),
+		  xxyy.end(),
+		  [&writer, &reader, &kernel](auto _xy) {
 
-			writer.pokeAt(kernel(reader.peekAt(std::get<0>(_xy), std::get<1>(_xy)), std::get<0>(_xy), std::get<1>(_xy)), std::get<0>(_xy), std::get<1>(_xy));
-		});
+			  writer.pokeAt(kernel(reader.peekAt(std::get<0>(_xy), std::get<1>(_xy)), std::get<0>(_xy), std::get<1>(_xy)),
+							std::get<0>(_xy),
+							std::get<1>(_xy));
+		  });
 	}
 
 }	// namespace khutils
