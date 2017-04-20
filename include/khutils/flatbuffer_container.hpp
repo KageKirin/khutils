@@ -2,6 +2,7 @@
 #define KHUTILS_FLATBUFFER_CONTAINER_HPP_INC
 
 #include "khutils/assertion.hpp"
+#include "khutils/file.hpp"
 #include "khutils/runtime_exceptions.hpp"
 #include <flatbuffers/flatbuffers.h>
 
@@ -32,7 +33,7 @@ namespace khutils
 				throw FatalImportException("bad flatbuffer");
 			}
 		}
-		FlatbufferContainer(const std::vector<uint8_t>& buffer) : FlatbufferContainer(std::vector<uint8_t>{buffer})
+		FlatbufferContainer(const std::vector<uint8_t>& buffer) : m_buffer(buffer)
 		{
 		}
 		FlatbufferContainer(const uint8_t* data, size_t length)
@@ -64,6 +65,11 @@ namespace khutils
 			return *ptr_;
 		}
 
+		inline const std::vector<uint8_t>& buf() const
+		{
+			return m_buffer;
+		}
+
 		inline const uint8_t* const raw() const
 		{
 			return m_buffer.data();
@@ -80,7 +86,7 @@ namespace khutils
 			return ptr()->Verify(verifier);
 		}
 
-		inline void dump(FILE* fptr) const
+		[[deprecated]] inline void dump(FILE* fptr) const
 		{
 			KHUTILS_ASSERT_PTR(fptr);
 			fwrite(raw(), size(), 1, fptr);
@@ -101,7 +107,8 @@ namespace khutils
 	public:
 		FlatbufferHandler() = delete;
 
-		FlatbufferHandler(const uint8_t* data, size_t length) : m_data(data), m_length(length)
+		FlatbufferHandler(const uint8_t* data, size_t length)	//
+			: m_data(data), m_length(length)
 		{
 			KHUTILS_ASSERT_PTR(m_data);
 			KHUTILS_ASSERT(m_length > 0);
@@ -111,6 +118,11 @@ namespace khutils
 				throw FatalImportException("bad flatbuffer");
 			}
 		}
+		FlatbufferHandler(const std::vector<uint8_t>& data)	//
+			: FlatbufferHandler(data.data(), data.size())
+		{
+		}
+
 		// no need to verify buffer, as it already has been verified when creating rhv
 		FlatbufferHandler(const FlatbufferHandler& rhv) = default;
 		FlatbufferHandler(FlatbufferHandler&& rhv)		= default;
@@ -147,6 +159,31 @@ namespace khutils
 			return ptr()->Verify(verifier);
 		}
 	};
+
+
+	template <typename FBType>
+	void dumpFlatbuffer(const FlatbufferContainer<FBType>& fb, const std::string& filename)
+	{
+		dumpBufferToFile(fb.buf(), openLocalFilePtr(filename, "wb"));
+	}
+
+	template <typename FBType>
+	void dumpFlatbuffer(const FlatbufferHandler<FBType>& fb, const std::string& filename)
+	{
+		dumpBufferToFile(fb.raw(), fb.size(), openLocalFilePtr(filename, "wb"));
+	}
+
+	template <typename FBType>
+	FlatbufferContainer<FBType> loadFlatbuffer(const std::string& filename)
+	{
+		return FlatbufferContainer<FBType>{openLocalFileBuffer(filename)};
+	}
+
+	template <typename FBType>
+	FlatbufferContainer<FBType> loadFlatbuffer(std::istream& ins)
+	{
+		return FlatbufferContainer<FBType>{openBufferFromStream(ins)};
+	}
 
 }	// namespace khutils
 
