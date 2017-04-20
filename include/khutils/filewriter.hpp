@@ -38,7 +38,7 @@ namespace khutils
 	template <order _order>
 	struct _filewriter : base_handler_trait<_order>
 	{
-		const std::shared_ptr<FILE> m_file;
+		std::shared_ptr<FILE> m_file;
 
 		_filewriter()					= delete;
 		_filewriter(const _filewriter&) = default;
