@@ -4,12 +4,17 @@
 #include <cctype>
 #include <fstream>
 #include <iosfwd>
+#include <iostream>
+#include <memory>
 #include <sstream>
 #include <string>
 #include <vector>
 
 namespace khutils
 {
+	typedef std::unique_ptr<FILE, decltype(&std::fclose)> FilePtr;
+	FilePtr openLocalFilePtr(const std::string& filename, const char* mode);
+
 	std::ifstream openLocalFile(const std::string& filename);
 	std::vector<uint8_t> openLocalFileBuffer(const std::string& filename);
 
@@ -17,6 +22,16 @@ namespace khutils
 	std::vector<uint8_t> openHttpFileBuffer(const std::string& url);
 
 	std::ofstream openOutputFile(const std::string& filename);
+	void dumpBufferToLocalFile(const std::vector<uint8_t>& databuffer, const std::string& filename);
+	void dumpBufferToLocalFile(const uint8_t* data, size_t length, const std::string& filename);
+
+	std::vector<uint8_t> openBufferFromStream(std::istream& ins);
+	void dumpBufferToStream(const std::vector<uint8_t>& databuffer, std::ostream& outs);
+	void dumpBufferToStream(const uint8_t* data, size_t length, std::ostream& outs);
+
+	std::vector<uint8_t> openBufferFromFile(const FilePtr& file);
+	void dumpBufferToFile(const std::vector<uint8_t>& databuffer, const FilePtr& file);
+	void dumpBufferToFile(const uint8_t* data, size_t length, const FilePtr& file);
 
 }	// namespace khutils
 
@@ -31,10 +46,17 @@ namespace khutils
 
 namespace khutils
 {
+	//--------------------------------
+
+	FilePtr openLocalFilePtr(const std::string& filename, const char* mode)
+	{
+		return FilePtr{std::fopen(filename.c_str(), mode), std::fclose};
+	}
+
+	//--------------------------------
+
 	std::ifstream openLocalFile(const std::string& filename)
 	{
-		using boost::filesystem::path;
-
 		std::ifstream ifs(filename);
 		if (!ifs)
 		{
@@ -47,28 +69,15 @@ namespace khutils
 		return ifs;
 	}
 
+	//--------------------------------
+
 	std::vector<uint8_t> openLocalFileBuffer(const std::string& filename)
 	{
-		using boost::filesystem::path;
-
-		std::ifstream ifs(filename);
-		if (!ifs)
-		{
-			khutils::logger::error() << "Failed to open " << filename << std::endl;
-			static std::string errorMsg;
-			errorMsg = "Could not open " + filename;
-			throw FatalImportException(errorMsg);
-		}
-
-		std::vector<uint8_t> ret;
-		while (ifs.good())
-		{
-			uint8_t c;
-			ifs.read((char*)&c, 1);
-			ret.push_back(c);
-		}
-		return ret;
+		auto ifs = openLocalFile(filename);
+		return openBufferFromStream(ifs);
 	}
+
+	//--------------------------------
 
 	std::ofstream openOutputFile(const std::string& filename)
 	{
@@ -82,6 +91,56 @@ namespace khutils
 		}
 
 		return ofs;
+	}
+
+	//--------------------------------
+
+	std::vector<uint8_t> openBufferFromStream(std::istream& ins)
+	{
+		ins.seekg(0, ins.end);
+		size_t length = ins.tellg();
+		ins.seekg(0, ins.beg);
+
+		std::vector<uint8_t> databuffer(length);
+		ins.read(reinterpret_cast<char*>(&databuffer[0]), length);
+		return databuffer;
+	}
+
+	//--------------------------------
+
+	void dumpBufferToLocalFile(const std::vector<uint8_t>& databuffer, const std::string& filename)
+	{
+		dumpBufferToLocalFile(databuffer.data(), databuffer.size(), filename);
+	}
+
+	void dumpBufferToLocalFile(const uint8_t* data, size_t length, const std::string& filename)
+	{
+		auto ofs = openOutputFile(filename);
+		dumpBufferToStream(data, length, ofs);
+	}
+
+	//--------------------------------
+
+	void dumpBufferToStream(const std::vector<uint8_t>& databuffer, std::ostream& outs)
+	{
+		dumpBufferToStream(databuffer.data(), databuffer.size(), outs);
+	}
+
+	void dumpBufferToStream(const uint8_t* data, size_t length, std::ostream& outs)
+	{
+		outs.write((char*)data, length);
+	}
+
+	//--------------------------------
+
+	void dumpBufferToFile(const std::vector<uint8_t>& databuffer, const FilePtr& file)
+	{
+		dumpBufferToFile(databuffer.data(), databuffer.size(), file);
+	}
+
+	void dumpBufferToFile(const uint8_t* data, size_t length, const FilePtr& file)
+	{
+		std::fwrite((char*)data, length, 1, file.get());
 	}
 
 	//////////////////////////////////////////////////////////////////////////
