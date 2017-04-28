@@ -17,6 +17,8 @@
 //#define KHUTILS_Z_COMPRESSION_IMPL_USING_ZLIB
 #define KHUTILS_Z_COMPRESSION_IMPL_USING_ZSTD
 #define KHUTILS_LZ4_COMPRESSION_IMPL
+#define KHUTILS_STRINGUTILS_INLINE
+#define KHUTILS_STRINGUTILS_IMPL
 
 #include <value_ptr/value_ptr.hpp>
 
@@ -56,6 +58,7 @@
 #include "khutils/writer_overload.hpp"
 #include "khutils/zcompression.hpp"
 //#include "khutils/utf8/utf8string.hpp"
+#include "khutils/stringutils.hpp"
 
 
 //!! file.hpp and file_http.hpp conflict (on purpose!)
