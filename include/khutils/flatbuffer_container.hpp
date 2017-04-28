@@ -160,6 +160,17 @@ namespace khutils
 		}
 	};
 
+	template <typename FBType, typename FBTypeT>
+	FlatbufferContainer<FBType> buildFlatbuffer(const FBTypeT*					obj,
+												flatbuffers::FlatBufferBuilder& fbb,
+												flatbuffers::Offset<FBType> (*create)(flatbuffers::FlatBufferBuilder&,
+																					  const FBTypeT*,
+																					  const flatbuffers::rehasher_function_t*),
+												void (*finish)(flatbuffers::FlatBufferBuilder&, flatbuffers::Offset<FBType>))
+	{
+		finish(fbb, create(fbb, obj, nullptr));
+		return FlatbufferContainer<FBType>(fbb);
+	}
 
 	template <typename FBType>
 	void dumpFlatbuffer(const FlatbufferContainer<FBType>& fb, const std::string& filename)
