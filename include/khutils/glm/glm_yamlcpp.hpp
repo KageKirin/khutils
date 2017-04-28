@@ -17,6 +17,9 @@
 		static bool decode(const Node&, type&);                                                                        \
 	};
 
+#define KHUTILS_YAML_DECLARE_CONVERT_ENCODE(type) Node convert<type>::encode(const type& val)
+#define KHUTILS_YAML_DECLARE_CONVERT_DECODE(type) bool convert<type>::decode(const Node& node, type& val)
+
 namespace YAML
 {
 	KHUTILS_YAML_DECLARE_CONVERT(glm::quat);
@@ -57,7 +60,6 @@ namespace YAML
 
 }	// namespace YAML
 
-#undef KHUTILS_YAML_DECLARE_CONVERT
 
 #if defined(KHUTILS_GLM_YAMLCPP_IMPL)
 
@@ -87,8 +89,10 @@ namespace YAML
 	KHUTILS_YAML_IMPLEMENT_CONVERT_DECODE(type, _subtype, _size)
 
 
+
+
 #define KHUTILS_YAML_IMPLEMENT_CONVERT_ENCODE(type, _size)                                                             \
-	Node convert<type>::encode(const type& val)                                                                        \
+	KHUTILS_YAML_DECLARE_CONVERT_ENCODE(type)                                                                          \
 	{                                                                                                                  \
 		Node node;                                                                                                     \
 		for (size_t i = 0; i < _size; ++i)                                                                             \
@@ -100,7 +104,7 @@ namespace YAML
 
 
 #define KHUTILS_YAML_IMPLEMENT_CONVERT_DECODE(type, _subtype, _size)                                                   \
-	bool convert<type>::decode(const Node& node, type& val)                                                            \
+	KHUTILS_YAML_DECLARE_CONVERT_DECODE(type)                                                                          \
 	{                                                                                                                  \
 		if (!node.IsSequence() || node.size() != _size)                                                                \
 		{                                                                                                              \
