@@ -22,6 +22,9 @@ namespace khutils
 	std::stringstream openHttpFile(const std::string& url);
 	std::vector<uint8_t> openHttpFileBuffer(const std::string& url);
 
+	std::stringstream openHttpFile_boost(const std::string& url);
+	std::vector<uint8_t> openHttpFileBuffer_boost(const std::string& url);
+
 }	// namespace khutils
 
 #if defined(KHUTILS_FILE_HTTP_IMPL)
@@ -35,8 +38,8 @@ namespace khutils
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include "bx/string.h"
 #include "bnet/bnet.h"
+#include "bx/string.h"
 #include "common/url.h"
 
 
@@ -228,18 +231,18 @@ namespace khutils
 
 	std::vector<uint8_t> openHttpFileBuffer(const std::string& url)
 	{
-		if(static bool once = true; once)
+		if (static bool once = true; once)
 		{
 			bnet::init(1, 0, nullptr);
 			once = false;
 		}
-		
+
 		auto handle = httpSendFileRequest(url);
 		KHUTILS_ASSERT(bnet::isValid(handle));
 
 		std::vector<uint8_t> buffer;
 
-		bool cont = bnet::isValid(handle); 
+		bool cont = bnet::isValid(handle);
 		while (cont)
 		{
 			bnet::Message* msg = bnet::recv();
