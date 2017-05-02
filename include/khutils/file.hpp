@@ -1,5 +1,5 @@
-#ifndef KHUTILS_FILE_HPP_INC﻿
-#define KHUTILS_FILE_HPP_INC﻿
+#ifndef KHUTILS_FILE_HPP_INC
+#define KHUTILS_FILE_HPP_INC
 
 #include <cctype>
 #include <fstream>
