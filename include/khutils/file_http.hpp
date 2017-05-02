@@ -231,7 +231,8 @@ namespace khutils
 
 	std::vector<uint8_t> openHttpFileBuffer(const std::string& url)
 	{
-		if (static bool once = true; once)
+		static bool once = true;
+		if (once)
 		{
 			bnet::init(1, 0, nullptr);
 			once = false;
