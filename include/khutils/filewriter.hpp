@@ -5,6 +5,7 @@
 //! include wisely to keep compile times minimal
 
 #include "khutils/base_handler.hpp"
+#include "khutils/file.hpp"
 #include "khutils/typeconversion.hpp"
 
 #include <boost/endian/conversion.hpp>
@@ -38,12 +39,18 @@ namespace khutils
 	template <order _order>
 	struct _filewriter : base_handler_trait<_order>
 	{
-		std::shared_ptr<FILE> m_file;
+		std::reference_wrapper<const FilePtr> m_file;
 
 		_filewriter()					= delete;
 		_filewriter(const _filewriter&) = default;
 		_filewriter(_filewriter&&)		= default;
-		_filewriter(const std::shared_ptr<FILE>& file) : m_file(file)
+		_filewriter(const FilePtr& file) : m_file(file)
+		{
+		}
+		_filewriter(std::reference_wrapper<const FilePtr>&& file) : m_file(file)
+		{
+		}
+		_filewriter(const std::reference_wrapper<const FilePtr>& file) : m_file(file)
 		{
 		}
 
@@ -59,7 +66,7 @@ namespace khutils
 		void write(InT t, SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
 		{
 			WriteT r = swapConv(t);
-			fwrite(&r, sizeof(char), sizeof(WriteT), m_file.get());
+			fwrite(&r, sizeof(char), sizeof(WriteT), m_file.get().get());
 		}
 
 		//! writes coubnt * WriteT into ofile after converting and end0an-swapping
@@ -95,7 +102,7 @@ namespace khutils
 			const char c = 0;
 			for (size_t i = 0; i < sizeof(_SkipT) * count; ++i)
 			{
-				fwrite(&c, sizeof(char), 1, m_file.get());
+				fwrite(&c, sizeof(char), 1, m_file.get().get());
 			}
 		}
 
@@ -107,19 +114,19 @@ namespace khutils
 			skip<char>(nextAlignedPos - pos);
 		}
 
-		const std::shared_ptr<FILE>& getFile()
+		const FilePtr& getFile()
 		{
 			return m_file;
 		}
 
 		size_t getCurrentOffset()
 		{
-			return ftell(m_file.get());
+			return ftell(m_file.get().get());
 		}
 
 		bool isEnd()
 		{
-			return feof(m_file.get());
+			return feof(m_file.get().get());
 		}
 	};
 

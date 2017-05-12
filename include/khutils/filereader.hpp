@@ -5,6 +5,7 @@
 //! include wisely to keep compile times minimal
 
 #include "khutils/base_handler.hpp"
+#include "khutils/file.hpp"
 #include "khutils/typeconversion.hpp"
 
 #include <boost/endian/conversion.hpp>
@@ -38,12 +39,18 @@ namespace khutils
 	template <order _order>
 	struct _filereader : base_handler_trait<_order>
 	{
-		std::shared_ptr<FILE> m_file;
+		std::reference_wrapper<const FilePtr> m_file;
 
 		_filereader()					= delete;
 		_filereader(const _filereader&) = default;
 		_filereader(_filereader&&)		= default;
-		_filereader(const std::shared_ptr<FILE>& file) : m_file(file)
+		_filereader(const FilePtr& file) : m_file(file)
+		{
+		}
+		_filereader(std::reference_wrapper<const FilePtr>&& file) : m_file(file)
+		{
+		}
+		_filereader(const std::reference_wrapper<const FilePtr>& file) : m_file(file)
 		{
 		}
 
@@ -58,7 +65,7 @@ namespace khutils
 		OutT read(SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
 		{
 			ReadT r;
-			fread(&r, sizeof(char), sizeof(ReadT), m_file.get());
+			fread(&r, sizeof(char), sizeof(ReadT), m_file.get().get());
 			return swapConv(r);
 		}
 
@@ -157,24 +164,24 @@ namespace khutils
 			skip<char>(nextAlignedPos - pos);
 		}
 
-		const std::shared_ptr<FILE>& getFile()
+		const FilePtr& getFile()
 		{
 			return m_file;
 		}
 
 		size_t getCurrentOffset()
 		{
-			return ftell(m_file.get());
+			return ftell(m_file.get().get());
 		}
 
 		void jumpToOffset(size_t pos)
 		{
-			fseek(m_file.get(), pos, SEEK_SET);
+			fseek(m_file.get().get(), pos, SEEK_SET);
 		}
 
 		bool isEnd()
 		{
-			return feof(m_file.get());
+			return feof(m_file.get().get());
 		}
 	};
 
