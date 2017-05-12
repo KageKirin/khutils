@@ -205,6 +205,7 @@ namespace khutils
 
 	bnet::Handle httpSendRequest(uint32_t _ip, uint16_t _port, const char* _request, bool secure)
 	{
+		khutils::logger::debug() << "sending HTTP request " << _request;
 		bnet::Handle handle = bnet::connect(_ip, _port, true, secure);
 
 		bnet::Message* out = bnet::alloc(handle, (uint16_t)strlen(_request));
@@ -238,6 +239,7 @@ namespace khutils
 			once = false;
 		}
 
+		khutils::logger::debug() << "accessing " << url;
 		auto handle = httpSendFileRequest(url);
 		KHUTILS_ASSERT(bnet::isValid(handle));
 
