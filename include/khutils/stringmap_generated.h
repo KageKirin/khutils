@@ -79,8 +79,7 @@ namespace khutils
 			bool Verify(flatbuffers::Verifier& verifier) const
 			{
 				return VerifyTableStart(verifier) && VerifyField<uint64_t>(verifier, VT_ID)
-					   && VerifyField<flatbuffers::uoffset_t>(verifier, VT_VALUE) && verifier.Verify(value())
-					   && verifier.EndTable();
+					   && VerifyOffset(verifier, VT_VALUE) && verifier.Verify(value()) && verifier.EndTable();
 			}
 			MapEntryT* UnPack(const flatbuffers::resolver_function_t* _resolver = nullptr) const;
 			void UnPackTo(MapEntryT* _o, const flatbuffers::resolver_function_t* _resolver = nullptr) const;
@@ -166,8 +165,8 @@ namespace khutils
 			}
 			bool Verify(flatbuffers::Verifier& verifier) const
 			{
-				return VerifyTableStart(verifier) && VerifyField<flatbuffers::uoffset_t>(verifier, VT_ENTRIES)
-					   && verifier.Verify(entries()) && verifier.VerifyVectorOfTables(entries()) && verifier.EndTable();
+				return VerifyTableStart(verifier) && VerifyOffset(verifier, VT_ENTRIES) && verifier.Verify(entries())
+					   && verifier.VerifyVectorOfTables(entries()) && verifier.EndTable();
 			}
 			MapT* UnPack(const flatbuffers::resolver_function_t* _resolver = nullptr) const;
 			void UnPackTo(MapT* _o, const flatbuffers::resolver_function_t* _resolver = nullptr) const;
