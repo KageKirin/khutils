@@ -14,6 +14,7 @@ namespace khutils
 {
 	typedef std::unique_ptr<FILE, decltype(&std::fclose)> FilePtr;
 	FilePtr openLocalFilePtr(const std::string& filename, const char* mode);
+	FilePtr openTempFilePtr();
 
 	std::ifstream openLocalFile(const std::string& filename);
 	std::vector<uint8_t> openLocalFileBuffer(const std::string& filename);
@@ -46,6 +47,13 @@ namespace khutils
 
 namespace khutils
 {
+	//--------------------------------
+
+	FilePtr openTempFilePtr()
+	{
+		return FilePtr{std::tmpfile(), std::fclose};
+	}
+
 	//--------------------------------
 
 	FilePtr openLocalFilePtr(const std::string& filename, const char* mode)
