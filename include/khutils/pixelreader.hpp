@@ -42,10 +42,7 @@ namespace khutils
 					 size_t			  height,
 					 const PixelType* begin,
 					 const PixelType* end)	//
-		  : m_begin(begin),
-			m_end(end),
-			m_width(width),
-			m_height(height)
+			: m_begin(begin), m_end(end), m_width(width), m_height(height)
 		{
 			KHUTILS_ASSERT_EQUALS((m_width * m_height), (size_t)std::distance(m_begin, m_end));
 		}

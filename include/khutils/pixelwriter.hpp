@@ -38,10 +38,7 @@ namespace khutils
 		_pixelwriter(const _pixelwriter&) = default;
 		_pixelwriter(_pixelwriter&&)	  = default;
 		_pixelwriter(size_t width, size_t height, PixelType* begin, PixelType* end)	//
-		  : m_begin(begin),
-			m_end(end),
-			m_width(width),
-			m_height(height)
+			: m_begin(begin), m_end(end), m_width(width), m_height(height)
 		{
 			KHUTILS_ASSERT_EQUALS(m_width * m_height, (size_t)std::distance(m_begin, m_end));
 		}
