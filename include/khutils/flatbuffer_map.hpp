@@ -2,107 +2,371 @@
 #define KHUTILS_FLATBUFFER_MAP_HPP_INC
 
 #include "khutils/datamap_generated.h"
+#include "khutils/datamultimap_generated.h"
 #include "khutils/map_generated.h"
+#include "khutils/multimap_generated.h"
+#include "khutils/stringmap_generated.h"
 
 #include <boost/container/flat_map.hpp>
 #include <string>
+#include <vector>
 
 namespace khutils
 {
+	typedef string_map::MapEntryT					  StringMapEntryT;
+	typedef smart_pointer::value_ptr<StringMapEntryT> StringMapEntry;
+	typedef std::vector<StringMapEntry>				  StringMapEntries;
+	typedef string_map::MapT						  StringMapT;
+	typedef smart_pointer::value_ptr<StringMapT>	  StringMap;
 
-	//! extract key-value-pair from flatbuffer MapEntry
-	boost::container::flat_map<std::string, std::string>::value_type from_flatbuffer(const string_map::MapEntry* ff);
+	typedef boost::container::flat_map<std::string, std::string> NativeStringMap;
+	typedef NativeStringMap::value_type NativeStringMapEntry;
 
-	//! extract map from flatbuffer Map
-	boost::container::flat_map<std::string, std::string> from_flatbuffer(const string_map::Map* ff);
 
-	//! produce flatbuffer MapEntry from key-value-pair
-	flatbuffers::Offset<string_map::MapEntry> to_flatbuffer_builder(flatbuffers::FlatBufferBuilder& _fbb,
-																	const boost::container::flat_map<std::string, std::string>::value_type& dd);
+	typedef data_map::MapEntryT						DataMapEntryT;
+	typedef smart_pointer::value_ptr<DataMapEntryT> DataMapEntry;
+	typedef std::vector<DataMapEntry>				DataMapEntries;
+	typedef data_map::MapT							DataMapT;
+	typedef smart_pointer::value_ptr<DataMapT>		DataMap;
 
-	//! produce flatbuffer Map from map
-	flatbuffers::Offset<string_map::Map> to_flatbuffer_builder(flatbuffers::FlatBufferBuilder& _fbb,
-															   const boost::container::flat_map<std::string, std::string>& dd);
+	typedef boost::container::flat_map<std::string, std::vector<uint8_t>> NativeDataMap;
+	typedef NativeDataMap::value_type NativeDataMapEntry;
+
+
+	typedef hashstring_map::MapEntryT					  HashStringMapEntryT;
+	typedef smart_pointer::value_ptr<HashStringMapEntryT> HashStringMapEntry;
+	typedef std::vector<StringMapEntry>					  HashStringMapEntries;
+	typedef hashstring_map::MapT						  HashStringMapT;
+	typedef smart_pointer::value_ptr<HashStringMapT>	  HashStringMap;
+
+	typedef boost::container::flat_map<uint64_t, std::string> NativeHashStringMap;
+	typedef NativeHashStringMap::value_type NativeHashStringMapEntry;
+
+
+	typedef string_multimap::MapEntryT					   StringMultiMapEntryT;
+	typedef smart_pointer::value_ptr<StringMultiMapEntryT> StringMultiMapEntry;
+	typedef std::vector<StringMultiMapEntry>			   MultiMapEntries;
+	typedef string_multimap::MapT						   StringMultiMapT;
+	typedef smart_pointer::value_ptr<StringMultiMapT>	  StringMultiMap;
+
+	typedef boost::container::flat_map<std::string, std::vector<std::string>> NativeStringMultiMap;
+	typedef NativeStringMultiMap::value_type NativeStringMultiMapEntry;
+
+	typedef data_multimap::DataT							 DataMultiMapEntryDataT;
+	typedef smart_pointer::value_ptr<DataMultiMapEntryDataT> DataMultiMapEntryData;
+	typedef data_multimap::MapEntryT						 DataMultiMapEntryT;
+	typedef smart_pointer::value_ptr<DataMultiMapEntryT>	 DataMultiMapEntry;
+	typedef std::vector<DataMultiMapEntry>					 DataMultiMapEntries;
+	typedef data_multimap::MapT								 DataMultiMapT;
+	typedef smart_pointer::value_ptr<DataMultiMapT>			 DataMultiMap;
+
+	typedef boost::container::flat_map<std::string, std::vector<std::vector<uint8_t>>> NativeDataMultiMap;
+	typedef NativeDataMultiMap::value_type NativeDataMultiMapEntry;
+	typedef std::vector<uint8_t>		   NativeDataMultiMapEntryData;
+
+	//----------------------------------------------------------
+
+	StringMapEntry		  createStringMapEntry();
+	StringMap			  createStringMap();
+	DataMapEntry		  createDataMapEntry();
+	DataMap				  createDataMap();
+	HashStringMapEntry	createHashStringMapEntry();
+	HashStringMap		  createHashStringMap();
+	StringMultiMapEntry   createStringMultiMapEntry();
+	StringMultiMap		  createStringMultiMap();
+	DataMultiMapEntryData createDataMultiMapEntryData();
+	DataMultiMapEntry	 createDataMultiMapEntry();
+	DataMultiMap		  createDataMultiMap();
+
+	StringMapEntry		  createStringMapEntry(const NativeStringMapEntry&);
+	StringMap			  createStringMap(const NativeStringMap&);
+	DataMapEntry		  createDataMapEntry(const NativeDataMapEntry&);
+	DataMap				  createDataMap(const NativeDataMap&);
+	HashStringMapEntry	createHashStringMapEntry(const NativeHashStringMapEntry&);
+	HashStringMap		  createHashStringMap(const NativeHashStringMap&);
+	StringMultiMapEntry   createStringMultiMapEntry(const NativeStringMultiMapEntry&);
+	StringMultiMap		  createStringMultiMap(const NativeStringMultiMap&);
+	DataMultiMapEntryData createDataMultiMapEntryData(const NativeDataMultiMapEntryData&);
+	DataMultiMapEntry	 createDataMultiMapEntry(const NativeDataMultiMapEntry&);
+	DataMultiMap		  createDataMultiMap(const NativeDataMultiMap&);
+
+
+	NativeStringMapEntry	  to_native(const StringMapEntry&);
+	NativeStringMap			  to_native(const StringMap&);
+	NativeDataMapEntry		  to_native(const DataMapEntry&);
+	NativeDataMap			  to_native(const DataMap&);
+	NativeHashStringMapEntry  to_native(const HashStringMapEntry&);
+	NativeHashStringMap		  to_native(const HashStringMap&);
+	NativeStringMultiMapEntry to_native(const StringMultiMapEntry&);
+	NativeStringMultiMap	  to_native(const StringMultiMap&);
+
+	NativeDataMultiMapEntryData to_native(const DataMultiMapEntryData&);
+	NativeDataMultiMapEntry		to_native(const DataMultiMapEntry&);
+	NativeDataMultiMap			to_native(const DataMultiMap&);
+
+	//----------------------------------------------------------
 
 	template <typename KeyModifier, typename ValueModifier>
-	boost::container::flat_map<std::string, std::string>::value_type modify(const boost::container::flat_map<std::string, std::string>::value_type& kv,
-														  KeyModifier   modifyKey,
-														  ValueModifier modifyValue);
+	StringMapEntry modify(const StringMapEntry& kv, KeyModifier modifyKey, ValueModifier modifyValue);
 
 	template <typename KeyModifier, typename ValueModifier>
-	boost::container::flat_map<std::string, std::string> modify(const boost::container::flat_map<std::string, std::string>& kvps, KeyModifier modifyKey, ValueModifier modifyValue);
+	StringMap modify(const StringMap& kvps, KeyModifier modifyKey, ValueModifier modifyValue);
 
-	///
-
-	//! extract key-value-pair from flatbuffer MapEntry
-	boost::container::flat_map<std::string, std::vector<uint8_t>>::value_type from_flatbuffer(const data_map::MapEntry* ff);
-
-	//! extract map from flatbuffer Map
-	boost::container::flat_map<std::string, std::vector<uint8_t>> from_flatbuffer(const data_map::Map* ff);
-
-	//! produce flatbuffer MapEntry from key-value-pair
-	flatbuffers::Offset<data_map::MapEntry> to_flatbuffer_builder(flatbuffers::FlatBufferBuilder& _fbb,
-																  const boost::container::flat_map<std::string, std::vector<uint8_t>>::value_type& dd);
-
-	//! produce flatbuffer Map from map
-	flatbuffers::Offset<data_map::Map> to_flatbuffer_builder(flatbuffers::FlatBufferBuilder& _fbb,
-															 const boost::container::flat_map<std::string, std::vector<uint8_t>>& dd);
 
 	template <typename KeyModifier, typename ValueModifier>
-	boost::container::flat_map<std::string, std::vector<uint8_t>>::value_type modify(const boost::container::flat_map<std::string, std::vector<uint8_t>>::value_type& kv,
-																   KeyModifier   modifyKey,
-																   ValueModifier modifyValue);
+	DataMapEntry modify(const DataMapEntry& kv, KeyModifier modifyKey, ValueModifier modifyValue);
 
 	template <typename KeyModifier, typename ValueModifier>
-	boost::container::flat_map<std::string, std::vector<uint8_t>> modify(const boost::container::flat_map<std::string, std::vector<uint8_t>>& kvps,
-													   KeyModifier   modifyKey,
-													   ValueModifier modifyValue);
+	DataMap modify(const DataMap& kvps, KeyModifier modifyKey, ValueModifier modifyValue);
+
+
+	template <typename KeyModifier, typename ValueModifier>
+	HashStringMapEntry modify(const HashStringMapEntry& kv, KeyModifier modifyKey, ValueModifier modifyValue);
+
+	template <typename KeyModifier, typename ValueModifier>
+	HashStringMap modify(const HashStringMap& kvps, KeyModifier modifyKey, ValueModifier modifyValue);
+
+
+	template <typename KeyModifier, typename ValueModifier>
+	StringMultiMapEntry modify(const StringMultiMapEntry& kv, KeyModifier modifyKey, ValueModifier modifyValue);
+
+	template <typename KeyModifier, typename ValueModifier>
+	StringMultiMap modify(const StringMultiMap& kvps, KeyModifier modifyKey, ValueModifier modifyValue);
+
+
+	template <typename KeyModifier, typename ValueModifier>
+	DataMultiMapEntry modify(const DataMultiMapEntry& kv, KeyModifier modifyKey, ValueModifier modifyValue);
+
+	template <typename KeyModifier, typename ValueModifier>
+	DataMultiMap modify(const DataMultiMap& kvps, KeyModifier modifyKey, ValueModifier modifyValue);
+
+	//----------------------------------------------------------
+
+	template <typename KeyModifier, typename ValueModifier>
+	NativeStringMapEntry modify(const NativeStringMapEntry& kv, KeyModifier modifyKey, ValueModifier modifyValue);
+
+	template <typename KeyModifier, typename ValueModifier>
+	NativeStringMap modify(const NativeStringMap& kvps, KeyModifier modifyKey, ValueModifier modifyValue);
+
+
+	template <typename KeyModifier, typename ValueModifier>
+	NativeDataMapEntry modify(const NativeDataMapEntry& kv, KeyModifier modifyKey, ValueModifier modifyValue);
+
+	template <typename KeyModifier, typename ValueModifier>
+	NativeDataMap modify(const NativeDataMap& kvps, KeyModifier modifyKey, ValueModifier modifyValue);
+
+
+	template <typename KeyModifier, typename ValueModifier>
+	NativeHashStringMapEntry modify(const NativeHashStringMapEntry& kv, KeyModifier modifyKey, ValueModifier modifyValue);
+
+	template <typename KeyModifier, typename ValueModifier>
+	NativeHashStringMap modify(const NativeHashStringMap& kvps, KeyModifier modifyKey, ValueModifier modifyValue);
+
+
+	template <typename KeyModifier, typename ValueModifier>
+	NativeStringMultiMapEntry modify(const NativeStringMultiMapEntry& kv, KeyModifier modifyKey, ValueModifier modifyValue);
+
+	template <typename KeyModifier, typename ValueModifier>
+	NativeStringMultiMap modify(const NativeStringMultiMap& kvps, KeyModifier modifyKey, ValueModifier modifyValue);
+
+
+	template <typename KeyModifier, typename ValueModifier>
+	NativeDataMultiMapEntry modify(const NativeDataMultiMapEntry& kv, KeyModifier modifyKey, ValueModifier modifyValue);
+
+	template <typename KeyModifier, typename ValueModifier>
+	NativeDataMultiMap modify(const NativeDataMultiMap& kvps, KeyModifier modifyKey, ValueModifier modifyValue);
 
 }	// namespace khutils
+
 
 #if defined(KHUTILS_FLATBUFFER_MAP_INLINE)
 
 namespace khutils
 {
+	//----------------------------------------------------------
 
 	template <typename KeyModifier, typename ValueModifier>
-	boost::container::flat_map<std::string, std::string>::value_type modify(const boost::container::flat_map<std::string, std::string>::value_type& kv,
-														  KeyModifier   modifyKey,
-														  ValueModifier modifyValue)
+	StringMapEntry modify(const StringMapEntry& arg, KeyModifier modifyKey, ValueModifier modifyValue)
 	{
-		return boost::container::flat_map<std::string, std::string>::value_type{modifyKey(kv.first), modifyValue(kv.second)};
+		return createStringMapEntry(modify(to_native(arg), modifyKey, modifyValue));
 	}
 
 	template <typename KeyModifier, typename ValueModifier>
-	boost::container::flat_map<std::string, std::string> modify(const boost::container::flat_map<std::string, std::string>& kvps, KeyModifier modifyKey, ValueModifier modifyValue)
+	StringMap modify(const StringMap& arg, KeyModifier modifyKey, ValueModifier modifyValue)
 	{
-		boost::container::flat_map<std::string, std::string> ret;
-		for (const auto& kv : kvps)
-		{
-			ret.insert(modify(kv, modifyKey, modifyValue));
-		}
+		return createStringMap(modify(to_native(arg), modifyKey, modifyValue));
 	}
 
-	///
 
 	template <typename KeyModifier, typename ValueModifier>
-	boost::container::flat_map<std::string, std::vector<uint8_t>>::value_type
-	modify(const boost::container::flat_map<std::string, std::vector<uint8_t>>::value_type& kv, KeyModifier modifyKey, ValueModifier modifyValue)
+	DataMapEntry modify(const DataMapEntry& arg, KeyModifier modifyKey, ValueModifier modifyValue)
 	{
-		return boost::container::flat_map<std::string, std::vector<uint8_t>>::value_type{modifyKey(kv.first), modifyValue(kv.second)};
+		return createDataMapEntry(modify(to_native(arg), modifyKey, modifyValue));
 	}
 
 	template <typename KeyModifier, typename ValueModifier>
-	boost::container::flat_map<std::string, std::vector<uint8_t>> modify(const boost::container::flat_map<std::string, std::vector<uint8_t>>& kvps,
-													   KeyModifier   modifyKey,
-													   ValueModifier modifyValue)
+	DataMap modify(const DataMap& arg, KeyModifier modifyKey, ValueModifier modifyValue)
 	{
-		boost::container::flat_map<std::string, std::vector<uint8_t>> ret;
-		for (const auto& kv : kvps)
-		{
-			ret.insert(modify(kv, modifyKey, modifyValue));
-		}
+		return createDataMap(modify(to_native(arg), modifyKey, modifyValue));
 	}
+
+
+	template <typename KeyModifier, typename ValueModifier>
+	HashStringMapEntry modify(const HashStringMapEntry& arg, KeyModifier modifyKey, ValueModifier modifyValue)
+	{
+		return createHashStringMapEntry(modify(to_native(arg), modifyKey, modifyValue));
+	}
+
+	template <typename KeyModifier, typename ValueModifier>
+	HashStringMap modify(const HashStringMap& arg, KeyModifier modifyKey, ValueModifier modifyValue)
+	{
+		return createHashStringMap(modify(to_native(arg), modifyKey, modifyValue));
+	}
+
+
+	template <typename KeyModifier, typename ValueModifier>
+	StringMultiMapEntry modify(const StringMultiMapEntry& arg, KeyModifier modifyKey, ValueModifier modifyValue)
+	{
+		return createStringMultiMapEntry(modify(to_native(arg), modifyKey, modifyValue));
+	}
+
+	template <typename KeyModifier, typename ValueModifier>
+	StringMultiMap modify(const StringMultiMap& arg, KeyModifier modifyKey, ValueModifier modifyValue)
+	{
+		return createStringMultiMap(modify(to_native(arg), modifyKey, modifyValue));
+	}
+
+
+	template <typename KeyModifier, typename ValueModifier>
+	DataMultiMapEntry modify(const DataMultiMapEntry& arg, KeyModifier modifyKey, ValueModifier modifyValue)
+	{
+		return createDataMultiMapEntry(modify(to_native(arg), modifyKey, modifyValue));
+	}
+
+	template <typename KeyModifier, typename ValueModifier>
+	DataMultiMap modify(const DataMultiMap& arg, KeyModifier modifyKey, ValueModifier modifyValue)
+	{
+		return createDataMultiMap(modify(to_native(arg), modifyKey, modifyValue));
+	}
+
+	//----------------------------------------------------------
+	//----------------------------------------------------------
+
+	template <typename KeyModifier, typename ValueModifier>
+	NativeStringMapEntry modify(const NativeStringMapEntry& kv, KeyModifier modifyKey, ValueModifier modifyValue)
+	{
+		return NativeStringMapEntry{modifyKey(kv.first), modifyValue(kv.second)};
+	}
+
+	template <typename KeyModifier, typename ValueModifier>
+	NativeStringMap modify(const NativeStringMap& kvps, KeyModifier modifyKey, ValueModifier modifyValue)
+	{
+		auto ret = NativeStringMap{};
+		ret.reserve(kvps.size());
+
+		std::transform(kvps.begin(), kvps.end(), std::inserter(ret, ret.begin()), [&modifyKey, &modifyValue](auto& e) {
+			return modify(e, modifyKey, modifyValue);
+		});
+
+		return ret;
+	}
+
+	//----------------------------------------------------------
+
+	template <typename KeyModifier, typename ValueModifier>
+	NativeDataMapEntry modify(const NativeDataMapEntry& kv, KeyModifier modifyKey, ValueModifier modifyValue)
+	{
+		return NativeDataMapEntry{modifyKey(kv.first), modifyValue(kv.second)};
+	}
+
+	template <typename KeyModifier, typename ValueModifier>
+	NativeDataMap modify(const NativeDataMap& kvps, KeyModifier modifyKey, ValueModifier modifyValue)
+	{
+		auto ret = NativeDataMap{};
+		ret.reserve(kvps.size());
+
+		std::transform(kvps.begin(), kvps.end(), std::inserter(ret, ret.begin()), [&modifyKey, &modifyValue](auto& e) {
+			return modify(e, modifyKey, modifyValue);
+		});
+
+		return ret;
+	}
+
+	//----------------------------------------------------------
+
+	template <typename KeyModifier, typename ValueModifier>
+	NativeHashStringMapEntry modify(const NativeHashStringMapEntry& kv, KeyModifier modifyKey, ValueModifier modifyValue)
+	{
+		return NativeHashStringMapEntry{modifyKey(kv.first), modifyValue(kv.second)};
+	}
+
+	template <typename KeyModifier, typename ValueModifier>
+	NativeHashStringMap modify(const NativeHashStringMap& kvps, KeyModifier modifyKey, ValueModifier modifyValue)
+	{
+		auto ret = NativeHashStringMap{};
+		ret.reserve(kvps.size());
+
+		std::transform(kvps.begin(), kvps.end(), std::inserter(ret, ret.begin()), [&modifyKey, &modifyValue](auto& e) {
+			return modify(e, modifyKey, modifyValue);
+		});
+
+		return ret;
+	}
+
+	//----------------------------------------------------------
+
+	template <typename KeyModifier, typename ValueModifier>
+	NativeStringMultiMapEntry modify(const NativeStringMultiMapEntry& kv, KeyModifier modifyKey, ValueModifier modifyValue)
+	{
+		auto r = std::remove_reference<std::remove_const<decltype(kv)>::type>::type{modifyKey(kv.first), {}};
+		NativeStringMultiMapEntry ret{modifyKey(kv.first), {}};
+		ret.second.reserve(kv.second.size());
+		std::transform(kv.second.begin(), kv.second.end(), std::back_inserter(ret.second), modifyValue);
+
+		return ret;
+	}
+
+	template <typename KeyModifier, typename ValueModifier>
+	NativeStringMultiMap modify(const NativeStringMultiMap& kvps, KeyModifier modifyKey, ValueModifier modifyValue)
+	{
+		auto ret = NativeStringMultiMap{};
+		ret.reserve(kvps.size());
+
+		std::transform(kvps.begin(), kvps.end(), std::inserter(ret, ret.begin()), [&modifyKey, &modifyValue](auto& e) {
+			return modify(e, modifyKey, modifyValue);
+		});
+
+		return ret;
+	}
+
+	//----------------------------------------------------------
+
+	template <typename KeyModifier, typename ValueModifier>
+	NativeDataMultiMapEntry modify(const NativeDataMultiMapEntry& kv, KeyModifier modifyKey, ValueModifier modifyValue)
+	{
+		auto r = std::remove_reference<std::remove_const<decltype(kv)>::type>::type{modifyKey(kv.first), {}};
+
+		NativeDataMultiMapEntry ret{modifyKey(kv.first), {}};
+		ret.second.reserve(kv.second.size());
+		std::transform(kv.second.begin(), kv.second.end(), std::back_inserter(ret.second), modifyValue);
+
+		return ret;
+	}
+
+	template <typename KeyModifier, typename ValueModifier>
+	NativeDataMultiMap modify(const NativeDataMultiMap& kvps, KeyModifier modifyKey, ValueModifier modifyValue)
+	{
+		auto ret = NativeDataMultiMap{};
+		ret.reserve(kvps.size());
+
+		std::transform(kvps.begin(), kvps.end(), std::inserter(ret, ret.begin()), [&modifyKey, &modifyValue](auto& e) {
+			return modify(e, modifyKey, modifyValue);
+		});
+
+		return ret;
+	}
+
+	//----------------------------------------------------------
 
 }	// namespace khutils
 
@@ -111,113 +375,323 @@ namespace khutils
 #if defined(KHUTILS_FLATBUFFER_MAP_IMPL)
 
 #include "khutils/assertion.hpp"
-#include "khutils/flatbuffer_map.hpp"
+
+#include <boost/container/flat_map.hpp>
 
 #include <algorithm>
-#include <boost/container/flat_map.hpp>
 #include <string>
 #include <vector>
 
 namespace khutils
 {
-
 	//////////////////////////////////////////////////////////////////////////
 
-	boost::container::flat_map<std::string, std::string>::value_type from_flatbuffer(const string_map::MapEntry* ff)
+	StringMapEntry createStringMapEntry()
 	{
-		KHUTILS_ASSERT_PTR(ff);
-		KHUTILS_ASSERT_PTR(ff->id());
-		KHUTILS_ASSERT_PTR(ff->value());
-
-		return boost::container::flat_map<std::string, std::string>::value_type{ff->id()->str(), ff->value()->str()};
+		return StringMapEntry{new StringMapEntryT()};
 	}
 
+	//---
+
+	StringMap createStringMap()
+	{
+		return StringMap{new StringMapT()};
+	}
+
+	//---
+
+	DataMapEntry createDataMapEntry()
+	{
+		return DataMapEntry{new DataMapEntryT()};
+	}
+
+	//---
+
+	DataMap createDataMap()
+	{
+		return DataMap{new DataMapT()};
+	}
+
+	//---
+
+	HashStringMapEntry createHashStringMapEntry()
+	{
+		return HashStringMapEntry{new HashStringMapEntryT()};
+	}
+
+	//---
+
+	HashStringMap createHashStringMap()
+	{
+		return HashStringMap{new HashStringMapT()};
+	}
+
+
+	StringMultiMapEntry createStringMultiMapEntry()
+	{
+		return StringMultiMapEntry{new StringMultiMapEntryT()};
+	}
+
+	//---
+
+	StringMultiMap createStringMultiMap()
+	{
+		return StringMultiMap{new StringMultiMapT()};
+	}
+
+	//---
+
+	DataMultiMapEntryData createDataMultiMapEntryData()
+	{
+		return DataMultiMapEntryData{new DataMultiMapEntryDataT()};
+	}
+
+	DataMultiMapEntry createDataMultiMapEntry()
+	{
+		return DataMultiMapEntry{new DataMultiMapEntryT()};
+	}
+
+	//---
+
+	DataMultiMap createDataMultiMap()
+	{
+		return DataMultiMap{new DataMultiMapT()};
+	}
+
+	//---
+
 	//////////////////////////////////////////////////////////////////////////
 
-	boost::container::flat_map<std::string, std::string> from_flatbuffer(const string_map::Map* ff)
+	StringMapEntry createStringMapEntry(const NativeStringMapEntry& native)
 	{
-		KHUTILS_ASSERT_PTR(ff);
-		KHUTILS_ASSERT_PTR(ff->entries());
+		auto m   = createStringMapEntry();
+		m->id	= native.first;
+		m->value = native.second;
 
-		boost::container::flat_map<std::string, std::string> rr;
+		return m;
+	}
 
-		std::for_each(ff->entries()->begin(), ff->entries()->end(), [&rr](const auto& _f) {
-			rr.insert(from_flatbuffer(_f));
+	NativeStringMapEntry to_native(const StringMapEntry& m)
+	{
+		return NativeStringMapEntry{m->id, m->value};
+	}
+
+	//---
+
+	StringMap createStringMap(const NativeStringMap& native)
+	{
+		auto m = createStringMap();
+		m->entries.reserve(native.size());
+		std::transform(native.begin(), native.end(), std::back_inserter(m->entries), [](auto& e) {
+			return createStringMapEntry(e);
+		});
+		std::sort(m->entries.begin(), m->entries.end());
+
+		return m;
+	}
+
+	NativeStringMap to_native(const StringMap& m)
+	{
+		NativeStringMap native;
+		native.reserve(m->entries.size());
+		std::transform(m->entries.begin(), m->entries.end(), std::inserter(native, native.begin()), [](auto& e) {
+			return to_native(e);
 		});
 
-		return rr;
+		return native;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 
-	flatbuffers::Offset<string_map::MapEntry> to_flatbuffer_builder(flatbuffers::FlatBufferBuilder& _fbb,
-																	const boost::container::flat_map<std::string, std::string>::value_type& dd)
+	DataMapEntry createDataMapEntry(const NativeDataMapEntry& native)
 	{
-		return string_map::CreateMapEntry(_fbb, _fbb.CreateSharedString(dd.first), _fbb.CreateSharedString(dd.second));
+		auto m   = createDataMapEntry();
+		m->id	= native.first;
+		m->value = native.second;
+
+		return m;
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-
-	flatbuffers::Offset<string_map::Map> to_flatbuffer_builder(flatbuffers::FlatBufferBuilder& _fbb,
-															   const boost::container::flat_map<std::string, std::string>& dd)
+	NativeDataMapEntry to_native(const DataMapEntry& m)
 	{
-		std::vector<flatbuffers::Offset<string_map::MapEntry>> entries(dd.size());
-		std::transform(dd.begin(), dd.end(), entries.begin(), [&_fbb](const auto& _d) {
-			return to_flatbuffer_builder(_fbb, _d);
+		return NativeDataMapEntry{m->id, m->value};
+	}
+
+	//---
+
+	DataMap createDataMap(const NativeDataMap& native)
+	{
+		auto m = createDataMap();
+		m->entries.reserve(native.size());
+		std::transform(native.begin(), native.end(), std::back_inserter(m->entries), [](auto& e) {
+			return createDataMapEntry(e);
+		});
+		std::sort(m->entries.begin(), m->entries.end());
+
+		return m;
+	}
+
+	NativeDataMap to_native(const DataMap& m)
+	{
+		NativeDataMap native;
+		native.reserve(m->entries.size());
+		std::transform(m->entries.begin(), m->entries.end(), std::inserter(native, native.begin()), [](auto& e) {
+			return to_native(e);
 		});
 
-		return string_map::CreateMap(_fbb, _fbb.CreateVector(entries));
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////
-
-	boost::container::flat_map<std::string, std::vector<uint8_t>>::value_type from_flatbuffer(const data_map::MapEntry* ff)
-	{
-		KHUTILS_ASSERT_PTR(ff);
-		KHUTILS_ASSERT_PTR(ff->id());
-		KHUTILS_ASSERT_PTR(ff->data());
-
-		return boost::container::flat_map<std::string, std::vector<uint8_t>>::value_type{ff->id()->str(), {ff->data()->begin(), ff->data()->end()}};
+		return native;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 
-	boost::container::flat_map<std::string, std::vector<uint8_t>> from_flatbuffer(const data_map::Map* ff)
+	StringMultiMapEntry createStringMultiMapEntry(const NativeStringMultiMapEntry& native)
 	{
-		KHUTILS_ASSERT_PTR(ff);
-		KHUTILS_ASSERT_PTR(ff->entries());
+		auto m	= createStringMultiMapEntry();
+		m->id	 = native.first;
+		m->values = decltype(m->values){native.second.begin(), native.second.end()};
 
-		boost::container::flat_map<std::string, std::vector<uint8_t>> rr;
+		return m;
+	}
 
-		std::for_each(ff->entries()->begin(), ff->entries()->end(), [&rr](const auto& _f) {
-			rr.insert(from_flatbuffer(_f));
+
+	NativeStringMultiMapEntry to_native(const StringMultiMapEntry& m)
+	{
+		return NativeStringMultiMapEntry{m->id, m->values};
+	}
+
+	//---
+
+	StringMultiMap createStringMultiMap(const NativeStringMultiMap& native)
+	{
+		auto m = createStringMultiMap();
+		m->entries.reserve(native.size());
+		std::transform(native.begin(), native.end(), std::back_inserter(m->entries), [](auto& e) {
+			return createStringMultiMapEntry(e);
+		});
+		std::sort(m->entries.begin(), m->entries.end());
+
+		return m;
+	}
+
+	NativeStringMultiMap to_native(const StringMultiMap& m)
+	{
+		NativeStringMultiMap native;
+		native.reserve(m->entries.size());
+		std::transform(m->entries.begin(), m->entries.end(), std::inserter(native, native.begin()), [](auto& e) {
+			return to_native(e);
 		});
 
-		return rr;
+		return native;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 
-	flatbuffers::Offset<data_map::MapEntry> to_flatbuffer_builder(flatbuffers::FlatBufferBuilder& _fbb,
-																  const boost::container::flat_map<std::string, std::vector<uint8_t>>::value_type& dd)
+	DataMultiMapEntryData createDataMultiMapEntryData(const NativeDataMultiMapEntryData& native)
 	{
-		return data_map::CreateMapEntry(_fbb, _fbb.CreateSharedString(dd.first), _fbb.CreateVector(dd.second));
+		auto m = createDataMultiMapEntryData();
+		m->data.reserve(native.size());
+		std::copy(native.begin(), native.end(), std::back_inserter(m->data));
+
+		return m;
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-
-	flatbuffers::Offset<data_map::Map> to_flatbuffer_builder(flatbuffers::FlatBufferBuilder& _fbb,
-															 const boost::container::flat_map<std::string, std::vector<uint8_t>>& dd)
+	NativeDataMultiMapEntryData to_native(const DataMultiMapEntryData& m)
 	{
-		std::vector<flatbuffers::Offset<data_map::MapEntry>> entries(dd.size());
-		std::transform(dd.begin(), dd.end(), entries.begin(), [&_fbb](const auto& _d) {
-			return to_flatbuffer_builder(_fbb, _d);
+		return m->data;
+	}
+
+	//---
+
+	DataMultiMapEntry createDataMultiMapEntry(const NativeDataMultiMapEntry& native)
+	{
+		auto m = createDataMultiMapEntry();
+		m->id  = native.first;
+		m->values.reserve(native.second.size());
+		std::transform(native.second.begin(), native.second.end(), std::back_inserter(m->values), [](auto& e) {
+			return createDataMultiMapEntryData(e);
 		});
 
-		return data_map::CreateMap(_fbb, _fbb.CreateVector(entries));
+		return m;
 	}
 
+	NativeDataMultiMapEntry to_native(const DataMultiMapEntry& m)
+	{
+		NativeDataMultiMapEntry native{m->id, {}};
+		native.second.reserve(m->values.size());
+		std::transform(m->values.begin(), m->values.end(), std::inserter(native.second, native.second.begin()), [](auto& e) {
+			return to_native(e);
+		});
+
+		return native;
+	}
+
+	//---
+
+	DataMultiMap createDataMultiMap(const NativeDataMultiMap& native)
+	{
+		auto m = createDataMultiMap();
+		m->entries.reserve(native.size());
+		std::transform(native.begin(), native.end(), std::back_inserter(m->entries), [](auto& e) {
+			return createDataMultiMapEntry(e);
+		});
+		std::sort(m->entries.begin(), m->entries.end());
+
+		return m;
+	}
+
+	NativeDataMultiMap to_native(const DataMultiMap& m)
+	{
+		NativeDataMultiMap native;
+		native.reserve(m->entries.size());
+		std::transform(m->entries.begin(), m->entries.end(), std::inserter(native, native.begin()), [](auto& e) {
+			return to_native(e);
+		});
+
+		return native;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+
+	HashStringMapEntry createHashStringMapEntry(const NativeHashStringMapEntry& native)
+	{
+		auto m   = createHashStringMapEntry();
+		m->id	= native.first;
+		m->value = native.second;
+
+		return m;
+	}
+
+	NativeHashStringMapEntry to_native(const HashStringMapEntry& m)
+	{
+		return NativeHashStringMapEntry{m->id, m->value};
+	}
+
+	//---
+
+	HashStringMap createHashStringMap(const NativeHashStringMap& native)
+	{
+		auto m = createHashStringMap();
+		m->entries.reserve(native.size());
+		std::transform(native.begin(), native.end(), std::back_inserter(m->entries), [](auto& e) {
+			return createHashStringMapEntry(e);
+		});
+		std::sort(m->entries.begin(), m->entries.end());
+
+		return m;
+	}
+
+	NativeHashStringMap to_native(const HashStringMap& m)
+	{
+		NativeHashStringMap native;
+		native.reserve(m->entries.size());
+		std::transform(m->entries.begin(), m->entries.end(), std::inserter(native, native.begin()), [](auto& e) {
+			return to_native(e);
+		});
+
+		return native;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////
 
 }	// namespace khutils
