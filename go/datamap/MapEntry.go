@@ -39,7 +39,7 @@ func (rcv *MapEntry) Id() []byte {
 	return nil
 }
 
-func (rcv *MapEntry) Data(j int) byte {
+func (rcv *MapEntry) Value(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		a := rcv._tab.Vector(o)
@@ -48,7 +48,7 @@ func (rcv *MapEntry) Data(j int) byte {
 	return 0
 }
 
-func (rcv *MapEntry) DataLength() int {
+func (rcv *MapEntry) ValueLength() int {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.VectorLen(o)
@@ -56,7 +56,7 @@ func (rcv *MapEntry) DataLength() int {
 	return 0
 }
 
-func (rcv *MapEntry) DataBytes() []byte {
+func (rcv *MapEntry) ValueBytes() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
@@ -70,10 +70,10 @@ func MapEntryStart(builder *flatbuffers.Builder) {
 func MapEntryAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(id), 0)
 }
-func MapEntryAddData(builder *flatbuffers.Builder, data flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(data), 0)
+func MapEntryAddValue(builder *flatbuffers.Builder, value flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(value), 0)
 }
-func MapEntryStartDataVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+func MapEntryStartValueVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(1, numElems, 1)
 }
 func MapEntryEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

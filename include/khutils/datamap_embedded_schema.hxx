@@ -13,7 +13,7 @@ namespace khutils.data_map;
 /// value: data
 table MapEntry {
 	id: string(key);
-	data: [ubyte];
+	value: [ubyte];
 }
 
 /// container for map entries
