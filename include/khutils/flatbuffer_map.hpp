@@ -13,52 +13,53 @@
 
 namespace khutils
 {
-	typedef string_map::MapEntryT					  StringMapEntryT;
-	typedef smart_pointer::value_ptr<StringMapEntryT> StringMapEntry;
-	typedef std::vector<StringMapEntry>				  StringMapEntries;
-	typedef string_map::MapT						  StringMapT;
-	typedef smart_pointer::value_ptr<StringMapT>	  StringMap;
+	typedef string_map::MapEntryT			 StringMapEntryT;
+	typedef std::unique_ptr<StringMapEntryT> StringMapEntry;
+	typedef std::vector<StringMapEntry>		 StringMapEntries;
+	typedef string_map::MapT				 StringMapT;
+	typedef std::unique_ptr<StringMapT>		 StringMap;
 
 	typedef boost::container::flat_map<std::string, std::string> NativeStringMap;
 	typedef NativeStringMap::value_type NativeStringMapEntry;
 
 
-	typedef data_map::MapEntryT						DataMapEntryT;
-	typedef smart_pointer::value_ptr<DataMapEntryT> DataMapEntry;
-	typedef std::vector<DataMapEntry>				DataMapEntries;
-	typedef data_map::MapT							DataMapT;
-	typedef smart_pointer::value_ptr<DataMapT>		DataMap;
+	typedef data_map::MapEntryT			   DataMapEntryT;
+	typedef std::unique_ptr<DataMapEntryT> DataMapEntry;
+	typedef std::vector<DataMapEntry>	  DataMapEntries;
+	typedef data_map::MapT				   DataMapT;
+	typedef std::unique_ptr<DataMapT>	  DataMap;
 
 	typedef boost::container::flat_map<std::string, std::vector<uint8_t>> NativeDataMap;
 	typedef NativeDataMap::value_type NativeDataMapEntry;
 
 
-	typedef hashstring_map::MapEntryT					  HashStringMapEntryT;
-	typedef smart_pointer::value_ptr<HashStringMapEntryT> HashStringMapEntry;
-	typedef std::vector<StringMapEntry>					  HashStringMapEntries;
-	typedef hashstring_map::MapT						  HashStringMapT;
-	typedef smart_pointer::value_ptr<HashStringMapT>	  HashStringMap;
+	typedef hashstring_map::MapEntryT			 HashStringMapEntryT;
+	typedef std::unique_ptr<HashStringMapEntryT> HashStringMapEntry;
+	typedef std::vector<StringMapEntry>			 HashStringMapEntries;
+	typedef hashstring_map::MapT				 HashStringMapT;
+	typedef std::unique_ptr<HashStringMapT>		 HashStringMap;
 
 	typedef boost::container::flat_map<uint64_t, std::string> NativeHashStringMap;
 	typedef NativeHashStringMap::value_type NativeHashStringMapEntry;
 
 
-	typedef string_multimap::MapEntryT					   StringMultiMapEntryT;
-	typedef smart_pointer::value_ptr<StringMultiMapEntryT> StringMultiMapEntry;
-	typedef std::vector<StringMultiMapEntry>			   MultiMapEntries;
-	typedef string_multimap::MapT						   StringMultiMapT;
-	typedef smart_pointer::value_ptr<StringMultiMapT>	  StringMultiMap;
+	typedef string_multimap::MapEntryT			  StringMultiMapEntryT;
+	typedef std::unique_ptr<StringMultiMapEntryT> StringMultiMapEntry;
+	typedef std::vector<StringMultiMapEntry>	  MultiMapEntries;
+	typedef string_multimap::MapT				  StringMultiMapT;
+	typedef std::unique_ptr<StringMultiMapT>	  StringMultiMap;
 
 	typedef boost::container::flat_map<std::string, std::vector<std::string>> NativeStringMultiMap;
 	typedef NativeStringMultiMap::value_type NativeStringMultiMapEntry;
 
-	typedef data_multimap::DataT							 DataMultiMapEntryDataT;
-	typedef smart_pointer::value_ptr<DataMultiMapEntryDataT> DataMultiMapEntryData;
-	typedef data_multimap::MapEntryT						 DataMultiMapEntryT;
-	typedef smart_pointer::value_ptr<DataMultiMapEntryT>	 DataMultiMapEntry;
-	typedef std::vector<DataMultiMapEntry>					 DataMultiMapEntries;
-	typedef data_multimap::MapT								 DataMultiMapT;
-	typedef smart_pointer::value_ptr<DataMultiMapT>			 DataMultiMap;
+
+	typedef data_multimap::DataT					DataMultiMapEntryDataT;
+	typedef std::unique_ptr<DataMultiMapEntryDataT> DataMultiMapEntryData;
+	typedef data_multimap::MapEntryT				DataMultiMapEntryT;
+	typedef std::unique_ptr<DataMultiMapEntryT>		DataMultiMapEntry;
+	typedef std::vector<DataMultiMapEntry>			DataMultiMapEntries;
+	typedef data_multimap::MapT						DataMultiMapT;
+	typedef std::unique_ptr<DataMultiMapT>			DataMultiMap;
 
 	typedef boost::container::flat_map<std::string, std::vector<std::vector<uint8_t>>> NativeDataMultiMap;
 	typedef NativeDataMultiMap::value_type NativeDataMultiMapEntry;
@@ -77,6 +78,18 @@ namespace khutils
 	DataMultiMapEntryData createDataMultiMapEntryData();
 	DataMultiMapEntry	 createDataMultiMapEntry();
 	DataMultiMap		  createDataMultiMap();
+
+	StringMapEntry		  createStringMapEntry(const StringMapEntry&);
+	StringMap			  createStringMap(const StringMap&);
+	DataMapEntry		  createDataMapEntry(const DataMapEntry&);
+	DataMap				  createDataMap(const DataMap&);
+	HashStringMapEntry	createHashStringMapEntry(const HashStringMapEntry&);
+	HashStringMap		  createHashStringMap(const HashStringMap&);
+	StringMultiMapEntry   createStringMultiMapEntry(const StringMultiMapEntry&);
+	StringMultiMap		  createStringMultiMap(const StringMultiMap&);
+	DataMultiMapEntryData createDataMultiMapEntryData(const DataMultiMapEntryData&);
+	DataMultiMapEntry	 createDataMultiMapEntry(const DataMultiMapEntry&);
+	DataMultiMap		  createDataMultiMap(const DataMultiMap&);
 
 	StringMapEntry		  createStringMapEntry(const NativeStringMapEntry&);
 	StringMap			  createStringMap(const NativeStringMap&);
@@ -459,6 +472,177 @@ namespace khutils
 	}
 
 	//---
+
+	//////////////////////////////////////////////////////////////////////////
+
+	StringMapEntry createStringMapEntry(const StringMapEntry& ref)
+	{
+		KHUTILS_ASSERT_PTR(ref);
+		auto clone = createStringMapEntry();
+		KHUTILS_ASSERT_PTR(clone);
+
+		clone->id	= ref->id;
+		clone->value = ref->value;
+
+		return clone;
+	}
+
+	//---
+
+	StringMap createStringMap(const StringMap& ref)
+	{
+		KHUTILS_ASSERT_PTR(ref);
+		auto clone = createStringMap();
+		KHUTILS_ASSERT_PTR(clone);
+
+		clone->entries.reserve(ref->entries.size());
+		std::transform(ref->entries.begin(), ref->entries.end(), std::back_inserter(clone->entries), [](auto& e) {
+			return createStringMapEntry(e);
+		});
+
+		return clone;
+	}
+
+	//---
+
+	DataMapEntry createDataMapEntry(const DataMapEntry& ref)
+	{
+		KHUTILS_ASSERT_PTR(ref);
+		auto clone = createDataMapEntry();
+		KHUTILS_ASSERT_PTR(clone);
+
+		clone->id	= ref->id;
+		clone->value = ref->value;
+
+		return clone;
+	}
+
+	//---
+
+	DataMap createDataMap(const DataMap& ref)
+	{
+		KHUTILS_ASSERT_PTR(ref);
+		auto clone = createDataMap();
+		KHUTILS_ASSERT_PTR(clone);
+
+		clone->entries.reserve(ref->entries.size());
+		std::transform(ref->entries.begin(), ref->entries.end(), std::back_inserter(clone->entries), [](auto& e) {
+			return createDataMapEntry(e);
+		});
+
+		return clone;
+	}
+
+	//---
+
+	HashStringMapEntry createHashStringMapEntry(const HashStringMapEntry& ref)
+	{
+		KHUTILS_ASSERT_PTR(ref);
+		auto clone = createHashStringMapEntry();
+		KHUTILS_ASSERT_PTR(clone);
+
+		clone->id	= ref->id;
+		clone->value = ref->value;
+
+		return clone;
+	}
+
+	//---
+
+	HashStringMap createHashStringMap(const HashStringMap& ref)
+	{
+		KHUTILS_ASSERT_PTR(ref);
+		auto clone = createHashStringMap();
+		KHUTILS_ASSERT_PTR(clone);
+
+		clone->entries.reserve(ref->entries.size());
+		std::transform(ref->entries.begin(), ref->entries.end(), std::back_inserter(clone->entries), [](auto& e) {
+			return createHashStringMapEntry(e);
+		});
+
+		return clone;
+	}
+
+	//---
+
+	StringMultiMapEntry createStringMultiMapEntry(const StringMultiMapEntry& ref)
+	{
+		KHUTILS_ASSERT_PTR(ref);
+		auto clone = createStringMultiMapEntry();
+		KHUTILS_ASSERT_PTR(clone);
+
+		clone->id = ref->id;
+		clone->values.reserve(ref->values.size());
+		std::copy(ref->values.begin(), ref->values.end(), std::back_inserter(clone->values));
+
+		return clone;
+	}
+
+	//---
+
+	StringMultiMap createStringMultiMap(const StringMultiMap& ref)
+	{
+		KHUTILS_ASSERT_PTR(ref);
+		auto clone = createStringMultiMap();
+		KHUTILS_ASSERT_PTR(clone);
+
+		clone->entries.reserve(ref->entries.size());
+		std::transform(ref->entries.begin(), ref->entries.end(), std::back_inserter(clone->entries), [](auto& e) {
+			return createStringMultiMapEntry(e);
+		});
+
+		return clone;
+	}
+
+	//---
+
+	DataMultiMapEntryData createDataMultiMapEntryData(const DataMultiMapEntryData& ref)
+	{
+		KHUTILS_ASSERT_PTR(ref);
+		auto clone = createDataMultiMapEntryData();
+		KHUTILS_ASSERT_PTR(clone);
+
+		clone->data.reserve(ref->data.size());
+		std::copy(ref->data.begin(), ref->data.end(), std::back_inserter(clone->data));
+
+		return clone;
+	}
+
+	//---
+
+	DataMultiMapEntry createDataMultiMapEntry(const DataMultiMapEntry& ref)
+	{
+		KHUTILS_ASSERT_PTR(ref);
+		auto clone = createDataMultiMapEntry();
+		KHUTILS_ASSERT_PTR(clone);
+
+		clone->id = ref->id;
+		clone->values.reserve(ref->values.size());
+		std::transform(ref->values.begin(), ref->values.end(), std::back_inserter(clone->values), [](auto& d) {
+			return createDataMultiMapEntryData(d);
+		});
+
+		return clone;
+	}
+
+	//---
+
+	DataMultiMap createDataMultiMap(const DataMultiMap& ref)
+	{
+		KHUTILS_ASSERT_PTR(ref);
+		auto clone = createDataMultiMap();
+		KHUTILS_ASSERT_PTR(clone);
+
+		clone->entries.reserve(ref->entries.size());
+		std::transform(ref->entries.begin(), ref->entries.end(), std::back_inserter(clone->entries), [](auto& e) {
+			return createDataMultiMapEntry(e);
+		});
+
+		return clone;
+	}
+
+	//---
+
 
 	//////////////////////////////////////////////////////////////////////////
 

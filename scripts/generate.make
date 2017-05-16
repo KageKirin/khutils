@@ -2,7 +2,7 @@
 # include this file in your master makefile
 
 KHUTILS_FLATC_CPP_FLAGS=\
-	--cpp --scoped-enums --gen-name-strings --gen-object-api --no-includes --cpp-ptr-type "smart_pointer::value_ptr" \
+	--cpp --scoped-enums --gen-name-strings --gen-object-api --no-includes \
 	-o $(PROJECT_SCAFFOLDING)/thirdparty/khutils/include/khutils/ \
 	-I $(PROJECT_SCAFFOLDING)/thirdparty/khutils/schemas
 

@@ -132,7 +132,7 @@ namespace khutils
 			{
 				return "khutils.data_map.MapT";
 			}
-			std::vector<smart_pointer::value_ptr<MapEntryT>> entries;
+			std::vector<std::unique_ptr<MapEntryT>> entries;
 			MapT()
 			{
 			}
@@ -270,7 +270,7 @@ namespace khutils
 					_o->entries.resize(_e->size());
 					for (flatbuffers::uoffset_t _i = 0; _i < _e->size(); _i++)
 					{
-						_o->entries[_i] = smart_pointer::value_ptr<MapEntryT>(_e->Get(_i)->UnPack(_resolver));
+						_o->entries[_i] = std::unique_ptr<MapEntryT>(_e->Get(_i)->UnPack(_resolver));
 					}
 				}
 			};
