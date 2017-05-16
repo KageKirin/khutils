@@ -25,7 +25,22 @@ namespace khutils
 	void AssertNullPtr(const T* ptr, const char* _file, const int _line);
 
 	template <typename T>
+	void AssertNullPtr(const std::shared_ptr<T>& ptr, const char* _file, const int _line);
+
+	template <typename T, typename D>
+	void AssertNullPtr(const std::unique_ptr<T, D>& ptr, const char* _file, const int _line);
+
+	template <typename T>
 	void AssertValidPtr(const T* ptr, const char* _file, const int _line);
+
+	template <typename T>
+	void AssertValidPtr(const std::shared_ptr<T>& ptr, const char* _file, const int _line);
+
+	template <typename T, typename D>
+	void AssertValidPtr(const std::unique_ptr<T, D>& ptr, const char* _file, const int _line);
+
+	template <typename T>
+	void AssertValidRawPtr(const T* ptr, const char* _file, const int _line);
 
 	template <typename T>
 	void AssertValidSharedPtr(const std::shared_ptr<T>& ptr, const char* _file, const int _line);
@@ -33,22 +48,17 @@ namespace khutils
 	template <typename T, typename D>
 	void AssertValidUniquePtr(const std::unique_ptr<T, D>& ptr, const char* _file, const int _line);
 
-	template <typename T>
-	void AssertXPtr(const T* ptr, const char* _file, const int _line);
-
-	template <typename T>
-	void AssertXPtr(const std::shared_ptr<T>& ptr, const char* _file, const int _line);
-
-	template <typename T, typename D>
-	void AssertXPtr(const std::unique_ptr<T, D>& ptr, const char* _file, const int _line);
-
 
 #ifdef KHUTILS_ASSERTION_WITH_VALUE_PTR
 	template <typename T>
-	void AssertValidValuePtr(const smart_pointer::value_ptr<T>& ptr, const char* _file, const int _line);
+	void AssertNullPtr(const smart_pointer::value_ptr<T>& ptr, const char* _file, const int _line);
 
 	template <typename T>
-	void AssertXPtr(const smart_pointer::value_ptr<T>& ptr, const char* _file, const int _line);
+	void AssertValidPtr(const smart_pointer::value_ptr<T>& ptr, const char* _file, const int _line);
+
+	template <typename T>
+	void AssertValidValuePtr(const smart_pointer::value_ptr<T>& ptr, const char* _file, const int _line);
+
 #endif	// KHUTILS_ASSERTION_WITH_VALUE_PTR
 
 }	// namespace khutils
@@ -58,15 +68,17 @@ namespace khutils
 #define KHUTILS_ASSERT_NOT(variable, value) khutils::AssertNot((variable), (value), __FILE__, __LINE__);
 #define KHUTILS_ASSERT_NULLPTR(pointer) khutils::AssertNullPtr((pointer), __FILE__, __LINE__);
 #define KHUTILS_ASSERT_PTR(pointer) khutils::AssertValidPtr((pointer), __FILE__, __LINE__);
+#define KHUTILS_ASSERT_RAWPTR(pointer) khutils::AssertValidRawPtr((pointer), __FILE__, __LINE__);
 #define KHUTILS_ASSERT_SPTR(pointer) khutils::AssertValidSharedPtr((pointer), __FILE__, __LINE__);
 #define KHUTILS_ASSERT_UPTR(pointer) khutils::AssertValidUniquePtr((pointer), __FILE__, __LINE__);
-#define KHUTILS_ASSERT_XPTR(pointer) khutils::AssertXPtr((pointer), __FILE__, __LINE__);
 
 #define KHUTILS_ASSERT_EXPR(variable, expr)                                                                            \
 	{                                                                                                                  \
 		using namespace snowhouse;                                                                                     \
 		khutils::Assert((variable), (expr), __FILE__, __LINE__);                                                       \
-	};
+	}
+
+//---;
 
 #define KHUTILS_ASSERT_GREATER(variable, val) KHUTILS_ASSERT_EXPR(variable, Is().GreaterThan(val))
 #define KHUTILS_ASSERT_GREATEREQ(variable, val) KHUTILS_ASSERT_EXPR(variable, Is().GreaterThanOrEqualTo(val))
@@ -108,6 +120,8 @@ namespace khutils
 
 namespace khutils
 {
+	//---
+
 	template <typename T>
 	void Assert(const T& var, const T& val, const char* _file, const int _line)
 	{
@@ -123,6 +137,8 @@ namespace khutils
 			throw;
 		}
 	}
+
+	//---
 
 	template <typename T>
 	void AssertNot(const T& var, const T& val, const char* _file, const int _line)
@@ -140,6 +156,8 @@ namespace khutils
 		}
 	}
 
+	//---
+
 	template <typename T, typename Expression>
 	void Assert(const T& var, Expression expression, const char* _file, const int _line)
 	{
@@ -154,6 +172,8 @@ namespace khutils
 			throw;
 		}
 	}
+
+	//---
 
 	template <typename T>
 	void AssertNullPtr(const T* ptr, const char* _file, const int _line)
@@ -171,6 +191,44 @@ namespace khutils
 		}
 	}
 
+	//---
+
+	template <typename T>
+	void AssertNullPtr(const std::shared_ptr<T>& ptr, const char* _file, const int _line)
+	{
+		CASSERT(!(bool)ptr);
+		try
+		{
+			using namespace snowhouse;
+			ConfigurableAssert<DefaultFailureHandler>::That((bool)ptr, IsFalse(), _file, _line);
+		}
+		catch (...)
+		{
+			logger::error() << "assertion in " << _file << " at line " << _line;
+			throw;
+		}
+	}
+
+	//---
+
+	template <typename T, typename D>
+	void AssertNullPtr(const std::unique_ptr<T, D>& ptr, const char* _file, const int _line)
+	{
+		CASSERT(!(bool)ptr);
+		try
+		{
+			using namespace snowhouse;
+			ConfigurableAssert<DefaultFailureHandler>::That((bool)ptr, IsFalse(), _file, _line);
+		}
+		catch (...)
+		{
+			logger::error() << "assertion in " << _file << " at line " << _line;
+			throw;
+		}
+	}
+
+	//---
+
 	template <typename T>
 	void AssertValidPtr(const T* ptr, const char* _file, const int _line)
 	{
@@ -187,8 +245,10 @@ namespace khutils
 		}
 	}
 
+	//---
+
 	template <typename T>
-	void AssertValidSharedPtr(const std::shared_ptr<T>& ptr, const char* _file, const int _line)
+	void AssertValidPtr(const std::shared_ptr<T>& ptr, const char* _file, const int _line)
 	{
 		CASSERT((bool)ptr);
 		try
@@ -202,9 +262,11 @@ namespace khutils
 			throw;
 		}
 	}
+
+	//---
 
 	template <typename T, typename D>
-	void AssertValidUniquePtr(const std::unique_ptr<T, D>& ptr, const char* _file, const int _line)
+	void AssertValidPtr(const std::unique_ptr<T, D>& ptr, const char* _file, const int _line)
 	{
 		CASSERT((bool)ptr);
 		try
@@ -219,27 +281,51 @@ namespace khutils
 		}
 	}
 
+	//---
+
 	template <typename T>
-	void AssertXPtr(const T* ptr, const char* _file, const int _line)
+	inline void AssertValidRawPtr(const T* ptr, const char* _file, const int _line)
 	{
 		AssertValidPtr(ptr, _file, _line);
 	}
 
+	//---
+
 	template <typename T>
-	void AssertXPtr(const std::shared_ptr<T>& ptr, const char* _file, const int _line)
+	inline void AssertValidSharedPtr(const std::shared_ptr<T>& ptr, const char* _file, const int _line)
 	{
-		AssertValidSharedPtr(ptr, _file, _line);
+		AssertValidPtr(ptr, _file, _line);
 	}
 
+	//---
+
 	template <typename T, typename D>
-	void AssertXPtr(const std::unique_ptr<T, D>& ptr, const char* _file, const int _line)
+	inline void AssertValidUniquePtr(const std::unique_ptr<T, D>& ptr, const char* _file, const int _line)
 	{
-		AssertValidUniquePtr(ptr, _file, _line);
+		AssertValidPtr(ptr, _file, _line);
 	}
 
 #ifdef KHUTILS_ASSERTION_WITH_VALUE_PTR
 	template <typename T>
-	void AssertValidValuePtr(const smart_pointer::value_ptr<T>& ptr, const char* _file, const int _line)
+	void AssertNullPtr(const smart_pointer::value_ptr<T>& ptr, const char* _file, const int _line)
+	{
+		CASSERT(!(bool)ptr);
+		try
+		{
+			using namespace snowhouse;
+			ConfigurableAssert<DefaultFailureHandler>::That((bool)ptr, IsFalse(), _file, _line);
+		}
+		catch (...)
+		{
+			logger::error() << "assertion in " << _file << " at line " << _line;
+			throw;
+		}
+	}
+
+	//---
+
+	template <typename T>
+	void AssertValidPtr(const smart_pointer::value_ptr<T>& ptr, const char* _file, const int _line)
 	{
 		CASSERT((bool)ptr);
 		try
@@ -254,11 +340,14 @@ namespace khutils
 		}
 	}
 
+	//---
+
 	template <typename T>
-	void AssertXPtr(const smart_pointer::value_ptr<T>& ptr, const char* _file, const int _line)
+	inline void AssertValidValuePtr(const smart_pointer::value_ptr<T>& ptr, const char* _file, const int _line)
 	{
-		AssertValidValuePtr(ptr, _file, _line);
+		AssertValidPtr(ptr, _file, _line);
 	}
+
 #endif	// KHUTILS_ASSERTION_WITH_VALUE_PTR
 
 }	// namespace khutils
@@ -286,6 +375,8 @@ namespace khutils
 			throw;
 		}
 	}
+
+	//---
 
 }	// namespace khutils
 
