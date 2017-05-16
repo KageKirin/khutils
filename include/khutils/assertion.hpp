@@ -33,9 +33,22 @@ namespace khutils
 	template <typename T, typename D>
 	void AssertValidUniquePtr(const std::unique_ptr<T, D>& ptr, const char* _file, const int _line);
 
+	template <typename T>
+	void AssertXPtr(const T* ptr, const char* _file, const int _line);
+
+	template <typename T>
+	void AssertXPtr(const std::shared_ptr<T>& ptr, const char* _file, const int _line);
+
+	template <typename T, typename D>
+	void AssertXPtr(const std::unique_ptr<T, D>& ptr, const char* _file, const int _line);
+
+
 #ifdef KHUTILS_ASSERTION_WITH_VALUE_PTR
 	template <typename T>
 	void AssertValidValuePtr(const smart_pointer::value_ptr<T>& ptr, const char* _file, const int _line);
+
+	template <typename T>
+	void AssertXPtr(const smart_pointer::value_ptr<T>& ptr, const char* _file, const int _line);
 #endif	// KHUTILS_ASSERTION_WITH_VALUE_PTR
 
 }	// namespace khutils
@@ -47,6 +60,7 @@ namespace khutils
 #define KHUTILS_ASSERT_PTR(pointer) khutils::AssertValidPtr((pointer), __FILE__, __LINE__);
 #define KHUTILS_ASSERT_SPTR(pointer) khutils::AssertValidSharedPtr((pointer), __FILE__, __LINE__);
 #define KHUTILS_ASSERT_UPTR(pointer) khutils::AssertValidUniquePtr((pointer), __FILE__, __LINE__);
+#define KHUTILS_ASSERT_XPTR(pointer) khutils::AssertXPtr((pointer), __FILE__, __LINE__);
 
 #define KHUTILS_ASSERT_EXPR(variable, expr)                                                                            \
 	{                                                                                                                  \
@@ -205,6 +219,23 @@ namespace khutils
 		}
 	}
 
+	template <typename T>
+	void AssertXPtr(const T* ptr, const char* _file, const int _line)
+	{
+		AssertValidPtr(ptr, _file, _line);
+	}
+
+	template <typename T>
+	void AssertXPtr(const std::shared_ptr<T>& ptr, const char* _file, const int _line)
+	{
+		AssertValidSharedPtr(ptr, _file, _line);
+	}
+
+	template <typename T, typename D>
+	void AssertXPtr(const std::unique_ptr<T, D>& ptr, const char* _file, const int _line)
+	{
+		AssertValidUniquePtr(ptr, _file, _line);
+	}
 
 #ifdef KHUTILS_ASSERTION_WITH_VALUE_PTR
 	template <typename T>
@@ -221,6 +252,12 @@ namespace khutils
 			logger::error() << "assertion in " << _file << " at line " << _line;
 			throw;
 		}
+	}
+
+	template <typename T>
+	void AssertXPtr(const smart_pointer::value_ptr<T>& ptr, const char* _file, const int _line)
+	{
+		AssertValidValuePtr(ptr, _file, _line);
 	}
 #endif	// KHUTILS_ASSERTION_WITH_VALUE_PTR
 
