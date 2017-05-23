@@ -61,7 +61,7 @@ namespace khutils
 	{
 		typedef _memorywriter_state<ByteForwardIterator>				 state;
 		std::reference_wrapper<_memorywriter_state<ByteForwardIterator>> m_ih;
-		static_assert(sizeof(decltype(*(m_ih.get().begin))) == 1);
+		static_assert(sizeof(decltype(*(m_ih.get().begin))) == 1, "not a 1 byte sized datatype");
 
 		_memorywriter()						= delete;
 		_memorywriter(const _memorywriter&) = default;

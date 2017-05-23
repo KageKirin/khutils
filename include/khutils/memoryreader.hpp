@@ -63,7 +63,7 @@ namespace khutils
 	{
 		typedef _memoryreader_state<ByteForwardIterator>				 state;
 		std::reference_wrapper<_memoryreader_state<ByteForwardIterator>> m_ih;
-		static_assert(sizeof(decltype(*(m_ih.get().begin))) == 1);
+		static_assert(sizeof(decltype(*(m_ih.get().begin))) == 1, "not a 1 byte sized datatype");
 
 		_memoryreader()						= delete;
 		_memoryreader(const _memoryreader&) = default;
