@@ -31,6 +31,7 @@ namespace khutils
 	void dumpBufferToStream(const uint8_t* data, size_t length, std::ostream& outs);
 
 	std::vector<uint8_t> openBufferFromFile(const FilePtr& file);
+	std::vector<uint8_t> openBufferFromFile(FILE* file);
 	void dumpBufferToFile(const std::vector<uint8_t>& databuffer, const FilePtr& file);
 	void dumpBufferToFile(const uint8_t* data, size_t length, const FilePtr& file);
 
@@ -116,6 +117,25 @@ namespace khutils
 
 	//--------------------------------
 
+	std::vector<uint8_t> openBufferFromFile(const FilePtr& file)
+	{
+		KHUTILS_ASSERT_PTR(file);
+		return openBufferFromFile(file.get());
+	}
+
+	std::vector<uint8_t> openBufferFromFile(FILE* file)
+	{
+		KHUTILS_ASSERT_PTR(file);
+		fseek(file, 0, SEEK_END);
+		size_t length = ftell(file);
+		rewind(file);
+
+		std::vector<uint8_t> databuffer(length);
+		fread(reinterpret_cast<char*>(&databuffer[0]), length, 1, file);
+		return databuffer;
+	}
+
+	//--------------------------------
 	void dumpBufferToLocalFile(const std::vector<uint8_t>& databuffer, const std::string& filename)
 	{
 		dumpBufferToLocalFile(databuffer.data(), databuffer.size(), filename);
