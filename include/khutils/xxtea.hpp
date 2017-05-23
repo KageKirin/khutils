@@ -157,4 +157,51 @@ go_bandit([]() {
 
 #endif	// defined(KHUTILS_XXTEA_UNITTEST)
 
+#if defined(KHUTILS_XXTEA_ENCODER_TOOL) || defined(KHUTILS_XXTEA_DECODER_TOOL)
+
+#include "file.hpp"
+#include <iostream>
+
+int main(int argc, char** argv)
+{
+	using namespace khutils;
+
+	std::vector<uint8_t> buf;
+	if (argc < 2)
+	{
+		buf = openBufferFromStreamProgressive(std::cin);
+	}
+	else
+	{
+		buf = openLocalFileBuffer(argv[1]);
+	}
+
+	if (buf.empty())
+	{
+		return -1;
+	}
+
+	auto data
+#if defined(KHUTILS_XXTEA_ENCODER_TOOL)
+	  = xxtea_encode(buf);
+#elif defined(KHUTILS_XXTEA_DECODER_TOOL)
+	  = xxtea_decode_data(buf);
+#endif	//
+
+
+	if (argc == 3)
+	{
+		dumpBufferToLocalFile(data, argv[2]);
+	}
+	else
+	{
+		dumpBufferToStream(data, std::cout);
+	}
+
+	return 0;
+}
+
+#endif	// defined(KHUTILS_XXTEA_ENCODER_TOOL) || defined(KHUTILS_XXTEA_DECODER_TOOL)
+
+
 #endif	// !KHUTILS_XXTEA_HPP_INC
