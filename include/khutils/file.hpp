@@ -27,11 +27,14 @@ namespace khutils
 	void dumpBufferToLocalFile(const uint8_t* data, size_t length, const std::string& filename);
 
 	std::vector<uint8_t> openBufferFromStream(std::istream& ins);
+	std::vector<uint8_t> openBufferFromStreamProgressive(std::istream& ins);
 	void dumpBufferToStream(const std::vector<uint8_t>& databuffer, std::ostream& outs);
 	void dumpBufferToStream(const uint8_t* data, size_t length, std::ostream& outs);
 
 	std::vector<uint8_t> openBufferFromFile(const FilePtr& file);
 	std::vector<uint8_t> openBufferFromFile(FILE* file);
+	std::vector<uint8_t> openBufferFromFileProgressive(const FilePtr& file);
+	std::vector<uint8_t> openBufferFromFileProgressive(FILE* file);
 	void dumpBufferToFile(const std::vector<uint8_t>& databuffer, const FilePtr& file);
 	void dumpBufferToFile(const uint8_t* data, size_t length, const FilePtr& file);
 
@@ -136,6 +139,41 @@ namespace khutils
 	}
 
 	//--------------------------------
+
+	std::vector<uint8_t> openBufferFromStreamProgressive(std::istream& ins)
+	{
+		std::vector<uint8_t> databuffer;
+		auto				 bi = std::back_inserter(databuffer);
+		while (ins)
+		{
+			ins.read(reinterpret_cast<char*>(&*bi), 1);
+			++bi;
+		}
+		return databuffer;
+	}
+
+	//--------------------------------
+
+	std::vector<uint8_t> openBufferFromFileProgressive(const FilePtr& file)
+	{
+		KHUTILS_ASSERT_PTR(file);
+		return openBufferFromFileProgressive(file.get());
+	}
+
+	std::vector<uint8_t> openBufferFromFileProgressive(FILE* file)
+	{
+		std::vector<uint8_t> databuffer;
+		auto				 bi = std::back_inserter(databuffer);
+		while (!feof(file))
+		{
+			fread(reinterpret_cast<char*>(&*bi), 1, 1, file);
+			++bi;
+		}
+		return databuffer;
+	}
+
+	//--------------------------------
+
 	void dumpBufferToLocalFile(const std::vector<uint8_t>& databuffer, const std::string& filename)
 	{
 		dumpBufferToLocalFile(databuffer.data(), databuffer.size(), filename);
