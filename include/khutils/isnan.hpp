@@ -100,6 +100,12 @@ void khutils::check_NaN(const int64_t& d)
 
 #include <cmath>
 
+#ifdef WIN32
+#define SAFE_ISNAN_TYPE(x) ((double)x)
+#else
+#define SAFE_ISNAN_TYPE(x) (x)
+#endif	// WIN32
+
 bool khutils::isNaN(const long double& d)
 {
 	return std::fpclassify(d) == FP_NAN;
@@ -117,42 +123,42 @@ bool khutils::isNaN(const float& d)
 
 bool khutils::isNaN(const uint8_t& d)
 {
-	return std::fpclassify(d) == FP_NAN;
+	return std::fpclassify(SAFE_ISNAN_TYPE(d)) == FP_NAN;
 }
 
 bool khutils::isNaN(const uint16_t& d)
 {
-	return std::fpclassify(d) == FP_NAN;
+	return std::fpclassify(SAFE_ISNAN_TYPE(d)) == FP_NAN;
 }
 
 bool khutils::isNaN(const uint32_t& d)
 {
-	return std::fpclassify(d) == FP_NAN;
+	return std::fpclassify(SAFE_ISNAN_TYPE(d)) == FP_NAN;
 }
 
 bool khutils::isNaN(const uint64_t& d)
 {
-	return std::fpclassify(d) == FP_NAN;
+	return std::fpclassify(SAFE_ISNAN_TYPE(d)) == FP_NAN;
 }
 
 bool khutils::isNaN(const int8_t& d)
 {
-	return std::fpclassify(d) == FP_NAN;
+	return std::fpclassify(SAFE_ISNAN_TYPE(d)) == FP_NAN;
 }
 
 bool khutils::isNaN(const int16_t& d)
 {
-	return std::fpclassify(d) == FP_NAN;
+	return std::fpclassify(SAFE_ISNAN_TYPE(d)) == FP_NAN;
 }
 
 bool khutils::isNaN(const int32_t& d)
 {
-	return std::fpclassify(d) == FP_NAN;
+	return std::fpclassify(SAFE_ISNAN_TYPE(d)) == FP_NAN;
 }
 
 bool khutils::isNaN(const int64_t& d)
 {
-	return std::fpclassify(d) == FP_NAN;
+	return std::fpclassify(SAFE_ISNAN_TYPE(d)) == FP_NAN;
 }
 
 #endif	// defined (KHUTILS_ISNAN_IMPL)
