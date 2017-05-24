@@ -1,7 +1,11 @@
 #ifndef KHUTILS_FBX_ISNAN_HPP_INC
 #define KHUTILS_FBX_ISNAN_HPP_INC
 
-#include "../isnan.hpp"
+#if defined(KHUTILS_FBX_ISNAN_IMPL)
+#define KHUTILS_ISNAN_INLINE
+#endif	// defined(KHUTILS_FBX_ISNAN_IMPL)
+
+#include "khutils/isnan.hpp"
 #include <fbxsdk.h>
 
 namespace khutils

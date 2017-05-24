@@ -1,7 +1,11 @@
 #ifndef KHUTILS_GLM_ISNAN_HPP_INC
 #define KHUTILS_GLM_ISNAN_HPP_INC
 
-#include "../isnan.hpp"
+#if defined(KHUTILS_GLM_ISNAN_IMPL)
+#define KHUTILS_ISNAN_INLINE
+#endif	// defined(KHUTILS_GLM_ISNAN_IMPL)
+
+#include "khutils/isnan.hpp"
 #include <glm/fwd.hpp>
 
 namespace khutils
