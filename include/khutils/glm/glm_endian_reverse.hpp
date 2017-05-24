@@ -720,8 +720,8 @@ namespace khutils
 	inline glm::mat2x2 endian_reverse_tpl<glm::mat2x2, endian::order::little, endian::order::big>(glm::mat2x2 x)
 	{
 		return glm::mat2x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::big>(x[1])		//
+		  endian_reverse_tpl<glm::vec2, endian::order::little, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::vec2, endian::order::little, endian::order::big>(x[1])		//
 		};
 	}
 
@@ -729,8 +729,8 @@ namespace khutils
 	inline glm::mat2x3 endian_reverse_tpl<glm::mat2x3, endian::order::little, endian::order::big>(glm::mat2x3 x)
 	{
 		return glm::mat2x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::big>(x[1])		//
+		  endian_reverse_tpl<glm::vec3, endian::order::little, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::vec3, endian::order::little, endian::order::big>(x[1])		//
 		};
 	}
 
@@ -738,8 +738,8 @@ namespace khutils
 	inline glm::mat2x4 endian_reverse_tpl<glm::mat2x4, endian::order::little, endian::order::big>(glm::mat2x4 x)
 	{
 		return glm::mat2x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::big>(x[1])		//
+		  endian_reverse_tpl<glm::vec4, endian::order::little, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::vec4, endian::order::little, endian::order::big>(x[1])		//
 		};
 	}
 
@@ -747,9 +747,9 @@ namespace khutils
 	inline glm::mat3x2 endian_reverse_tpl<glm::mat3x2, endian::order::little, endian::order::big>(glm::mat3x2 x)
 	{
 		return glm::mat3x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::big>(x[2])	//
+		  endian_reverse_tpl<glm::vec2, endian::order::little, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::vec2, endian::order::little, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::vec2, endian::order::little, endian::order::big>(x[2])	//
 		};
 	}
 
@@ -757,9 +757,9 @@ namespace khutils
 	inline glm::mat3x3 endian_reverse_tpl<glm::mat3x3, endian::order::little, endian::order::big>(glm::mat3x3 x)
 	{
 		return glm::mat3x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::big>(x[2])	//
+		  endian_reverse_tpl<glm::vec3, endian::order::little, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::vec3, endian::order::little, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::vec3, endian::order::little, endian::order::big>(x[2])	//
 		};
 	}
 
@@ -767,9 +767,9 @@ namespace khutils
 	inline glm::mat3x4 endian_reverse_tpl<glm::mat3x4, endian::order::little, endian::order::big>(glm::mat3x4 x)
 	{
 		return glm::mat3x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::big>(x[2])	//
+		  endian_reverse_tpl<glm::vec4, endian::order::little, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::vec4, endian::order::little, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::vec4, endian::order::little, endian::order::big>(x[2])	//
 		};
 	}
 
@@ -777,10 +777,10 @@ namespace khutils
 	inline glm::mat4x2 endian_reverse_tpl<glm::mat4x2, endian::order::little, endian::order::big>(glm::mat4x2 x)
 	{
 		return glm::mat4x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::big>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::little, endian::order::big>(x[3])	//
+		  endian_reverse_tpl<glm::vec2, endian::order::little, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::vec2, endian::order::little, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::vec2, endian::order::little, endian::order::big>(x[2]),
+		  endian_reverse_tpl<glm::vec2, endian::order::little, endian::order::big>(x[3])	//
 		};
 	}
 
@@ -788,10 +788,10 @@ namespace khutils
 	inline glm::mat4x3 endian_reverse_tpl<glm::mat4x3, endian::order::little, endian::order::big>(glm::mat4x3 x)
 	{
 		return glm::mat4x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::big>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::little, endian::order::big>(x[3])	//
+		  endian_reverse_tpl<glm::vec3, endian::order::little, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::vec3, endian::order::little, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::vec3, endian::order::little, endian::order::big>(x[2]),
+		  endian_reverse_tpl<glm::vec3, endian::order::little, endian::order::big>(x[3])	//
 		};
 	}
 
@@ -799,10 +799,10 @@ namespace khutils
 	inline glm::mat4x4 endian_reverse_tpl<glm::mat4x4, endian::order::little, endian::order::big>(glm::mat4x4 x)
 	{
 		return glm::mat4x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::big>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::little, endian::order::big>(x[3])	//
+		  endian_reverse_tpl<glm::vec4, endian::order::little, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::vec4, endian::order::little, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::vec4, endian::order::little, endian::order::big>(x[2]),
+		  endian_reverse_tpl<glm::vec4, endian::order::little, endian::order::big>(x[3])	//
 		};
 	}
 
@@ -810,8 +810,8 @@ namespace khutils
 	inline glm::dmat2x2 endian_reverse_tpl<glm::dmat2x2, endian::order::little, endian::order::big>(glm::dmat2x2 x)
 	{
 		return glm::dmat2x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::big>(x[1])		//
+		  endian_reverse_tpl<glm::dvec2, endian::order::little, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec2, endian::order::little, endian::order::big>(x[1])		//
 		};
 	}
 
@@ -819,8 +819,8 @@ namespace khutils
 	inline glm::dmat2x3 endian_reverse_tpl<glm::dmat2x3, endian::order::little, endian::order::big>(glm::dmat2x3 x)
 	{
 		return glm::dmat2x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::big>(x[1])		//
+		  endian_reverse_tpl<glm::dvec3, endian::order::little, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec3, endian::order::little, endian::order::big>(x[1])		//
 		};
 	}
 
@@ -828,8 +828,8 @@ namespace khutils
 	inline glm::dmat2x4 endian_reverse_tpl<glm::dmat2x4, endian::order::little, endian::order::big>(glm::dmat2x4 x)
 	{
 		return glm::dmat2x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::big>(x[1])		//
+		  endian_reverse_tpl<glm::dvec4, endian::order::little, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec4, endian::order::little, endian::order::big>(x[1])		//
 		};
 	}
 
@@ -837,9 +837,9 @@ namespace khutils
 	inline glm::dmat3x2 endian_reverse_tpl<glm::dmat3x2, endian::order::little, endian::order::big>(glm::dmat3x2 x)
 	{
 		return glm::dmat3x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::big>(x[2])	//
+		  endian_reverse_tpl<glm::dvec2, endian::order::little, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec2, endian::order::little, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::dvec2, endian::order::little, endian::order::big>(x[2])	//
 		};
 	}
 
@@ -847,9 +847,9 @@ namespace khutils
 	inline glm::dmat3x3 endian_reverse_tpl<glm::dmat3x3, endian::order::little, endian::order::big>(glm::dmat3x3 x)
 	{
 		return glm::dmat3x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::big>(x[2])	//
+		  endian_reverse_tpl<glm::dvec3, endian::order::little, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec3, endian::order::little, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::dvec3, endian::order::little, endian::order::big>(x[2])	//
 		};
 	}
 
@@ -857,9 +857,9 @@ namespace khutils
 	inline glm::dmat3x4 endian_reverse_tpl<glm::dmat3x4, endian::order::little, endian::order::big>(glm::dmat3x4 x)
 	{
 		return glm::dmat3x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::big>(x[2])	//
+		  endian_reverse_tpl<glm::dvec4, endian::order::little, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec4, endian::order::little, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::dvec4, endian::order::little, endian::order::big>(x[2])	//
 		};
 	}
 
@@ -867,10 +867,10 @@ namespace khutils
 	inline glm::dmat4x2 endian_reverse_tpl<glm::dmat4x2, endian::order::little, endian::order::big>(glm::dmat4x2 x)
 	{
 		return glm::dmat4x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::big>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::little, endian::order::big>(x[3])	//
+		  endian_reverse_tpl<glm::dvec2, endian::order::little, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec2, endian::order::little, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::dvec2, endian::order::little, endian::order::big>(x[2]),
+		  endian_reverse_tpl<glm::dvec2, endian::order::little, endian::order::big>(x[3])	//
 		};
 	}
 
@@ -878,10 +878,10 @@ namespace khutils
 	inline glm::dmat4x3 endian_reverse_tpl<glm::dmat4x3, endian::order::little, endian::order::big>(glm::dmat4x3 x)
 	{
 		return glm::dmat4x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::big>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::little, endian::order::big>(x[3])	//
+		  endian_reverse_tpl<glm::dvec3, endian::order::little, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec3, endian::order::little, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::dvec3, endian::order::little, endian::order::big>(x[2]),
+		  endian_reverse_tpl<glm::dvec3, endian::order::little, endian::order::big>(x[3])	//
 		};
 	}
 
@@ -889,10 +889,10 @@ namespace khutils
 	inline glm::dmat4x4 endian_reverse_tpl<glm::dmat4x4, endian::order::little, endian::order::big>(glm::dmat4x4 x)
 	{
 		return glm::dmat4x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::big>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::little, endian::order::big>(x[3])	//
+		  endian_reverse_tpl<glm::dvec4, endian::order::little, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec4, endian::order::little, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::dvec4, endian::order::little, endian::order::big>(x[2]),
+		  endian_reverse_tpl<glm::dvec4, endian::order::little, endian::order::big>(x[3])	//
 		};
 	}
 
@@ -1163,8 +1163,8 @@ namespace khutils
 	inline glm::mat2x2 endian_reverse_tpl<glm::mat2x2, endian::order::big, endian::order::little>(glm::mat2x2 x)
 	{
 		return glm::mat2x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::little>(x[1])		//
+		  endian_reverse_tpl<glm::vec2, endian::order::big, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::vec2, endian::order::big, endian::order::little>(x[1])		//
 		};
 	}
 
@@ -1172,8 +1172,8 @@ namespace khutils
 	inline glm::mat2x3 endian_reverse_tpl<glm::mat2x3, endian::order::big, endian::order::little>(glm::mat2x3 x)
 	{
 		return glm::mat2x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::little>(x[1])		//
+		  endian_reverse_tpl<glm::vec3, endian::order::big, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::vec3, endian::order::big, endian::order::little>(x[1])		//
 		};
 	}
 
@@ -1181,8 +1181,8 @@ namespace khutils
 	inline glm::mat2x4 endian_reverse_tpl<glm::mat2x4, endian::order::big, endian::order::little>(glm::mat2x4 x)
 	{
 		return glm::mat2x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::little>(x[1])		//
+		  endian_reverse_tpl<glm::vec4, endian::order::big, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::vec4, endian::order::big, endian::order::little>(x[1])		//
 		};
 	}
 
@@ -1190,9 +1190,9 @@ namespace khutils
 	inline glm::mat3x2 endian_reverse_tpl<glm::mat3x2, endian::order::big, endian::order::little>(glm::mat3x2 x)
 	{
 		return glm::mat3x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::little>(x[2])	//
+		  endian_reverse_tpl<glm::vec2, endian::order::big, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::vec2, endian::order::big, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::vec2, endian::order::big, endian::order::little>(x[2])	//
 		};
 	}
 
@@ -1200,9 +1200,9 @@ namespace khutils
 	inline glm::mat3x3 endian_reverse_tpl<glm::mat3x3, endian::order::big, endian::order::little>(glm::mat3x3 x)
 	{
 		return glm::mat3x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::little>(x[2])	//
+		  endian_reverse_tpl<glm::vec3, endian::order::big, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::vec3, endian::order::big, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::vec3, endian::order::big, endian::order::little>(x[2])	//
 		};
 	}
 
@@ -1210,9 +1210,9 @@ namespace khutils
 	inline glm::mat3x4 endian_reverse_tpl<glm::mat3x4, endian::order::big, endian::order::little>(glm::mat3x4 x)
 	{
 		return glm::mat3x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::little>(x[2])	//
+		  endian_reverse_tpl<glm::vec4, endian::order::big, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::vec4, endian::order::big, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::vec4, endian::order::big, endian::order::little>(x[2])	//
 		};
 	}
 
@@ -1220,10 +1220,10 @@ namespace khutils
 	inline glm::mat4x2 endian_reverse_tpl<glm::mat4x2, endian::order::big, endian::order::little>(glm::mat4x2 x)
 	{
 		return glm::mat4x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::little>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::big, endian::order::little>(x[3])	//
+		  endian_reverse_tpl<glm::vec2, endian::order::big, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::vec2, endian::order::big, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::vec2, endian::order::big, endian::order::little>(x[2]),
+		  endian_reverse_tpl<glm::vec2, endian::order::big, endian::order::little>(x[3])	//
 		};
 	}
 
@@ -1231,10 +1231,10 @@ namespace khutils
 	inline glm::mat4x3 endian_reverse_tpl<glm::mat4x3, endian::order::big, endian::order::little>(glm::mat4x3 x)
 	{
 		return glm::mat4x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::little>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::big, endian::order::little>(x[3])	//
+		  endian_reverse_tpl<glm::vec3, endian::order::big, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::vec3, endian::order::big, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::vec3, endian::order::big, endian::order::little>(x[2]),
+		  endian_reverse_tpl<glm::vec3, endian::order::big, endian::order::little>(x[3])	//
 		};
 	}
 
@@ -1242,10 +1242,10 @@ namespace khutils
 	inline glm::mat4x4 endian_reverse_tpl<glm::mat4x4, endian::order::big, endian::order::little>(glm::mat4x4 x)
 	{
 		return glm::mat4x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::little>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::big, endian::order::little>(x[3])	//
+		  endian_reverse_tpl<glm::vec4, endian::order::big, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::vec4, endian::order::big, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::vec4, endian::order::big, endian::order::little>(x[2]),
+		  endian_reverse_tpl<glm::vec4, endian::order::big, endian::order::little>(x[3])	//
 		};
 	}
 
@@ -1253,8 +1253,8 @@ namespace khutils
 	inline glm::dmat2x2 endian_reverse_tpl<glm::dmat2x2, endian::order::big, endian::order::little>(glm::dmat2x2 x)
 	{
 		return glm::dmat2x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::little>(x[1])		//
+		  endian_reverse_tpl<glm::dvec2, endian::order::big, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec2, endian::order::big, endian::order::little>(x[1])		//
 		};
 	}
 
@@ -1262,8 +1262,8 @@ namespace khutils
 	inline glm::dmat2x3 endian_reverse_tpl<glm::dmat2x3, endian::order::big, endian::order::little>(glm::dmat2x3 x)
 	{
 		return glm::dmat2x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::little>(x[1])		//
+		  endian_reverse_tpl<glm::dvec3, endian::order::big, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec3, endian::order::big, endian::order::little>(x[1])		//
 		};
 	}
 
@@ -1271,8 +1271,8 @@ namespace khutils
 	inline glm::dmat2x4 endian_reverse_tpl<glm::dmat2x4, endian::order::big, endian::order::little>(glm::dmat2x4 x)
 	{
 		return glm::dmat2x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::little>(x[1])		//
+		  endian_reverse_tpl<glm::dvec4, endian::order::big, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec4, endian::order::big, endian::order::little>(x[1])		//
 		};
 	}
 
@@ -1280,9 +1280,9 @@ namespace khutils
 	inline glm::dmat3x2 endian_reverse_tpl<glm::dmat3x2, endian::order::big, endian::order::little>(glm::dmat3x2 x)
 	{
 		return glm::dmat3x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::little>(x[2])	//
+		  endian_reverse_tpl<glm::dvec2, endian::order::big, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec2, endian::order::big, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::dvec2, endian::order::big, endian::order::little>(x[2])	//
 		};
 	}
 
@@ -1290,9 +1290,9 @@ namespace khutils
 	inline glm::dmat3x3 endian_reverse_tpl<glm::dmat3x3, endian::order::big, endian::order::little>(glm::dmat3x3 x)
 	{
 		return glm::dmat3x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::little>(x[2])	//
+		  endian_reverse_tpl<glm::dvec3, endian::order::big, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec3, endian::order::big, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::dvec3, endian::order::big, endian::order::little>(x[2])	//
 		};
 	}
 
@@ -1300,9 +1300,9 @@ namespace khutils
 	inline glm::dmat3x4 endian_reverse_tpl<glm::dmat3x4, endian::order::big, endian::order::little>(glm::dmat3x4 x)
 	{
 		return glm::dmat3x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::little>(x[2])	//
+		  endian_reverse_tpl<glm::dvec4, endian::order::big, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec4, endian::order::big, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::dvec4, endian::order::big, endian::order::little>(x[2])	//
 		};
 	}
 
@@ -1310,10 +1310,10 @@ namespace khutils
 	inline glm::dmat4x2 endian_reverse_tpl<glm::dmat4x2, endian::order::big, endian::order::little>(glm::dmat4x2 x)
 	{
 		return glm::dmat4x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::little>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::big, endian::order::little>(x[3])	//
+		  endian_reverse_tpl<glm::dvec2, endian::order::big, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec2, endian::order::big, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::dvec2, endian::order::big, endian::order::little>(x[2]),
+		  endian_reverse_tpl<glm::dvec2, endian::order::big, endian::order::little>(x[3])	//
 		};
 	}
 
@@ -1321,10 +1321,10 @@ namespace khutils
 	inline glm::dmat4x3 endian_reverse_tpl<glm::dmat4x3, endian::order::big, endian::order::little>(glm::dmat4x3 x)
 	{
 		return glm::dmat4x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::little>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::big, endian::order::little>(x[3])	//
+		  endian_reverse_tpl<glm::dvec3, endian::order::big, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec3, endian::order::big, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::dvec3, endian::order::big, endian::order::little>(x[2]),
+		  endian_reverse_tpl<glm::dvec3, endian::order::big, endian::order::little>(x[3])	//
 		};
 	}
 
@@ -1332,10 +1332,10 @@ namespace khutils
 	inline glm::dmat4x4 endian_reverse_tpl<glm::dmat4x4, endian::order::big, endian::order::little>(glm::dmat4x4 x)
 	{
 		return glm::dmat4x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::little>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::big, endian::order::little>(x[3])	//
+		  endian_reverse_tpl<glm::dvec4, endian::order::big, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec4, endian::order::big, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::dvec4, endian::order::big, endian::order::little>(x[2]),
+		  endian_reverse_tpl<glm::dvec4, endian::order::big, endian::order::little>(x[3])	//
 		};
 	}
 
@@ -1606,8 +1606,8 @@ namespace khutils
 	inline glm::mat2x2 endian_reverse_tpl<glm::mat2x2, endian::order::little, endian::order::little>(glm::mat2x2 x)
 	{
 		return glm::mat2x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::little>(x[1])		//
+		  endian_reverse_tpl<glm::vec2, endian::order::little, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::vec2, endian::order::little, endian::order::little>(x[1])		//
 		};
 	}
 
@@ -1615,8 +1615,8 @@ namespace khutils
 	inline glm::mat2x3 endian_reverse_tpl<glm::mat2x3, endian::order::little, endian::order::little>(glm::mat2x3 x)
 	{
 		return glm::mat2x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::little>(x[1])		//
+		  endian_reverse_tpl<glm::vec3, endian::order::little, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::vec3, endian::order::little, endian::order::little>(x[1])		//
 		};
 	}
 
@@ -1624,8 +1624,8 @@ namespace khutils
 	inline glm::mat2x4 endian_reverse_tpl<glm::mat2x4, endian::order::little, endian::order::little>(glm::mat2x4 x)
 	{
 		return glm::mat2x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::little>(x[1])		//
+		  endian_reverse_tpl<glm::vec4, endian::order::little, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::vec4, endian::order::little, endian::order::little>(x[1])		//
 		};
 	}
 
@@ -1633,9 +1633,9 @@ namespace khutils
 	inline glm::mat3x2 endian_reverse_tpl<glm::mat3x2, endian::order::little, endian::order::little>(glm::mat3x2 x)
 	{
 		return glm::mat3x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::little>(x[2])	//
+		  endian_reverse_tpl<glm::vec2, endian::order::little, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::vec2, endian::order::little, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::vec2, endian::order::little, endian::order::little>(x[2])	//
 		};
 	}
 
@@ -1643,9 +1643,9 @@ namespace khutils
 	inline glm::mat3x3 endian_reverse_tpl<glm::mat3x3, endian::order::little, endian::order::little>(glm::mat3x3 x)
 	{
 		return glm::mat3x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::little>(x[2])	//
+		  endian_reverse_tpl<glm::vec3, endian::order::little, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::vec3, endian::order::little, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::vec3, endian::order::little, endian::order::little>(x[2])	//
 		};
 	}
 
@@ -1653,9 +1653,9 @@ namespace khutils
 	inline glm::mat3x4 endian_reverse_tpl<glm::mat3x4, endian::order::little, endian::order::little>(glm::mat3x4 x)
 	{
 		return glm::mat3x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::little>(x[2])	//
+		  endian_reverse_tpl<glm::vec4, endian::order::little, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::vec4, endian::order::little, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::vec4, endian::order::little, endian::order::little>(x[2])	//
 		};
 	}
 
@@ -1663,10 +1663,10 @@ namespace khutils
 	inline glm::mat4x2 endian_reverse_tpl<glm::mat4x2, endian::order::little, endian::order::little>(glm::mat4x2 x)
 	{
 		return glm::mat4x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::little>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::little, endian::order::little>(x[3])	//
+		  endian_reverse_tpl<glm::vec2, endian::order::little, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::vec2, endian::order::little, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::vec2, endian::order::little, endian::order::little>(x[2]),
+		  endian_reverse_tpl<glm::vec2, endian::order::little, endian::order::little>(x[3])	//
 		};
 	}
 
@@ -1674,10 +1674,10 @@ namespace khutils
 	inline glm::mat4x3 endian_reverse_tpl<glm::mat4x3, endian::order::little, endian::order::little>(glm::mat4x3 x)
 	{
 		return glm::mat4x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::little>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::little, endian::order::little>(x[3])	//
+		  endian_reverse_tpl<glm::vec3, endian::order::little, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::vec3, endian::order::little, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::vec3, endian::order::little, endian::order::little>(x[2]),
+		  endian_reverse_tpl<glm::vec3, endian::order::little, endian::order::little>(x[3])	//
 		};
 	}
 
@@ -1685,10 +1685,10 @@ namespace khutils
 	inline glm::mat4x4 endian_reverse_tpl<glm::mat4x4, endian::order::little, endian::order::little>(glm::mat4x4 x)
 	{
 		return glm::mat4x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::little>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::little, endian::order::little>(x[3])	//
+		  endian_reverse_tpl<glm::vec4, endian::order::little, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::vec4, endian::order::little, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::vec4, endian::order::little, endian::order::little>(x[2]),
+		  endian_reverse_tpl<glm::vec4, endian::order::little, endian::order::little>(x[3])	//
 		};
 	}
 
@@ -1696,8 +1696,8 @@ namespace khutils
 	inline glm::dmat2x2 endian_reverse_tpl<glm::dmat2x2, endian::order::little, endian::order::little>(glm::dmat2x2 x)
 	{
 		return glm::dmat2x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::little>(x[1])		//
+		  endian_reverse_tpl<glm::dvec2, endian::order::little, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec2, endian::order::little, endian::order::little>(x[1])		//
 		};
 	}
 
@@ -1705,8 +1705,8 @@ namespace khutils
 	inline glm::dmat2x3 endian_reverse_tpl<glm::dmat2x3, endian::order::little, endian::order::little>(glm::dmat2x3 x)
 	{
 		return glm::dmat2x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::little>(x[1])		//
+		  endian_reverse_tpl<glm::dvec3, endian::order::little, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec3, endian::order::little, endian::order::little>(x[1])		//
 		};
 	}
 
@@ -1714,8 +1714,8 @@ namespace khutils
 	inline glm::dmat2x4 endian_reverse_tpl<glm::dmat2x4, endian::order::little, endian::order::little>(glm::dmat2x4 x)
 	{
 		return glm::dmat2x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::little>(x[1])		//
+		  endian_reverse_tpl<glm::dvec4, endian::order::little, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec4, endian::order::little, endian::order::little>(x[1])		//
 		};
 	}
 
@@ -1723,9 +1723,9 @@ namespace khutils
 	inline glm::dmat3x2 endian_reverse_tpl<glm::dmat3x2, endian::order::little, endian::order::little>(glm::dmat3x2 x)
 	{
 		return glm::dmat3x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::little>(x[2])	//
+		  endian_reverse_tpl<glm::dvec2, endian::order::little, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec2, endian::order::little, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::dvec2, endian::order::little, endian::order::little>(x[2])	//
 		};
 	}
 
@@ -1733,9 +1733,9 @@ namespace khutils
 	inline glm::dmat3x3 endian_reverse_tpl<glm::dmat3x3, endian::order::little, endian::order::little>(glm::dmat3x3 x)
 	{
 		return glm::dmat3x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::little>(x[2])	//
+		  endian_reverse_tpl<glm::dvec3, endian::order::little, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec3, endian::order::little, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::dvec3, endian::order::little, endian::order::little>(x[2])	//
 		};
 	}
 
@@ -1743,9 +1743,9 @@ namespace khutils
 	inline glm::dmat3x4 endian_reverse_tpl<glm::dmat3x4, endian::order::little, endian::order::little>(glm::dmat3x4 x)
 	{
 		return glm::dmat3x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::little>(x[2])	//
+		  endian_reverse_tpl<glm::dvec4, endian::order::little, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec4, endian::order::little, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::dvec4, endian::order::little, endian::order::little>(x[2])	//
 		};
 	}
 
@@ -1753,10 +1753,10 @@ namespace khutils
 	inline glm::dmat4x2 endian_reverse_tpl<glm::dmat4x2, endian::order::little, endian::order::little>(glm::dmat4x2 x)
 	{
 		return glm::dmat4x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::little>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::little, endian::order::little>(x[3])	//
+		  endian_reverse_tpl<glm::dvec2, endian::order::little, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec2, endian::order::little, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::dvec2, endian::order::little, endian::order::little>(x[2]),
+		  endian_reverse_tpl<glm::dvec2, endian::order::little, endian::order::little>(x[3])	//
 		};
 	}
 
@@ -1764,10 +1764,10 @@ namespace khutils
 	inline glm::dmat4x3 endian_reverse_tpl<glm::dmat4x3, endian::order::little, endian::order::little>(glm::dmat4x3 x)
 	{
 		return glm::dmat4x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::little>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::little, endian::order::little>(x[3])	//
+		  endian_reverse_tpl<glm::dvec3, endian::order::little, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec3, endian::order::little, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::dvec3, endian::order::little, endian::order::little>(x[2]),
+		  endian_reverse_tpl<glm::dvec3, endian::order::little, endian::order::little>(x[3])	//
 		};
 	}
 
@@ -1775,10 +1775,10 @@ namespace khutils
 	inline glm::dmat4x4 endian_reverse_tpl<glm::dmat4x4, endian::order::little, endian::order::little>(glm::dmat4x4 x)
 	{
 		return glm::dmat4x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::little, endian::order::little>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::little, endian::order::little>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::little, endian::order::little>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::little, endian::order::little>(x[3])	//
+		  endian_reverse_tpl<glm::dvec4, endian::order::little, endian::order::little>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec4, endian::order::little, endian::order::little>(x[1]),
+		  endian_reverse_tpl<glm::dvec4, endian::order::little, endian::order::little>(x[2]),
+		  endian_reverse_tpl<glm::dvec4, endian::order::little, endian::order::little>(x[3])	//
 		};
 	}
 
@@ -2049,8 +2049,8 @@ namespace khutils
 	inline glm::mat2x2 endian_reverse_tpl<glm::mat2x2, endian::order::big, endian::order::big>(glm::mat2x2 x)
 	{
 		return glm::mat2x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::big>(x[1])		//
+		  endian_reverse_tpl<glm::vec2, endian::order::big, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::vec2, endian::order::big, endian::order::big>(x[1])		//
 		};
 	}
 
@@ -2058,8 +2058,8 @@ namespace khutils
 	inline glm::mat2x3 endian_reverse_tpl<glm::mat2x3, endian::order::big, endian::order::big>(glm::mat2x3 x)
 	{
 		return glm::mat2x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::big>(x[1])		//
+		  endian_reverse_tpl<glm::vec3, endian::order::big, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::vec3, endian::order::big, endian::order::big>(x[1])		//
 		};
 	}
 
@@ -2067,8 +2067,8 @@ namespace khutils
 	inline glm::mat2x4 endian_reverse_tpl<glm::mat2x4, endian::order::big, endian::order::big>(glm::mat2x4 x)
 	{
 		return glm::mat2x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::big>(x[1])		//
+		  endian_reverse_tpl<glm::vec4, endian::order::big, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::vec4, endian::order::big, endian::order::big>(x[1])		//
 		};
 	}
 
@@ -2076,9 +2076,9 @@ namespace khutils
 	inline glm::mat3x2 endian_reverse_tpl<glm::mat3x2, endian::order::big, endian::order::big>(glm::mat3x2 x)
 	{
 		return glm::mat3x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::big>(x[2])	//
+		  endian_reverse_tpl<glm::vec2, endian::order::big, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::vec2, endian::order::big, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::vec2, endian::order::big, endian::order::big>(x[2])	//
 		};
 	}
 
@@ -2086,9 +2086,9 @@ namespace khutils
 	inline glm::mat3x3 endian_reverse_tpl<glm::mat3x3, endian::order::big, endian::order::big>(glm::mat3x3 x)
 	{
 		return glm::mat3x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::big>(x[2])	//
+		  endian_reverse_tpl<glm::vec3, endian::order::big, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::vec3, endian::order::big, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::vec3, endian::order::big, endian::order::big>(x[2])	//
 		};
 	}
 
@@ -2096,9 +2096,9 @@ namespace khutils
 	inline glm::mat3x4 endian_reverse_tpl<glm::mat3x4, endian::order::big, endian::order::big>(glm::mat3x4 x)
 	{
 		return glm::mat3x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::big>(x[2])	//
+		  endian_reverse_tpl<glm::vec4, endian::order::big, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::vec4, endian::order::big, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::vec4, endian::order::big, endian::order::big>(x[2])	//
 		};
 	}
 
@@ -2106,10 +2106,10 @@ namespace khutils
 	inline glm::mat4x2 endian_reverse_tpl<glm::mat4x2, endian::order::big, endian::order::big>(glm::mat4x2 x)
 	{
 		return glm::mat4x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::big>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::big, endian::order::big>(x[3])	//
+		  endian_reverse_tpl<glm::vec2, endian::order::big, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::vec2, endian::order::big, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::vec2, endian::order::big, endian::order::big>(x[2]),
+		  endian_reverse_tpl<glm::vec2, endian::order::big, endian::order::big>(x[3])	//
 		};
 	}
 
@@ -2117,10 +2117,10 @@ namespace khutils
 	inline glm::mat4x3 endian_reverse_tpl<glm::mat4x3, endian::order::big, endian::order::big>(glm::mat4x3 x)
 	{
 		return glm::mat4x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::big>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::big, endian::order::big>(x[3])	//
+		  endian_reverse_tpl<glm::vec3, endian::order::big, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::vec3, endian::order::big, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::vec3, endian::order::big, endian::order::big>(x[2]),
+		  endian_reverse_tpl<glm::vec3, endian::order::big, endian::order::big>(x[3])	//
 		};
 	}
 
@@ -2128,10 +2128,10 @@ namespace khutils
 	inline glm::mat4x4 endian_reverse_tpl<glm::mat4x4, endian::order::big, endian::order::big>(glm::mat4x4 x)
 	{
 		return glm::mat4x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::big>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::big, endian::order::big>(x[3])	//
+		  endian_reverse_tpl<glm::vec4, endian::order::big, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::vec4, endian::order::big, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::vec4, endian::order::big, endian::order::big>(x[2]),
+		  endian_reverse_tpl<glm::vec4, endian::order::big, endian::order::big>(x[3])	//
 		};
 	}
 
@@ -2139,8 +2139,8 @@ namespace khutils
 	inline glm::dmat2x2 endian_reverse_tpl<glm::dmat2x2, endian::order::big, endian::order::big>(glm::dmat2x2 x)
 	{
 		return glm::dmat2x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::big>(x[1])		//
+		  endian_reverse_tpl<glm::dvec2, endian::order::big, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec2, endian::order::big, endian::order::big>(x[1])		//
 		};
 	}
 
@@ -2148,8 +2148,8 @@ namespace khutils
 	inline glm::dmat2x3 endian_reverse_tpl<glm::dmat2x3, endian::order::big, endian::order::big>(glm::dmat2x3 x)
 	{
 		return glm::dmat2x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::big>(x[1])		//
+		  endian_reverse_tpl<glm::dvec3, endian::order::big, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec3, endian::order::big, endian::order::big>(x[1])		//
 		};
 	}
 
@@ -2157,8 +2157,8 @@ namespace khutils
 	inline glm::dmat2x4 endian_reverse_tpl<glm::dmat2x4, endian::order::big, endian::order::big>(glm::dmat2x4 x)
 	{
 		return glm::dmat2x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::big>(x[1])		//
+		  endian_reverse_tpl<glm::dvec4, endian::order::big, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec4, endian::order::big, endian::order::big>(x[1])		//
 		};
 	}
 
@@ -2166,9 +2166,9 @@ namespace khutils
 	inline glm::dmat3x2 endian_reverse_tpl<glm::dmat3x2, endian::order::big, endian::order::big>(glm::dmat3x2 x)
 	{
 		return glm::dmat3x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::big>(x[2])	//
+		  endian_reverse_tpl<glm::dvec2, endian::order::big, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec2, endian::order::big, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::dvec2, endian::order::big, endian::order::big>(x[2])	//
 		};
 	}
 
@@ -2176,9 +2176,9 @@ namespace khutils
 	inline glm::dmat3x3 endian_reverse_tpl<glm::dmat3x3, endian::order::big, endian::order::big>(glm::dmat3x3 x)
 	{
 		return glm::dmat3x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::big>(x[2])	//
+		  endian_reverse_tpl<glm::dvec3, endian::order::big, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec3, endian::order::big, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::dvec3, endian::order::big, endian::order::big>(x[2])	//
 		};
 	}
 
@@ -2186,9 +2186,9 @@ namespace khutils
 	inline glm::dmat3x4 endian_reverse_tpl<glm::dmat3x4, endian::order::big, endian::order::big>(glm::dmat3x4 x)
 	{
 		return glm::dmat3x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::big>(x[2])	//
+		  endian_reverse_tpl<glm::dvec4, endian::order::big, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec4, endian::order::big, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::dvec4, endian::order::big, endian::order::big>(x[2])	//
 		};
 	}
 
@@ -2196,10 +2196,10 @@ namespace khutils
 	inline glm::dmat4x2 endian_reverse_tpl<glm::dmat4x2, endian::order::big, endian::order::big>(glm::dmat4x2 x)
 	{
 		return glm::dmat4x2{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::big>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::big, endian::order::big>(x[3])	//
+		  endian_reverse_tpl<glm::dvec2, endian::order::big, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec2, endian::order::big, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::dvec2, endian::order::big, endian::order::big>(x[2]),
+		  endian_reverse_tpl<glm::dvec2, endian::order::big, endian::order::big>(x[3])	//
 		};
 	}
 
@@ -2207,10 +2207,10 @@ namespace khutils
 	inline glm::dmat4x3 endian_reverse_tpl<glm::dmat4x3, endian::order::big, endian::order::big>(glm::dmat4x3 x)
 	{
 		return glm::dmat4x3{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::big>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::big, endian::order::big>(x[3])	//
+		  endian_reverse_tpl<glm::dvec3, endian::order::big, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec3, endian::order::big, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::dvec3, endian::order::big, endian::order::big>(x[2]),
+		  endian_reverse_tpl<glm::dvec3, endian::order::big, endian::order::big>(x[3])	//
 		};
 	}
 
@@ -2218,10 +2218,10 @@ namespace khutils
 	inline glm::dmat4x4 endian_reverse_tpl<glm::dmat4x4, endian::order::big, endian::order::big>(glm::dmat4x4 x)
 	{
 		return glm::dmat4x4{
-		  endian_reverse_tpl<decltype(x[0]), endian::order::big, endian::order::big>(x[0]),	//
-		  endian_reverse_tpl<decltype(x[1]), endian::order::big, endian::order::big>(x[1]),
-		  endian_reverse_tpl<decltype(x[2]), endian::order::big, endian::order::big>(x[2]),
-		  endian_reverse_tpl<decltype(x[3]), endian::order::big, endian::order::big>(x[3])	//
+		  endian_reverse_tpl<glm::dvec4, endian::order::big, endian::order::big>(x[0]),	//
+		  endian_reverse_tpl<glm::dvec4, endian::order::big, endian::order::big>(x[1]),
+		  endian_reverse_tpl<glm::dvec4, endian::order::big, endian::order::big>(x[2]),
+		  endian_reverse_tpl<glm::dvec4, endian::order::big, endian::order::big>(x[3])	//
 		};
 	}
 
