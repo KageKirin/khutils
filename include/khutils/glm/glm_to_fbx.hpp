@@ -34,7 +34,6 @@ namespace khutils
 #define GLM_SWIZZLE
 #define GLM_FORCE_RADIANS
 #define GLM_PRECISION_HIGHP_FLOAT
-#include <fmt/format.h>
 
 #include "khutils/glm/glm_to_fbx.hpp"
 

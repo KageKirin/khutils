@@ -17,7 +17,6 @@ namespace khutils
 #include <fmt/format.h>
 
 #include "runtime_exceptions.hpp"
-#include "spiritual_compare.hpp"
 
 #include <boost/config/warning_disable.hpp>
 #include <boost/fusion/include/adapt_struct.hpp>

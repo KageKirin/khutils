@@ -75,8 +75,6 @@ namespace YAML
 #define GLM_PRECISION_HIGHP_FLOAT
 #endif	// !GLM_PRECISION_HIGHP_FLOAT
 
-#include <fmt/format.h>
-
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
@@ -87,8 +85,6 @@ namespace YAML
 #define KHUTILS_YAML_IMPLEMENT_CONVERT(type, _subtype, _size)                                                          \
 	KHUTILS_YAML_IMPLEMENT_CONVERT_ENCODE(type, _size)                                                                 \
 	KHUTILS_YAML_IMPLEMENT_CONVERT_DECODE(type, _subtype, _size)
-
-
 
 
 #define KHUTILS_YAML_IMPLEMENT_CONVERT_ENCODE(type, _size)                                                             \
