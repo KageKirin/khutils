@@ -321,6 +321,306 @@ namespace khutils
 		return rx;
 	}
 
+
+	// explicit template
+	template <typename T, endian::order order_out, endian::order order_in = endian::native>
+	T endian_reverse_tpl(T val);
+
+	// explicit overloads (aka, this why we can't have all the nice things)
+	// overload: little -> little
+	template <>
+	inline char endian_reverse_tpl<char, endian::order::little, endian::order::little>(char val)
+	{
+		return val;
+	}
+
+	template <>
+	inline uint8_t endian_reverse_tpl<uint8_t, endian::order::little, endian::order::little>(uint8_t val)
+	{
+		return val;
+	}
+
+	template <>
+	inline int8_t endian_reverse_tpl<int8_t, endian::order::little, endian::order::little>(int8_t val)
+	{
+		return val;
+	}
+
+	template <>
+	inline uint16_t endian_reverse_tpl<uint16_t, endian::order::little, endian::order::little>(uint16_t val)
+	{
+		return val;
+	}
+
+	template <>
+	inline int16_t endian_reverse_tpl<int16_t, endian::order::little, endian::order::little>(int16_t val)
+	{
+		return val;
+	}
+
+	template <>
+	inline uint32_t endian_reverse_tpl<uint32_t, endian::order::little, endian::order::little>(uint32_t val)
+	{
+		return val;
+	}
+
+	template <>
+	inline int32_t endian_reverse_tpl<int32_t, endian::order::little, endian::order::little>(int32_t val)
+	{
+		return val;
+	}
+
+	template <>
+	inline uint64_t endian_reverse_tpl<uint64_t, endian::order::little, endian::order::little>(uint64_t val)
+	{
+		return val;
+	}
+
+	template <>
+	inline int64_t endian_reverse_tpl<int64_t, endian::order::little, endian::order::little>(int64_t val)
+	{
+		return val;
+	}
+
+	template <>
+	inline float endian_reverse_tpl<float, endian::order::little, endian::order::little>(float val)
+	{
+		return val;
+	}
+
+	template <>
+	inline double endian_reverse_tpl<double, endian::order::little, endian::order::little>(double val)
+	{
+		return val;
+	}
+
+	template <>
+	inline long double endian_reverse_tpl<long double, endian::order::little, endian::order::little>(long double val)
+	{
+		return val;
+	}
+
+	// overload: big -> big
+	template <>
+	inline char endian_reverse_tpl<char, endian::order::big, endian::order::big>(char val)
+	{
+		return val;
+	}
+
+	template <>
+	inline uint8_t endian_reverse_tpl<uint8_t, endian::order::big, endian::order::big>(uint8_t val)
+	{
+		return val;
+	}
+
+	template <>
+	inline int8_t endian_reverse_tpl<int8_t, endian::order::big, endian::order::big>(int8_t val)
+	{
+		return val;
+	}
+
+	template <>
+	inline uint16_t endian_reverse_tpl<uint16_t, endian::order::big, endian::order::big>(uint16_t val)
+	{
+		return val;
+	}
+
+	template <>
+	inline int16_t endian_reverse_tpl<int16_t, endian::order::big, endian::order::big>(int16_t val)
+	{
+		return val;
+	}
+
+	template <>
+	inline uint32_t endian_reverse_tpl<uint32_t, endian::order::big, endian::order::big>(uint32_t val)
+	{
+		return val;
+	}
+
+	template <>
+	inline int32_t endian_reverse_tpl<int32_t, endian::order::big, endian::order::big>(int32_t val)
+	{
+		return val;
+	}
+
+	template <>
+	inline uint64_t endian_reverse_tpl<uint64_t, endian::order::big, endian::order::big>(uint64_t val)
+	{
+		return val;
+	}
+
+	template <>
+	inline int64_t endian_reverse_tpl<int64_t, endian::order::big, endian::order::big>(int64_t val)
+	{
+		return val;
+	}
+
+	template <>
+	inline float endian_reverse_tpl<float, endian::order::big, endian::order::big>(float val)
+	{
+		return val;
+	}
+
+	template <>
+	inline double endian_reverse_tpl<double, endian::order::big, endian::order::big>(double val)
+	{
+		return val;
+	}
+
+	template <>
+	inline long double endian_reverse_tpl<long double, endian::order::big, endian::order::big>(long double val)
+	{
+		return val;
+	}
+
+	// overload: little -> big
+	template <>
+	inline char endian_reverse_tpl<char, endian::order::big, endian::order::little>(char val)
+	{
+		return val;
+	}
+
+	template <>
+	inline uint8_t endian_reverse_tpl<uint8_t, endian::order::big, endian::order::little>(uint8_t val)
+	{
+		return val;
+	}
+
+	template <>
+	inline int8_t endian_reverse_tpl<int8_t, endian::order::big, endian::order::little>(int8_t val)
+	{
+		return val;
+	}
+
+	template <>
+	inline uint16_t endian_reverse_tpl<uint16_t, endian::order::big, endian::order::little>(uint16_t val)
+	{
+		return flip_bytes(val);
+	}
+
+	template <>
+	inline int16_t endian_reverse_tpl<int16_t, endian::order::big, endian::order::little>(int16_t val)
+	{
+		return flip_bytes(val);
+	}
+
+	template <>
+	inline uint32_t endian_reverse_tpl<uint32_t, endian::order::big, endian::order::little>(uint32_t val)
+	{
+		return flip_bytes(val);
+	}
+
+	template <>
+	inline int32_t endian_reverse_tpl<int32_t, endian::order::big, endian::order::little>(int32_t val)
+	{
+		return flip_bytes(val);
+	}
+
+	template <>
+	inline uint64_t endian_reverse_tpl<uint64_t, endian::order::big, endian::order::little>(uint64_t val)
+	{
+		return flip_bytes(val);
+	}
+
+	template <>
+	inline int64_t endian_reverse_tpl<int64_t, endian::order::big, endian::order::little>(int64_t val)
+	{
+		return flip_bytes(val);
+	}
+
+	template <>
+	inline float endian_reverse_tpl<float, endian::order::big, endian::order::little>(float val)
+	{
+		return flip_bytes(val);
+	}
+
+	template <>
+	inline double endian_reverse_tpl<double, endian::order::big, endian::order::little>(double val)
+	{
+		return flip_bytes(val);
+	}
+
+	template <>
+	inline long double endian_reverse_tpl<long double, endian::order::big, endian::order::little>(long double val)
+	{
+		return flip_bytes(val);
+	}
+
+
+	// overload: big -> little
+	template <>
+	inline char endian_reverse_tpl<char, endian::order::little, endian::order::big>(char val)
+	{
+		return val;
+	}
+
+	template <>
+	inline uint8_t endian_reverse_tpl<uint8_t, endian::order::little, endian::order::big>(uint8_t val)
+	{
+		return val;
+	}
+
+	template <>
+	inline int8_t endian_reverse_tpl<int8_t, endian::order::little, endian::order::big>(int8_t val)
+	{
+		return val;
+	}
+
+	template <>
+	inline uint16_t endian_reverse_tpl<uint16_t, endian::order::little, endian::order::big>(uint16_t val)
+	{
+		return flip_bytes(val);
+	}
+
+	template <>
+	inline int16_t endian_reverse_tpl<int16_t, endian::order::little, endian::order::big>(int16_t val)
+	{
+		return flip_bytes(val);
+	}
+
+	template <>
+	inline uint32_t endian_reverse_tpl<uint32_t, endian::order::little, endian::order::big>(uint32_t val)
+	{
+		return flip_bytes(val);
+	}
+
+	template <>
+	inline int32_t endian_reverse_tpl<int32_t, endian::order::little, endian::order::big>(int32_t val)
+	{
+		return flip_bytes(val);
+	}
+
+	template <>
+	inline uint64_t endian_reverse_tpl<uint64_t, endian::order::little, endian::order::big>(uint64_t val)
+	{
+		return flip_bytes(val);
+	}
+
+	template <>
+	inline int64_t endian_reverse_tpl<int64_t, endian::order::little, endian::order::big>(int64_t val)
+	{
+		return flip_bytes(val);
+	}
+
+	template <>
+	inline float endian_reverse_tpl<float, endian::order::little, endian::order::big>(float val)
+	{
+		return flip_bytes(val);
+	}
+
+	template <>
+	inline double endian_reverse_tpl<double, endian::order::little, endian::order::big>(double val)
+	{
+		return flip_bytes(val);
+	}
+
+	template <>
+	inline long double endian_reverse_tpl<long double, endian::order::little, endian::order::big>(long double val)
+	{
+		return flip_bytes(val);
+	}
+
+
 }	// namespace khutils
 
 #endif	// !KHUTILS_ENDIAN_HPP_INC

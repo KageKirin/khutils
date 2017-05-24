@@ -25,13 +25,13 @@ namespace khutils
 		template <typename T>
 		static T read_swap(T from)
 		{
-			return endian_reverse<_order, endian::native>(from);
+			return endian_reverse_tpl<T, _order, endian::native>(from);
 		}
 
 		template <typename T>
 		static T write_swap(T from)
 		{
-			return endian_reverse<endian::native, _order>(from);
+			return endian_reverse_tpl<T, endian::native, _order>(from);
 		}
 
 		template <typename OutT, typename InT>
