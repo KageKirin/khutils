@@ -5,27 +5,25 @@
 //! include wisely to keep compile times minimal
 
 #include "khutils/base_handler.hpp"
+#include "khutils/endian.hpp"
 #include "khutils/typeconversion.hpp"
 
-#include <boost/endian/conversion.hpp>
 #include <functional>
 #include <ostream>
 #include <vector>
 
 namespace khutils
 {
-	using boost::endian::order;
-
 	//! stream writer
 	//! wraps ostream.write in an endian-aware
 	//! and bitstream-fitting manner
 	//! usage: use typedef'ed version (see below)
-	template <order _order>
+	template <endian::order _order>
 	struct _streamwriter;
 
-	using streamwriter				 = _streamwriter<order::native>;
-	using little_endian_streamwriter = _streamwriter<order::little>;
-	using big_endian_streamwriter	= _streamwriter<order::big>;
+	using streamwriter				 = _streamwriter<endian::native>;
+	using little_endian_streamwriter = _streamwriter<endian::order::little>;
+	using big_endian_streamwriter	= _streamwriter<endian::order::big>;
 
 	struct streamwriter_trait
 	{
@@ -34,7 +32,7 @@ namespace khutils
 		typedef big_endian_streamwriter	big_endian_writer;
 	};
 
-	template <order _order>
+	template <endian::order _order>
 	struct _streamwriter : base_handler_trait<_order>
 	{
 		std::ostream& m_os;

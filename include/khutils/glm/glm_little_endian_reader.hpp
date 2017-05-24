@@ -3,24 +3,22 @@
 
 #include "khutils/glm/glm_endian_reverse.hpp"
 
+#include "khutils/endian.hpp"
 #include "khutils/filereader.hpp"
 #include "khutils/memoryreader.hpp"
-#include "khutils/streamreader.hpp"
-
 #include "khutils/reader_overload.hpp"
+#include "khutils/streamreader.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include <boost/endian/conversion.hpp>
 
 namespace khutils
 {
-	using boost::endian::order;
-
 #define KUTILS_LITTLE_ENDIAN_READER_SEQ                                                                                \
 	(little_endian_streamreader)(little_endian_filereader)(                                                            \
-	  little_endian_memoryreader<char*>)(little_endian_memoryreader<uint8_t*>)(little_endian_memoryreader<std::vector<uint8_t>::iterator>)(little_endian_memoryreader<std::vector<uint8_t>::const_iterator>)
+	  little_endian_memoryreader<char*>)(little_endian_memoryreader<uint8_t*>)(little_endian_memoryreader<             \
+																			   std::vector<uint8_t>::iterator>)(little_endian_memoryreader<std::vector<uint8_t>::const_iterator>)
 
 	KUTILS_OVERLOAD_READERSEQ_DECL(KUTILS_LITTLE_ENDIAN_READER_SEQ, glm::vec2, glm::vec2)
 	KUTILS_OVERLOAD_READERSEQ_DECL(KUTILS_LITTLE_ENDIAN_READER_SEQ, glm::vec3, glm::vec3)

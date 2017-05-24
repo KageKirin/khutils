@@ -3,9 +3,9 @@
 
 #include "khutils/assertion.hpp"
 #include "khutils/base_handler.hpp"
+#include "khutils/endian.hpp"
 #include "khutils/typeconversion.hpp"
 
-#include <boost/endian/conversion.hpp>
 #include <functional>
 #include <vector>
 

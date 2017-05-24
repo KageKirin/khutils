@@ -1,14 +1,12 @@
 #ifndef KHUTILS_BASE_HANDLER_HPP_INC
 #define KHUTILS_BASE_HANDLER_HPP_INC
 
+#include "khutils/endian.hpp"
 #include "khutils/typeconversion.hpp"
-#include <boost/endian/conversion.hpp>
 #include <functional>
 
 namespace khutils
 {
-	using boost::endian::order;
-
 	//! signature for swap conversion functions
 	template <typename OutT, typename InT>
 	using SwapConversionFuncT = std::function<OutT(InT)>;
@@ -19,21 +17,21 @@ namespace khutils
 		return reinterpret_convert<OutT, InT>(_val);
 	}
 
-	template <order _order>
+	template <endian::order _order>
 	struct base_handler_trait
 	{
-		static constexpr order m_order = _order;
+		static constexpr endian::order m_order = _order;
 
 		template <typename T>
 		static T read_swap(T from)
 		{
-			return conditional_reverse<_order, order::native>(from);
+			return endian_reverse<_order, endian::native>(from);
 		}
 
 		template <typename T>
 		static T write_swap(T from)
 		{
-			return conditional_reverse<order::native, _order>(from);
+			return endian_reverse<endian::native, _order>(from);
 		}
 
 		template <typename OutT, typename InT>

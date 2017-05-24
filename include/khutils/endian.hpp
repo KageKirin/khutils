@@ -1,8 +1,10 @@
 #ifndef KHUTILS_ENDIAN_HPP_INC
 #define KHUTILS_ENDIAN_HPP_INC
 
+#include <array>
 #include <cctype>
 #include <cstdint>
+#include <vector>
 
 namespace khutils
 {
@@ -17,7 +19,7 @@ namespace khutils
 
 		constexpr order static_endian_order()
 		{
-			return (order)0xFFFF & 1;
+			return ((0xFFFF & 1) == (uint16_t)order::little) ? order::little : order::big;
 		}
 
 		constexpr order native = static_endian_order();
@@ -61,7 +63,6 @@ namespace khutils
 
 	template <endian::order order_out, endian::order order_in = endian::native>
 	long double endian_reverse(long double val);
-
 
 	// helper
 	template <typename T>
@@ -299,6 +300,25 @@ namespace khutils
 	inline long double endian_reverse<endian::order::little, endian::order::big>(long double val)
 	{
 		return flip_bytes(val);
+	}
+
+
+	// vector/array
+
+	template <endian::order order_out, endian::order order_in = endian::native, typename T>
+	inline std::vector<T> endian_reverse(const std::vector<T>& x)
+	{
+		std::vector<T> rx(x.size());
+		std::transform(x.begin(), x.end(), rx.begin(), [](auto& _t) { return endian_reverse<order_out, order_in>(_t); });
+		return rx;
+	}
+
+	template <endian::order order_out, endian::order order_in = endian::native, typename T, size_t L>
+	inline std::array<T, L> endian_reverse(const std::array<T, L>& x)
+	{
+		std::array<T, L> rx;
+		std::transform(x.begin(), x.end(), rx.begin(), [](auto& _t) { return endian_reverse<order_out, order_in>(_t); });
+		return rx;
 	}
 
 }	// namespace khutils

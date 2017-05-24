@@ -8,28 +8,26 @@
 
 #include "khutils/assertion.hpp"
 #include "khutils/base_handler.hpp"
+#include "khutils/endian.hpp"
 #include "khutils/typeconversion.hpp"
 
-#include <boost/endian/conversion.hpp>
 #include <functional>
 #include <vector>
 
 namespace khutils
 {
-	using boost::endian::order;
-
 	//! data reader
 	//! read data from buffer
 	//! usage: use typedef'ed version (see below)
-	template <typename ByteForwardIterator, order _order>
+	template <typename ByteForwardIterator, endian::order _order>
 	struct _memoryreader;
 
 	template <typename ByteForwardIterator>
-	using memoryreader = _memoryreader<ByteForwardIterator, order::native>;
+	using memoryreader = _memoryreader<ByteForwardIterator, endian::native>;
 	template <typename ByteForwardIterator>
-	using little_endian_memoryreader = _memoryreader<ByteForwardIterator, order::little>;
+	using little_endian_memoryreader = _memoryreader<ByteForwardIterator, endian::order::little>;
 	template <typename ByteForwardIterator>
-	using big_endian_memoryreader = _memoryreader<ByteForwardIterator, order::big>;
+	using big_endian_memoryreader = _memoryreader<ByteForwardIterator, endian::order::big>;
 
 	template <typename ByteForwardIterator>
 	struct memoryreader_trait
@@ -58,12 +56,12 @@ namespace khutils
 		_memoryreader_state& operator=(_memoryreader_state&&) = default;
 	};
 
-	template <typename ByteForwardIterator, order _order>
+	template <typename ByteForwardIterator, endian::order _order>
 	struct _memoryreader : base_handler_trait<_order>
 	{
 		typedef _memoryreader_state<ByteForwardIterator>				 state;
 		std::reference_wrapper<_memoryreader_state<ByteForwardIterator>> m_ih;
-		//static_assert(sizeof(decltype(*(m_ih.get().begin))) == 1, "not a 1 byte sized datatype");
+		// static_assert(sizeof(decltype(*(m_ih.get().begin))) == 1, "not a 1 byte sized datatype");
 
 		_memoryreader()						= delete;
 		_memoryreader(const _memoryreader&) = default;

@@ -5,27 +5,25 @@
 //! include wisely to keep compile times minimal
 
 #include "khutils/base_handler.hpp"
+#include "khutils/endian.hpp"
 #include "khutils/typeconversion.hpp"
 
-#include <boost/endian/conversion.hpp>
 #include <functional>
 #include <istream>
 #include <vector>
 
 namespace khutils
 {
-	using boost::endian::order;
-
 	//! stream reader
 	//! wraps istream.read and ostream.write in an endian-aware
 	//! and bitstream-fitting manner
 	//! usage: use typedef'ed version (see below)
-	template <order _order>
+	template <endian::order _order>
 	struct _streamreader;
 
-	using streamreader				 = _streamreader<order::native>;
-	using little_endian_streamreader = _streamreader<order::little>;
-	using big_endian_streamreader	= _streamreader<order::big>;
+	using streamreader				 = _streamreader<endian::native>;
+	using little_endian_streamreader = _streamreader<endian::order::little>;
+	using big_endian_streamreader	= _streamreader<endian::order::big>;
 
 	struct streamreader_trait
 	{
@@ -34,7 +32,7 @@ namespace khutils
 		typedef big_endian_streamreader	big_endian_reader;
 	};
 
-	template <order _order>
+	template <endian::order _order>
 	struct _streamreader : base_handler_trait<_order>
 	{
 		std::istream& m_is;

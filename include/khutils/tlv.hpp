@@ -2,8 +2,8 @@
 #define KHUTILS_TLV_HPP_INC
 
 //! must come first and in this order
+#include "khutils/endian.hpp"
 #include "khutils/typeconversion.hpp"
-#include <boost/endian/conversion.hpp>
 
 #include <array>
 #include <cstdint>
@@ -12,17 +12,17 @@
 namespace khutils
 {
 	//! Type-length-value container
-	template <typename TagT, typename LengthT, size_t TagOffset, size_t LengthOffset, size_t Alignment, boost::endian::order _order>
+	template <typename TagT, typename LengthT, size_t TagOffset, size_t LengthOffset, size_t Alignment, endian::order _order>
 	class TLVelement
 	{
 	public:
-		typedef TagT						  tag_type;
-		typedef LengthT						  length_type;
-		typedef std::vector<uint8_t>		  value_type;
-		static constexpr size_t				  tag_offset	= TagOffset;
-		static constexpr size_t				  length_offset = LengthOffset;
-		static constexpr size_t				  alignment		= Alignment;
-		static constexpr boost::endian::order endianity		= _order;
+		typedef TagT				   tag_type;
+		typedef LengthT				   length_type;
+		typedef std::vector<uint8_t>   value_type;
+		static constexpr size_t		   tag_offset	= TagOffset;
+		static constexpr size_t		   length_offset = LengthOffset;
+		static constexpr size_t		   alignment	 = Alignment;
+		static constexpr endian::order endianity	 = _order;
 
 	protected:
 		value_type				 m_header;
@@ -54,12 +54,12 @@ namespace khutils
 		TLVelement& operator=(TLVelement&&) = default;
 		TLVelement& operator=(const TLVelement&) = default;
 
-		tag_type tag(boost::endian::order target = order::native) const
+		tag_type tag(endian::order target = endian::native) const
 		{
 			return conditional_reverse(*m_tagp, endianity, target);
 		}
 
-		length_type size(boost::endian::order target = order::native) const
+		length_type size(endian::order target = endian::native) const
 		{
 			return conditional_reverse(*m_sizep, endianity, target);
 		}

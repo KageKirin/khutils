@@ -5,29 +5,27 @@
 //! include wisely to keep compile times minimal
 
 #include "khutils/base_handler.hpp"
+#include "khutils/endian.hpp"
 #include "khutils/typeconversion.hpp"
 
-#include <boost/endian/conversion.hpp>
 #include <functional>
 #include <vector>
 
 namespace khutils
 {
-	using boost::endian::order;
-
 	//! data writer
 	//! writes data into PRE-ALLOCATED buffer
 	//! DOES NOT RESIZE BUFFER
 	//! usage: use typedef'ed version (see below)
-	template <typename ByteForwardIterator, order _order>
+	template <typename ByteForwardIterator, endian::order _order>
 	struct _memorywriter;
 
 	template <typename ByteForwardIterator>
-	using memorywriter = _memorywriter<ByteForwardIterator, order::native>;
+	using memorywriter = _memorywriter<ByteForwardIterator, endian::native>;
 	template <typename ByteForwardIterator>
-	using little_endian_memorywriter = _memorywriter<ByteForwardIterator, order::little>;
+	using little_endian_memorywriter = _memorywriter<ByteForwardIterator, endian::order::little>;
 	template <typename ByteForwardIterator>
-	using big_endian_memorywriter = _memorywriter<ByteForwardIterator, order::big>;
+	using big_endian_memorywriter = _memorywriter<ByteForwardIterator, endian::order::big>;
 
 	template <typename ByteForwardIterator>
 	struct memorywriter_trait
@@ -56,12 +54,12 @@ namespace khutils
 		_memorywriter_state& operator=(_memorywriter_state&&) = default;
 	};
 
-	template <typename ByteForwardIterator, order _order>
+	template <typename ByteForwardIterator, endian::order _order>
 	struct _memorywriter : base_handler_trait<_order>
 	{
 		typedef _memorywriter_state<ByteForwardIterator>				 state;
 		std::reference_wrapper<_memorywriter_state<ByteForwardIterator>> m_ih;
-		//static_assert(sizeof(decltype(*(m_ih.get().begin))) == 1, "not a 1 byte sized datatype");
+		// static_assert(sizeof(decltype(*(m_ih.get().begin))) == 1, "not a 1 byte sized datatype");
 
 		_memorywriter()						= delete;
 		_memorywriter(const _memorywriter&) = default;

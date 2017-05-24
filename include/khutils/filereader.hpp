@@ -5,10 +5,10 @@
 //! include wisely to keep compile times minimal
 
 #include "khutils/base_handler.hpp"
+#include "khutils/endian.hpp"
 #include "khutils/file.hpp"
 #include "khutils/typeconversion.hpp"
 
-#include <boost/endian/conversion.hpp>
 #include <cstdio>
 #include <functional>
 #include <memory>
@@ -16,18 +16,16 @@
 
 namespace khutils
 {
-	using boost::endian::order;
-
 	//! file reader
 	//! wraps FILE* read in an endian-aware
 	//! and bit-fitting manner
 	//! usage: use typedef'ed version (see below)
-	template <order _order>
+	template <endian::order _order>
 	struct _filereader;
 
-	using filereader			   = _filereader<order::native>;
-	using little_endian_filereader = _filereader<order::little>;
-	using big_endian_filereader	= _filereader<order::big>;
+	using filereader			   = _filereader<endian::native>;
+	using little_endian_filereader = _filereader<endian::order::little>;
+	using big_endian_filereader	= _filereader<endian::order::big>;
 
 	struct filereader_trait
 	{
@@ -36,7 +34,7 @@ namespace khutils
 		typedef big_endian_filereader	big_endian_reader;
 	};
 
-	template <order _order>
+	template <endian::order _order>
 	struct _filereader : base_handler_trait<_order>
 	{
 		std::reference_wrapper<const FilePtr> m_file;

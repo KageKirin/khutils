@@ -1,471 +1,456 @@
 #ifndef KHUTILS_GLM_ENDIAN_REVERSE_HPP_INC
 #define KHUTILS_GLM_ENDIAN_REVERSE_HPP_INC
 
-#include <boost/config.hpp>
-#include <boost/cstdint.hpp>
+#include "khutils/endian.hpp"
+#include "khutils/typeconversion.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-// overload function endian_reverse BEFORE including header
-namespace boost
+namespace khutils
 {
-	namespace endian
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::vec2 endian_reverse(glm::vec2 x)
 	{
-		inline glm::vec2 endian_reverse(glm::vec2 x) BOOST_NOEXCEPT;
-		inline glm::vec3 endian_reverse(glm::vec3 x) BOOST_NOEXCEPT;
-		inline glm::vec4 endian_reverse(glm::vec4 x) BOOST_NOEXCEPT;
-		inline glm::quat endian_reverse(glm::quat x) BOOST_NOEXCEPT;
-		inline glm::dvec2 endian_reverse(glm::dvec2 x) BOOST_NOEXCEPT;
-		inline glm::dvec3 endian_reverse(glm::dvec3 x) BOOST_NOEXCEPT;
-		inline glm::dvec4 endian_reverse(glm::dvec4 x) BOOST_NOEXCEPT;
-		inline glm::dquat endian_reverse(glm::dquat x) BOOST_NOEXCEPT;
-		inline glm::ivec2 endian_reverse(glm::ivec2 x) BOOST_NOEXCEPT;
-		inline glm::ivec3 endian_reverse(glm::ivec3 x) BOOST_NOEXCEPT;
-		inline glm::ivec4 endian_reverse(glm::ivec4 x) BOOST_NOEXCEPT;
-		inline glm::uvec2 endian_reverse(glm::uvec2 x) BOOST_NOEXCEPT;
-		inline glm::uvec3 endian_reverse(glm::uvec3 x) BOOST_NOEXCEPT;
-		inline glm::uvec4 endian_reverse(glm::uvec4 x) BOOST_NOEXCEPT;
-		inline glm::i8vec2 endian_reverse(glm::i8vec2 x) BOOST_NOEXCEPT;
-		inline glm::i8vec3 endian_reverse(glm::i8vec3 x) BOOST_NOEXCEPT;
-		inline glm::i8vec4 endian_reverse(glm::i8vec4 x) BOOST_NOEXCEPT;
-		inline glm::u8vec2 endian_reverse(glm::u8vec2 x) BOOST_NOEXCEPT;
-		inline glm::u8vec3 endian_reverse(glm::u8vec3 x) BOOST_NOEXCEPT;
-		inline glm::u8vec4 endian_reverse(glm::u8vec4 x) BOOST_NOEXCEPT;
-		inline glm::i16vec2 endian_reverse(glm::i16vec2 x) BOOST_NOEXCEPT;
-		inline glm::i16vec3 endian_reverse(glm::i16vec3 x) BOOST_NOEXCEPT;
-		inline glm::i16vec4 endian_reverse(glm::i16vec4 x) BOOST_NOEXCEPT;
-		inline glm::u16vec2 endian_reverse(glm::u16vec2 x) BOOST_NOEXCEPT;
-		inline glm::u16vec3 endian_reverse(glm::u16vec3 x) BOOST_NOEXCEPT;
-		inline glm::u16vec4 endian_reverse(glm::u16vec4 x) BOOST_NOEXCEPT;
-		inline glm::mat2x2 endian_reverse(glm::mat2x2 x) BOOST_NOEXCEPT;
-		inline glm::mat2x3 endian_reverse(glm::mat2x3 x) BOOST_NOEXCEPT;
-		inline glm::mat2x4 endian_reverse(glm::mat2x4 x) BOOST_NOEXCEPT;
-		inline glm::mat3x2 endian_reverse(glm::mat3x2 x) BOOST_NOEXCEPT;
-		inline glm::mat3x3 endian_reverse(glm::mat3x3 x) BOOST_NOEXCEPT;
-		inline glm::mat3x4 endian_reverse(glm::mat3x4 x) BOOST_NOEXCEPT;
-		inline glm::mat4x2 endian_reverse(glm::mat4x2 x) BOOST_NOEXCEPT;
-		inline glm::mat4x3 endian_reverse(glm::mat4x3 x) BOOST_NOEXCEPT;
-		inline glm::mat4x4 endian_reverse(glm::mat4x4 x) BOOST_NOEXCEPT;
-		inline glm::dmat2x2 endian_reverse(glm::dmat2x2 x) BOOST_NOEXCEPT;
-		inline glm::dmat2x3 endian_reverse(glm::dmat2x3 x) BOOST_NOEXCEPT;
-		inline glm::dmat2x4 endian_reverse(glm::dmat2x4 x) BOOST_NOEXCEPT;
-		inline glm::dmat3x2 endian_reverse(glm::dmat3x2 x) BOOST_NOEXCEPT;
-		inline glm::dmat3x3 endian_reverse(glm::dmat3x3 x) BOOST_NOEXCEPT;
-		inline glm::dmat3x4 endian_reverse(glm::dmat3x4 x) BOOST_NOEXCEPT;
-		inline glm::dmat4x2 endian_reverse(glm::dmat4x2 x) BOOST_NOEXCEPT;
-		inline glm::dmat4x3 endian_reverse(glm::dmat4x3 x) BOOST_NOEXCEPT;
-		inline glm::dmat4x4 endian_reverse(glm::dmat4x4 x) BOOST_NOEXCEPT;
+		return glm::vec2{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y)	 //
+		};
+	}
 
-	}	// namespace endian
-}	// namespace boost
-
-#include "khutils/typeconversion.hpp"
-
-namespace boost
-{
-	namespace endian
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::vec3 endian_reverse(glm::vec3 x)
 	{
+		return glm::vec3{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y),
+		  endian_reverse<order_out, order_in>(x.z)	//
+		};
+	}
 
-		glm::vec2 endian_reverse(glm::vec2 x) BOOST_NOEXCEPT
-		{
-			return glm::vec2{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::vec4 endian_reverse(glm::vec4 x)
+	{
+		return glm::vec4{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y),
+		  endian_reverse<order_out, order_in>(x.z),
+		  endian_reverse<order_out, order_in>(x.w)	//
+		};
+	}
 
-		glm::vec3 endian_reverse(glm::vec3 x) BOOST_NOEXCEPT
-		{
-			return glm::vec3{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y),
-			  endian_reverse(x.z)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::quat endian_reverse(glm::quat x)
+	{
+		return glm::quat{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y),
+		  endian_reverse<order_out, order_in>(x.z),
+		  endian_reverse<order_out, order_in>(x.w)	//
+		};
+	}
 
-		glm::vec4 endian_reverse(glm::vec4 x) BOOST_NOEXCEPT
-		{
-			return glm::vec4{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y),
-			  endian_reverse(x.z),
-			  endian_reverse(x.w)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::dvec2 endian_reverse(glm::dvec2 x)
+	{
+		return glm::dvec2{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y)	 //
+		};
+	}
 
-		glm::quat endian_reverse(glm::quat x) BOOST_NOEXCEPT
-		{
-			return glm::quat{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y),
-			  endian_reverse(x.z),
-			  endian_reverse(x.w)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::dvec3 endian_reverse(glm::dvec3 x)
+	{
+		return glm::dvec3{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y),
+		  endian_reverse<order_out, order_in>(x.z)	//
+		};
+	}
 
-		glm::dvec2 endian_reverse(glm::dvec2 x) BOOST_NOEXCEPT
-		{
-			return glm::dvec2{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::dvec4 endian_reverse(glm::dvec4 x)
+	{
+		return glm::dvec4{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y),
+		  endian_reverse<order_out, order_in>(x.z),
+		  endian_reverse<order_out, order_in>(x.w)	//
+		};
+	}
 
-		glm::dvec3 endian_reverse(glm::dvec3 x) BOOST_NOEXCEPT
-		{
-			return glm::dvec3{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y),
-			  endian_reverse(x.z)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::dquat endian_reverse(glm::dquat x)
+	{
+		return glm::dquat{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y),
+		  endian_reverse<order_out, order_in>(x.z),
+		  endian_reverse<order_out, order_in>(x.w)	//
+		};
+	}
 
-		glm::dvec4 endian_reverse(glm::dvec4 x) BOOST_NOEXCEPT
-		{
-			return glm::dvec4{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y),
-			  endian_reverse(x.z),
-			  endian_reverse(x.w)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::ivec2 endian_reverse(glm::ivec2 x)
+	{
+		return glm::ivec2{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y)	 //
+		};
+	}
 
-		glm::dquat endian_reverse(glm::dquat x) BOOST_NOEXCEPT
-		{
-			return glm::dquat{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y),
-			  endian_reverse(x.z),
-			  endian_reverse(x.w)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::ivec3 endian_reverse(glm::ivec3 x)
+	{
+		return glm::ivec3{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y),
+		  endian_reverse<order_out, order_in>(x.z)	//
+		};
+	}
 
-		glm::ivec2 endian_reverse(glm::ivec2 x) BOOST_NOEXCEPT
-		{
-			return glm::ivec2{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::ivec4 endian_reverse(glm::ivec4 x)
+	{
+		return glm::ivec4{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y),
+		  endian_reverse<order_out, order_in>(x.z),
+		  endian_reverse<order_out, order_in>(x.w)	//
+		};
+	}
 
-		glm::ivec3 endian_reverse(glm::ivec3 x) BOOST_NOEXCEPT
-		{
-			return glm::ivec3{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y),
-			  endian_reverse(x.z)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::uvec2 endian_reverse(glm::uvec2 x)
+	{
+		return glm::uvec2{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y)	 //
+		};
+	}
 
-		glm::ivec4 endian_reverse(glm::ivec4 x) BOOST_NOEXCEPT
-		{
-			return glm::ivec4{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y),
-			  endian_reverse(x.z),
-			  endian_reverse(x.w)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::uvec3 endian_reverse(glm::uvec3 x)
+	{
+		return glm::uvec3{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y),
+		  endian_reverse<order_out, order_in>(x.z)	//
+		};
+	}
 
-		glm::uvec2 endian_reverse(glm::uvec2 x) BOOST_NOEXCEPT
-		{
-			return glm::uvec2{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::uvec4 endian_reverse(glm::uvec4 x)
+	{
+		return glm::uvec4{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y),
+		  endian_reverse<order_out, order_in>(x.z),
+		  endian_reverse<order_out, order_in>(x.w)	//
+		};
+	}
 
-		glm::uvec3 endian_reverse(glm::uvec3 x) BOOST_NOEXCEPT
-		{
-			return glm::uvec3{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y),
-			  endian_reverse(x.z)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::i8vec2 endian_reverse(glm::i8vec2 x)
+	{
+		return glm::i8vec2{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y)	 //
+		};
+	}
 
-		glm::uvec4 endian_reverse(glm::uvec4 x) BOOST_NOEXCEPT
-		{
-			return glm::uvec4{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y),
-			  endian_reverse(x.z),
-			  endian_reverse(x.w)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::i8vec3 endian_reverse(glm::i8vec3 x)
+	{
+		return glm::i8vec3{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y),
+		  endian_reverse<order_out, order_in>(x.z)	//
+		};
+	}
 
-		glm::i8vec2 endian_reverse(glm::i8vec2 x) BOOST_NOEXCEPT
-		{
-			return glm::i8vec2{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::i8vec4 endian_reverse(glm::i8vec4 x)
+	{
+		return glm::i8vec4{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y),
+		  endian_reverse<order_out, order_in>(x.z),
+		  endian_reverse<order_out, order_in>(x.w)	//
+		};
+	}
 
-		glm::i8vec3 endian_reverse(glm::i8vec3 x) BOOST_NOEXCEPT
-		{
-			return glm::i8vec3{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y),
-			  endian_reverse(x.z)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::u8vec2 endian_reverse(glm::u8vec2 x)
+	{
+		return glm::u8vec2{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y)	 //
+		};
+	}
 
-		glm::i8vec4 endian_reverse(glm::i8vec4 x) BOOST_NOEXCEPT
-		{
-			return glm::i8vec4{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y),
-			  endian_reverse(x.z),
-			  endian_reverse(x.w)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::u8vec3 endian_reverse(glm::u8vec3 x)
+	{
+		return glm::u8vec3{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y),
+		  endian_reverse<order_out, order_in>(x.z)	//
+		};
+	}
 
-		glm::u8vec2 endian_reverse(glm::u8vec2 x) BOOST_NOEXCEPT
-		{
-			return glm::u8vec2{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::u8vec4 endian_reverse(glm::u8vec4 x)
+	{
+		return glm::u8vec4{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y),
+		  endian_reverse<order_out, order_in>(x.z),
+		  endian_reverse<order_out, order_in>(x.w)	//
+		};
+	}
 
-		glm::u8vec3 endian_reverse(glm::u8vec3 x) BOOST_NOEXCEPT
-		{
-			return glm::u8vec3{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y),
-			  endian_reverse(x.z)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::i16vec2 endian_reverse(glm::i16vec2 x)
+	{
+		return glm::i16vec2{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y)	 //
+		};
+	}
 
-		glm::u8vec4 endian_reverse(glm::u8vec4 x) BOOST_NOEXCEPT
-		{
-			return glm::u8vec4{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y),
-			  endian_reverse(x.z),
-			  endian_reverse(x.w)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::i16vec3 endian_reverse(glm::i16vec3 x)
+	{
+		return glm::i16vec3{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y),
+		  endian_reverse<order_out, order_in>(x.z)	//
+		};
+	}
 
-		glm::i16vec2 endian_reverse(glm::i16vec2 x) BOOST_NOEXCEPT
-		{
-			return glm::i16vec2{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::i16vec4 endian_reverse(glm::i16vec4 x)
+	{
+		return glm::i16vec4{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y),
+		  endian_reverse<order_out, order_in>(x.z),
+		  endian_reverse<order_out, order_in>(x.w)	//
+		};
+	}
 
-		glm::i16vec3 endian_reverse(glm::i16vec3 x) BOOST_NOEXCEPT
-		{
-			return glm::i16vec3{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y),
-			  endian_reverse(x.z)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::u16vec2 endian_reverse(glm::u16vec2 x)
+	{
+		return glm::u16vec2{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y)	 //
+		};
+	}
 
-		glm::i16vec4 endian_reverse(glm::i16vec4 x) BOOST_NOEXCEPT
-		{
-			return glm::i16vec4{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y),
-			  endian_reverse(x.z),
-			  endian_reverse(x.w)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::u16vec3 endian_reverse(glm::u16vec3 x)
+	{
+		return glm::u16vec3{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y),
+		  endian_reverse<order_out, order_in>(x.z)	//
+		};
+	}
 
-		glm::u16vec2 endian_reverse(glm::u16vec2 x) BOOST_NOEXCEPT
-		{
-			return glm::u16vec2{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::u16vec4 endian_reverse(glm::u16vec4 x)
+	{
+		return glm::u16vec4{
+		  endian_reverse<order_out, order_in>(x.x),	//
+		  endian_reverse<order_out, order_in>(x.y),
+		  endian_reverse<order_out, order_in>(x.z),
+		  endian_reverse<order_out, order_in>(x.w)	//
+		};
+	}
 
-		glm::u16vec3 endian_reverse(glm::u16vec3 x) BOOST_NOEXCEPT
-		{
-			return glm::u16vec3{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y),
-			  endian_reverse(x.z)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::mat2x2 endian_reverse(glm::mat2x2 x)
+	{
+		return glm::mat2x2{
+		  endian_reverse<order_out, order_in>(x[0]),	//
+		  endian_reverse<order_out, order_in>(x[1])		//
+		};
+	}
 
-		glm::u16vec4 endian_reverse(glm::u16vec4 x) BOOST_NOEXCEPT
-		{
-			return glm::u16vec4{
-			  endian_reverse(x.x),
-			  endian_reverse(x.y),
-			  endian_reverse(x.z),
-			  endian_reverse(x.w)	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::mat2x3 endian_reverse(glm::mat2x3 x)
+	{
+		return glm::mat2x3{
+		  endian_reverse<order_out, order_in>(x[0]),	//
+		  endian_reverse<order_out, order_in>(x[1])		//
+		};
+	}
 
-		glm::mat2x2 endian_reverse(glm::mat2x2 x) BOOST_NOEXCEPT
-		{
-			return glm::mat2x2{
-			  endian_reverse(x[0]),
-			  endian_reverse(x[1])	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::mat2x4 endian_reverse(glm::mat2x4 x)
+	{
+		return glm::mat2x4{
+		  endian_reverse<order_out, order_in>(x[0]),	//
+		  endian_reverse<order_out, order_in>(x[1])		//
+		};
+	}
 
-		glm::mat2x3 endian_reverse(glm::mat2x3 x) BOOST_NOEXCEPT
-		{
-			return glm::mat2x3{
-			  endian_reverse(x[0]),
-			  endian_reverse(x[1])	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::mat3x2 endian_reverse(glm::mat3x2 x)
+	{
+		return glm::mat3x2{
+		  endian_reverse<order_out, order_in>(x[0]),	//
+		  endian_reverse<order_out, order_in>(x[1]),
+		  endian_reverse<order_out, order_in>(x[2])	//
+		};
+	}
 
-		glm::mat2x4 endian_reverse(glm::mat2x4 x) BOOST_NOEXCEPT
-		{
-			return glm::mat2x4{
-			  endian_reverse(x[0]),
-			  endian_reverse(x[1])	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::mat3x3 endian_reverse(glm::mat3x3 x)
+	{
+		return glm::mat3x3{
+		  endian_reverse<order_out, order_in>(x[0]),	//
+		  endian_reverse<order_out, order_in>(x[1]),
+		  endian_reverse<order_out, order_in>(x[2])	//
+		};
+	}
 
-		glm::mat3x2 endian_reverse(glm::mat3x2 x) BOOST_NOEXCEPT
-		{
-			return glm::mat3x2{
-			  endian_reverse(x[0]),
-			  endian_reverse(x[1]),
-			  endian_reverse(x[2])	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::mat3x4 endian_reverse(glm::mat3x4 x)
+	{
+		return glm::mat3x4{
+		  endian_reverse<order_out, order_in>(x[0]),	//
+		  endian_reverse<order_out, order_in>(x[1]),
+		  endian_reverse<order_out, order_in>(x[2])	//
+		};
+	}
 
-		glm::mat3x3 endian_reverse(glm::mat3x3 x) BOOST_NOEXCEPT
-		{
-			return glm::mat3x3{
-			  endian_reverse(x[0]),
-			  endian_reverse(x[1]),
-			  endian_reverse(x[2])	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::mat4x2 endian_reverse(glm::mat4x2 x)
+	{
+		return glm::mat4x2{
+		  endian_reverse<order_out, order_in>(x[0]),	//
+		  endian_reverse<order_out, order_in>(x[1]),
+		  endian_reverse<order_out, order_in>(x[2]),
+		  endian_reverse<order_out, order_in>(x[3])	//
+		};
+	}
 
-		glm::mat3x4 endian_reverse(glm::mat3x4 x) BOOST_NOEXCEPT
-		{
-			return glm::mat3x4{
-			  endian_reverse(x[0]),
-			  endian_reverse(x[1]),
-			  endian_reverse(x[2])	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::mat4x3 endian_reverse(glm::mat4x3 x)
+	{
+		return glm::mat4x3{
+		  endian_reverse<order_out, order_in>(x[0]),	//
+		  endian_reverse<order_out, order_in>(x[1]),
+		  endian_reverse<order_out, order_in>(x[2]),
+		  endian_reverse<order_out, order_in>(x[3])	//
+		};
+	}
 
-		glm::mat4x2 endian_reverse(glm::mat4x2 x) BOOST_NOEXCEPT
-		{
-			return glm::mat4x2{
-			  endian_reverse(x[0]),
-			  endian_reverse(x[1]),
-			  endian_reverse(x[2]),
-			  endian_reverse(x[3])	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::mat4x4 endian_reverse(glm::mat4x4 x)
+	{
+		return glm::mat4x4{
+		  endian_reverse<order_out, order_in>(x[0]),	//
+		  endian_reverse<order_out, order_in>(x[1]),
+		  endian_reverse<order_out, order_in>(x[2]),
+		  endian_reverse<order_out, order_in>(x[3])	//
+		};
+	}
 
-		glm::mat4x3 endian_reverse(glm::mat4x3 x) BOOST_NOEXCEPT
-		{
-			return glm::mat4x3{
-			  endian_reverse(x[0]),
-			  endian_reverse(x[1]),
-			  endian_reverse(x[2]),
-			  endian_reverse(x[3])	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::dmat2x2 endian_reverse(glm::dmat2x2 x)
+	{
+		return glm::dmat2x2{
+		  endian_reverse<order_out, order_in>(x[0]),	//
+		  endian_reverse<order_out, order_in>(x[1])		//
+		};
+	}
 
-		glm::mat4x4 endian_reverse(glm::mat4x4 x) BOOST_NOEXCEPT
-		{
-			return glm::mat4x4{
-			  endian_reverse(x[0]),
-			  endian_reverse(x[1]),
-			  endian_reverse(x[2]),
-			  endian_reverse(x[3])	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::dmat2x3 endian_reverse(glm::dmat2x3 x)
+	{
+		return glm::dmat2x3{
+		  endian_reverse<order_out, order_in>(x[0]),	//
+		  endian_reverse<order_out, order_in>(x[1])		//
+		};
+	}
 
-		glm::dmat2x2 endian_reverse(glm::dmat2x2 x) BOOST_NOEXCEPT
-		{
-			return glm::dmat2x2{
-			  endian_reverse(x[0]),
-			  endian_reverse(x[1])	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::dmat2x4 endian_reverse(glm::dmat2x4 x)
+	{
+		return glm::dmat2x4{
+		  endian_reverse<order_out, order_in>(x[0]),	//
+		  endian_reverse<order_out, order_in>(x[1])		//
+		};
+	}
 
-		glm::dmat2x3 endian_reverse(glm::dmat2x3 x) BOOST_NOEXCEPT
-		{
-			return glm::dmat2x3{
-			  endian_reverse(x[0]),
-			  endian_reverse(x[1])	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::dmat3x2 endian_reverse(glm::dmat3x2 x)
+	{
+		return glm::dmat3x2{
+		  endian_reverse<order_out, order_in>(x[0]),	//
+		  endian_reverse<order_out, order_in>(x[1]),
+		  endian_reverse<order_out, order_in>(x[2])	//
+		};
+	}
 
-		glm::dmat2x4 endian_reverse(glm::dmat2x4 x) BOOST_NOEXCEPT
-		{
-			return glm::dmat2x4{
-			  endian_reverse(x[0]),
-			  endian_reverse(x[1])	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::dmat3x3 endian_reverse(glm::dmat3x3 x)
+	{
+		return glm::dmat3x3{
+		  endian_reverse<order_out, order_in>(x[0]),	//
+		  endian_reverse<order_out, order_in>(x[1]),
+		  endian_reverse<order_out, order_in>(x[2])	//
+		};
+	}
 
-		glm::dmat3x2 endian_reverse(glm::dmat3x2 x) BOOST_NOEXCEPT
-		{
-			return glm::dmat3x2{
-			  endian_reverse(x[0]),
-			  endian_reverse(x[1]),
-			  endian_reverse(x[2])	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::dmat3x4 endian_reverse(glm::dmat3x4 x)
+	{
+		return glm::dmat3x4{
+		  endian_reverse<order_out, order_in>(x[0]),	//
+		  endian_reverse<order_out, order_in>(x[1]),
+		  endian_reverse<order_out, order_in>(x[2])	//
+		};
+	}
 
-		glm::dmat3x3 endian_reverse(glm::dmat3x3 x) BOOST_NOEXCEPT
-		{
-			return glm::dmat3x3{
-			  endian_reverse(x[0]),
-			  endian_reverse(x[1]),
-			  endian_reverse(x[2])	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::dmat4x2 endian_reverse(glm::dmat4x2 x)
+	{
+		return glm::dmat4x2{
+		  endian_reverse<order_out, order_in>(x[0]),	//
+		  endian_reverse<order_out, order_in>(x[1]),
+		  endian_reverse<order_out, order_in>(x[2]),
+		  endian_reverse<order_out, order_in>(x[3])	//
+		};
+	}
 
-		glm::dmat3x4 endian_reverse(glm::dmat3x4 x) BOOST_NOEXCEPT
-		{
-			return glm::dmat3x4{
-			  endian_reverse(x[0]),
-			  endian_reverse(x[1]),
-			  endian_reverse(x[2])	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::dmat4x3 endian_reverse(glm::dmat4x3 x)
+	{
+		return glm::dmat4x3{
+		  endian_reverse<order_out, order_in>(x[0]),	//
+		  endian_reverse<order_out, order_in>(x[1]),
+		  endian_reverse<order_out, order_in>(x[2]),
+		  endian_reverse<order_out, order_in>(x[3])	//
+		};
+	}
 
-		glm::dmat4x2 endian_reverse(glm::dmat4x2 x) BOOST_NOEXCEPT
-		{
-			return glm::dmat4x2{
-			  endian_reverse(x[0]),
-			  endian_reverse(x[1]),
-			  endian_reverse(x[2]),
-			  endian_reverse(x[3])	//
-			};
-		}
+	template <endian::order order_out, endian::order order_in = endian::native>
+	glm::dmat4x4 endian_reverse(glm::dmat4x4 x)
+	{
+		return glm::dmat4x4{
+		  endian_reverse<order_out, order_in>(x[0]),	//
+		  endian_reverse<order_out, order_in>(x[1]),
+		  endian_reverse<order_out, order_in>(x[2]),
+		  endian_reverse<order_out, order_in>(x[3])	//
+		};
+	}
 
-		glm::dmat4x3 endian_reverse(glm::dmat4x3 x) BOOST_NOEXCEPT
-		{
-			return glm::dmat4x3{
-			  endian_reverse(x[0]),
-			  endian_reverse(x[1]),
-			  endian_reverse(x[2]),
-			  endian_reverse(x[3])	//
-			};
-		}
-
-		glm::dmat4x4 endian_reverse(glm::dmat4x4 x) BOOST_NOEXCEPT
-		{
-			return glm::dmat4x4{
-			  endian_reverse(x[0]),
-			  endian_reverse(x[1]),
-			  endian_reverse(x[2]),
-			  endian_reverse(x[3])	//
-			};
-		}
-
-	}	// namespace endian
-}	// namespace boost
+}	// namespace khutils
 
 #endif	// KHUTILS_GLM_ENDIAN_REVERSE_HPP_INC

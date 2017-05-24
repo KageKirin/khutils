@@ -14,8 +14,6 @@
 
 namespace khutils
 {
-	using boost::endian::order;
-
 #define KUTILS_LITTLE_ENDIAN_WRITER_SEQ                                                                                \
 	(little_endian_streamwriter)(little_endian_filewriter)(                                                            \
 	  little_endian_memorywriter<char*>)(little_endian_memorywriter<uint8_t*>)(little_endian_memorywriter<std::vector<uint8_t>::iterator>)
