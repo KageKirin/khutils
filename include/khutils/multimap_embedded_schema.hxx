@@ -20,5 +20,5 @@ table MapEntry {
 table Map {
 	entries: [MapEntry];
 }
-
-)");
+)"
+);
