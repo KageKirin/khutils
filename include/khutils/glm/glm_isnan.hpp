@@ -6,19 +6,25 @@
 #endif	// defined(KHUTILS_GLM_ISNAN_IMPL)
 
 #include "khutils/isnan.hpp"
-#include <glm/fwd.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtx/dual_quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 namespace khutils
 {
 	void check_NaN(const glm::dvec3& v);
 	void check_NaN(const glm::dvec4& v);
+	void check_NaN(const glm::dmat3& mat);
 	void check_NaN(const glm::dmat4& mat);
 	void check_NaN(const glm::dquat& q);
+	void check_NaN(const glm::ddualquat& dq);
 
 	void check_NaN(const glm::vec3& v);
 	void check_NaN(const glm::vec4& v);
+	void check_NaN(const glm::mat3& mat);
 	void check_NaN(const glm::mat4& mat);
 	void check_NaN(const glm::quat& q);
+	void check_NaN(const glm::dualquat& dq);
 
 }	// namespace khutils
 
@@ -37,7 +43,8 @@ namespace khutils
 #endif	// !GLM_PRECISION_HIGHP_FLOAT
 
 #include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/dual_quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 namespace khutils
 {
@@ -56,6 +63,13 @@ namespace khutils
 		check_NaN(v.w);
 	}
 
+	void check_NaN(const glm::dmat3& mat)
+	{
+		check_NaN(mat[0]);
+		check_NaN(mat[1]);
+		check_NaN(mat[2]);
+	}
+
 	void check_NaN(const glm::dmat4& mat)
 	{
 		check_NaN(mat[0]);
@@ -70,6 +84,12 @@ namespace khutils
 		check_NaN(q.y);
 		check_NaN(q.z);
 		check_NaN(q.w);
+	}
+
+	void check_NaN(const glm::ddualquat& dq)
+	{
+		check_NaN(dq.real);
+		check_NaN(dq.dual);
 	}
 
 	void check_NaN(const glm::vec3& v)
@@ -87,6 +107,13 @@ namespace khutils
 		check_NaN(v.w);
 	}
 
+	void check_NaN(const glm::mat3& mat)
+	{
+		check_NaN(mat[0]);
+		check_NaN(mat[1]);
+		check_NaN(mat[2]);
+	}
+
 	void check_NaN(const glm::mat4& mat)
 	{
 		check_NaN(mat[0]);
@@ -101,6 +128,12 @@ namespace khutils
 		check_NaN(q.y);
 		check_NaN(q.z);
 		check_NaN(q.w);
+	}
+
+	void check_NaN(const glm::dualquat& dq)
+	{
+		check_NaN(dq.real);
+		check_NaN(dq.dual);
 	}
 
 }	// namespace khutils

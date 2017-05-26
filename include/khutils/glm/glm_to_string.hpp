@@ -2,21 +2,28 @@
 #define KHUTILS_GLM_TO_STRING_HPP_INC
 
 #include <glm/fwd.hpp>
+#include <glm/gtx/dual_quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+
 #include <iosfwd>
 #include <string>
 
 namespace khutils
 {
 	const std::string to_string(const glm::quat& q);
+	const std::string to_string(const glm::dualquat& dq);
 	const std::string to_string(const glm::vec2& v);
 	const std::string to_string(const glm::vec3& v);
 	const std::string to_string(const glm::vec4& v);
+	const std::string to_string(const glm::mat3& m);
 	const std::string to_string(const glm::mat4& m);
 
 	const std::string to_string(const glm::dquat& q);
+	const std::string to_string(const glm::ddualquat& dq);
 	const std::string to_string(const glm::dvec2& v);
 	const std::string to_string(const glm::dvec3& v);
 	const std::string to_string(const glm::dvec4& v);
+	const std::string to_string(const glm::dmat3& m);
 	const std::string to_string(const glm::dmat4& m);
 
 	const std::string to_string(const glm::ivec2& v);
@@ -44,14 +51,18 @@ namespace khutils
 	const std::string to_string(const glm::u16vec4& v);
 
 	std::ostream& operator<<(std::ostream& os, const glm::quat& q);
+	std::ostream& operator<<(std::ostream& os, const glm::dualquat& dq);
 	std::ostream& operator<<(std::ostream& os, const glm::vec2& v);
 	std::ostream& operator<<(std::ostream& os, const glm::vec3& v);
 	std::ostream& operator<<(std::ostream& os, const glm::vec4& v);
+	std::ostream& operator<<(std::ostream& os, const glm::mat3& m);
 	std::ostream& operator<<(std::ostream& os, const glm::mat4& m);
 	std::ostream& operator<<(std::ostream& os, const glm::dquat& q);
+	std::ostream& operator<<(std::ostream& os, const glm::ddualquat& dq);
 	std::ostream& operator<<(std::ostream& os, const glm::dvec2& v);
 	std::ostream& operator<<(std::ostream& os, const glm::dvec3& v);
 	std::ostream& operator<<(std::ostream& os, const glm::dvec4& v);
+	std::ostream& operator<<(std::ostream& os, const glm::dmat3& m);
 	std::ostream& operator<<(std::ostream& os, const glm::dmat4& m);
 	std::ostream& operator<<(std::ostream& os, const glm::ivec2& v);
 	std::ostream& operator<<(std::ostream& os, const glm::ivec3& v);
@@ -92,6 +103,8 @@ namespace khutils
 
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/dual_quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 #include <iostream>
 #include <string>
@@ -105,6 +118,11 @@ namespace khutils
 	const std::string to_string(const glm::quat& q)
 	{
 		return "({0} i + {1} j + {2} k + {3})\n"_format(q.x, q.y, q.z, q.w);
+	}
+
+	const std::string to_string(const glm::dualquat& dq)
+	{
+		return "(({0}) + ({1}))\n"_format(to_string(dq.real), to_string(dq.dual));
 	}
 
 	const std::string to_string(const glm::vec2& v)
@@ -122,6 +140,16 @@ namespace khutils
 		return "({0}, {1}, {2}, {3})\n"_format(v.x, v.y, v.z, v.w);
 	}
 
+	const std::string to_string(const glm::mat3& m)
+	{
+		static const char* linefmt = "{0}, {1}, {2}";
+
+		return "({0},\n{1},\n{2}\n)"_format(fmt::format(linefmt, m[0][0], m[1][0], m[2][0]),
+											fmt::format(linefmt, m[0][1], m[1][1], m[2][1]),
+											fmt::format(linefmt, m[0][2], m[1][2], m[2][2]),
+											fmt::format(linefmt, m[0][3], m[1][3], m[2][3]));
+	}
+
 	const std::string to_string(const glm::mat4& m)
 	{
 		static const char* linefmt = "{0}, {1}, {2}, {3}";
@@ -137,6 +165,11 @@ namespace khutils
 		return "({0} i + {1} j + {2} k + {3})\n"_format(q.x, q.y, q.z, q.w);
 	}
 
+	const std::string to_string(const glm::ddualquat& dq)
+	{
+		return "(({0}) + ({1}))\n"_format(to_string(dq.real), to_string(dq.dual));
+	}
+
 	const std::string to_string(const glm::dvec2& v)
 	{
 		return "({0}, {1})\n"_format(v.x, v.y);
@@ -150,6 +183,16 @@ namespace khutils
 	const std::string to_string(const glm::dvec4& v)
 	{
 		return "({0}, {1}, {2}, {3})\n"_format(v.x, v.y, v.z, v.w);
+	}
+
+	const std::string to_string(const glm::dmat3& m)
+	{
+		static const char* linefmt = "{0}, {1}, {2}";
+
+		return "({0},\n{1},\n{2})"_format(fmt::format(linefmt, m[0][0], m[1][0], m[2][0]),
+										  fmt::format(linefmt, m[0][1], m[1][1], m[2][1]),
+										  fmt::format(linefmt, m[0][2], m[1][2], m[2][2]),
+										  fmt::format(linefmt, m[0][3], m[1][3], m[2][3]));
 	}
 
 	const std::string to_string(const glm::dmat4& m)
@@ -261,6 +304,11 @@ namespace khutils
 		os << "glm::quat" << to_string(q);
 		return os;
 	}
+	std::ostream& operator<<(std::ostream& os, const glm::dualquat& dq)
+	{
+		os << "glm::dualquat" << to_string(dq);
+		return os;
+	}
 	std::ostream& operator<<(std::ostream& os, const glm::vec2& v)
 	{
 		os << "glm::vec2" << to_string(v);
@@ -276,6 +324,11 @@ namespace khutils
 		os << "glm::vec4" << to_string(v);
 		return os;
 	}
+	std::ostream& operator<<(std::ostream& os, const glm::mat3& m)
+	{
+		os << "glm::mat3" << to_string(m);
+		return os;
+	}
 	std::ostream& operator<<(std::ostream& os, const glm::mat4& m)
 	{
 		os << "glm::mat4" << to_string(m);
@@ -284,6 +337,11 @@ namespace khutils
 	std::ostream& operator<<(std::ostream& os, const glm::dquat& q)
 	{
 		os << "glm::dquat" << to_string(q);
+		return os;
+	}
+	std::ostream& operator<<(std::ostream& os, const glm::ddualquat& dq)
+	{
+		os << "glm::ddualquat" << to_string(dq);
 		return os;
 	}
 	std::ostream& operator<<(std::ostream& os, const glm::dvec2& v)
@@ -299,6 +357,11 @@ namespace khutils
 	std::ostream& operator<<(std::ostream& os, const glm::dvec4& v)
 	{
 		os << "glm::dvec4" << to_string(v);
+		return os;
+	}
+	std::ostream& operator<<(std::ostream& os, const glm::dmat3& m)
+	{
+		os << "glm::dmat3" << to_string(m);
 		return os;
 	}
 	std::ostream& operator<<(std::ostream& os, const glm::dmat4& m)
