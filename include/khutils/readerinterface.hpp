@@ -10,6 +10,8 @@
 #include "khutils/handlerinterface.hpp"
 #include "khutils/typeconversion.hpp"
 
+#include <algorithm>
+#include <functional>
 
 namespace khutils
 {
@@ -30,13 +32,13 @@ namespace khutils
 
 
 	template <endian::order _order>
-	struct EndianReaderInterface : ReaderInterface
+	struct EndianReaderInterface : virtual ReaderInterface
 	{
 		static constexpr endian::order m_order = _order;
 
 		// read 1 element of given type
 		template <typename OutT>
-		OutT read()
+		OutT readType()
 		{
 			OutT val;
 			read(&val, sizeof(val));
@@ -45,7 +47,7 @@ namespace khutils
 
 		// fetch 1 element of given type
 		template <typename OutT>
-		OutT fetch()
+		OutT fetchType()
 		{
 			OutT val;
 			fetch(&val, sizeof(val));
@@ -54,7 +56,7 @@ namespace khutils
 
 		// read 1 element of given type at given offset
 		template <typename OutT>
-		OutT readAt(size_t offset)
+		OutT readTypeAt(size_t offset)
 		{
 			OutT val;
 			readAt(offset, &val, sizeof(val));
@@ -63,7 +65,7 @@ namespace khutils
 
 		// fetch 1 element of given type at given offset
 		template <typename OutT>
-		OutT fetchAt(size_t offset)
+		OutT fetchTypeAt(size_t offset)
 		{
 			OutT val;
 			fetchAt(offset, &val, sizeof(val));
@@ -72,7 +74,7 @@ namespace khutils
 
 		// read n elements of given type
 		template <typename OutT>
-		std::vector<OutT> read(size_t count)
+		std::vector<OutT> readType(size_t count)
 		{
 			std::vector<OutT> val(count);
 			read(&val.front(), sizeof(val) * count);
@@ -84,7 +86,7 @@ namespace khutils
 
 		// fetch n elements of given type
 		template <typename OutT>
-		std::vector<OutT> fetch(size_t count)
+		std::vector<OutT> fetchType(size_t count)
 		{
 			std::vector<OutT> val(count);
 			fetch(&val.front(), sizeof(val) * count);
@@ -96,7 +98,7 @@ namespace khutils
 
 		// read n elements of given type at given offset
 		template <typename OutT>
-		std::vector<OutT> readAt(size_t count, size_t offset)
+		std::vector<OutT> readTypeAt(size_t count, size_t offset)
 		{
 			std::vector<OutT> val(count);
 			readAt(offset, &val.front(), sizeof(val) * count);
@@ -108,7 +110,7 @@ namespace khutils
 
 		// read n elements of given type at given offset
 		template <typename OutT>
-		std::vector<OutT> fetchAt(size_t count, size_t offset)
+		std::vector<OutT> fetchTypeAt(size_t count, size_t offset)
 		{
 			std::vector<OutT> val(count);
 			fetchAt(offset, &val.front(), sizeof(val) * count);
@@ -121,73 +123,73 @@ namespace khutils
 		//---
 
 		template <typename OutT, typename ReadT>
-		using std::function<OutT(ReadT)> ConversionFunc;
+		using ConversionFunc = std::function<OutT(ReadT)>;
 
 		// read 1 element of ReadT, return as OutT
 		template <typename OutT, typename ReadT>
-		OutT readAs(ConversionFunc<OutT, ReadT> conv)
+		OutT readTypeAs(ConversionFunc<OutT, ReadT> conv)
 		{
-			return conv(this->read<ReadT>());
+			return conv(this->readType<ReadT>());
 		}
 
 		// fetch 1 element of ReadT, return as OutT
 		template <typename OutT, typename ReadT>
-		OutT fetchAs(ConversionFunc<OutT, ReadT> conv)
+		OutT fetchTypeAs(ConversionFunc<OutT, ReadT> conv)
 		{
-			return conv(this->fetch<ReadT>());
+			return conv(this->fetchType<ReadT>());
 		}
 
 		// read 1 element of ReadT at given offset, return as OutT
 		template <typename OutT, typename ReadT>
-		OutT readAsAt(size_t offset, ConversionFunc<OutT, ReadT> conv)
+		OutT readTypeAsAt(size_t offset, ConversionFunc<OutT, ReadT> conv)
 		{
-			return conv(this->readAt<ReadT>(offset));
+			return conv(this->readTypeAt<ReadT>(offset));
 		}
 
 		// fetch 1 element of ReadT at given offset, return as OutT
 		template <typename OutT, typename ReadT>
-		OutT fetchAsAt(size_t offset, ConversionFunc<OutT, ReadT> conv)
+		OutT fetchTypeAsAt(size_t offset, ConversionFunc<OutT, ReadT> conv)
 		{
-			return conv(this->fetchAt<ReadT>(offset));
+			return conv(this->fetchTypeAt<ReadT>(offset));
 		}
 
 		// read n elements of ReadT, return as OutT
 		template <typename OutT, typename ReadT>
-		std::vector<OutT> readAs(size_t count, ConversionFunc<OutT, ReadT> conv)
+		std::vector<OutT> readTypeAs(size_t count, ConversionFunc<OutT, ReadT> conv)
 		{
-			auto			  rval = this->read<ReadT>(count);
+			auto			  rval = this->readType<ReadT>(count);
 			std::vector<OutT> val;
-			std::tranform(rval.begin(), rval.end(), std::back_inserter(val), conv);
+			std::transform(rval.begin(), rval.end(), std::back_inserter(val), conv);
 			return val;
 		}
 
 		// fetch n elements of ReadT, return as OutT
 		template <typename OutT, typename ReadT>
-		std::vector<OutT> fetchAs(size_t count, ConversionFunc<OutT, ReadT> conv)
+		std::vector<OutT> fetchTypeAs(size_t count, ConversionFunc<OutT, ReadT> conv)
 		{
-			auto			  rval = this->fetch<ReadT>(count);
+			auto			  rval = this->fetchType<ReadT>(count);
 			std::vector<OutT> val;
-			std::tranform(rval.begin(), rval.end(), std::back_inserter(val), conv);
+			std::transform(rval.begin(), rval.end(), std::back_inserter(val), conv);
 			return val;
 		}
 
 		// read n elements of ReadT at given offset, return as OutT
 		template <typename OutT, typename ReadT>
-		std::vector<OutT> readAsAt(size_t count, size_t offset, ConversionFunc<OutT, ReadT> conv)
+		std::vector<OutT> readTypeAsAt(size_t count, size_t offset, ConversionFunc<OutT, ReadT> conv)
 		{
-			auto			  rval = this->readAt<ReadT>(count, offset);
+			auto			  rval = this->readTypeAt<ReadT>(count, offset);
 			std::vector<OutT> val;
-			std::tranform(rval.begin(), rval.end(), std::back_inserter(val), conv);
+			std::transform(rval.begin(), rval.end(), std::back_inserter(val), conv);
 			return val;
 		}
 
 		// read n elements of ReadT at given offset, return as OutT
 		template <typename OutT, typename ReadT>
-		std::vector<OutT> fetchAsAt(size_t count, size_t offset, ConversionFunc<OutT, ReadT> conv)
+		std::vector<OutT> fetchTypeAsAt(size_t count, size_t offset, ConversionFunc<OutT, ReadT> conv)
 		{
-			auto			  rval = this->fetchAt<ReadT>(count, offset);
+			auto			  rval = this->fetchTypeAt<ReadT>(count, offset);
 			std::vector<OutT> val;
-			std::tranform(rval.begin(), rval.end(), std::back_inserter(val), conv);
+			std::transform(rval.begin(), rval.end(), std::back_inserter(val), conv);
 			return val;
 		}
 	};

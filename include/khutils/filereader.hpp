@@ -1,12 +1,14 @@
 #ifndef KHUTILS_FILEREADER_HPP_INC
 #define KHUTILS_FILEREADER_HPP_INC
 
-//! file has dependency on boost.endian
-//! include wisely to keep compile times minimal
+#define KHUTILS_ASSERTION_INLINE
 
+#include "khutils/assertion.hpp"
 #include "khutils/base_handler.hpp"
 #include "khutils/endian.hpp"
 #include "khutils/file.hpp"
+#include "khutils/handlerinterface.hpp"
+#include "khutils/readerinterface.hpp"
 #include "khutils/typeconversion.hpp"
 
 #include <cstdio>
@@ -16,16 +18,93 @@
 
 namespace khutils
 {
-	//! file reader
-	//! wraps FILE* read in an endian-aware
-	//! and bit-fitting manner
-	//! usage: use typedef'ed version (see below)
-	template <endian::order _order>
-	struct _filereader;
+	class FileReaderImplementation : public virtual ReaderInterface
+	{
+	protected:
+		std::reference_wrapper<const FilePtr> m_file;
 
-	using filereader			   = _filereader<endian::native>;
-	using little_endian_filereader = _filereader<endian::order::little>;
-	using big_endian_filereader	= _filereader<endian::order::big>;
+		FileReaderImplementation()								  = delete;
+		FileReaderImplementation(const FileReaderImplementation&) = default;
+		FileReaderImplementation(FileReaderImplementation&&)	  = default;
+		FileReaderImplementation(const FilePtr& file);
+		FileReaderImplementation(std::reference_wrapper<const FilePtr>&& file);
+		FileReaderImplementation(const std::reference_wrapper<const FilePtr>& file);
+
+		FileReaderImplementation& operator=(const FileReaderImplementation&) = default;
+		FileReaderImplementation& operator=(FileReaderImplementation&&) = default;
+
+	public:
+		virtual ~FileReaderImplementation() = default;
+
+		//-- handler interface
+		virtual size_t getCurrentOffset();
+		virtual void jumpToOffset(size_t pos);
+		virtual void skip(size_t bytes);
+		virtual bool isEnd();
+
+		//-- reader interface
+		virtual void read(void* data, size_t size);
+	};
+
+	//----------------------------
+
+	template <endian::order _order>
+	class _FileReader : public FileReaderImplementation, public EndianReaderInterface<_order>
+	{
+	public:
+		_FileReader()					= delete;
+		_FileReader(const _FileReader&) = default;
+		_FileReader(_FileReader&&)		= default;
+		_FileReader(const FilePtr& file)		//
+			: FileReaderImplementation(file)	//
+			, EndianReaderInterface<_order>()
+		{
+		}
+		_FileReader(std::reference_wrapper<const FilePtr>&& file)	//
+			: FileReaderImplementation(file)						 //
+			, EndianReaderInterface<_order>()
+		{
+		}
+		_FileReader(const std::reference_wrapper<const FilePtr>& file)	//
+			: FileReaderImplementation(file)							  //
+			, EndianReaderInterface<_order>()
+		{
+		}
+		virtual ~_FileReader() = default;
+
+		_FileReader& operator=(const _FileReader&) = default;
+		_FileReader& operator=(_FileReader&&) = default;
+
+		//-- handler interface
+		virtual size_t getCurrentOffset()
+		{
+			return FileReaderImplementation::getCurrentOffset();
+		}
+		virtual void jumpToOffset(size_t pos)
+		{
+			FileReaderImplementation::jumpToOffset(pos);
+		}
+		virtual void skip(size_t bytes)
+		{
+			FileReaderImplementation::skip(bytes);
+		}
+		virtual bool isEnd()
+		{
+			return FileReaderImplementation::isEnd();
+		}
+
+		//-- reader interface
+		virtual void read(void* data, size_t size)
+		{
+			FileReaderImplementation::read(data, size);
+		}
+	};
+
+	//----------------------------
+
+	using filereader			   = _FileReader<endian::native>;
+	using little_endian_filereader = _FileReader<endian::order::little>;
+	using big_endian_filereader	= _FileReader<endian::order::big>;
 
 	struct filereader_trait
 	{
@@ -34,155 +113,69 @@ namespace khutils
 		typedef big_endian_filereader	big_endian_reader;
 	};
 
-	template <endian::order _order>
-	struct _filereader : base_handler_trait<_order>
-	{
-		std::reference_wrapper<const FilePtr> m_file;
-
-		_filereader()					= delete;
-		_filereader(const _filereader&) = default;
-		_filereader(_filereader&&)		= default;
-		_filereader(const FilePtr& file) : m_file(file)
-		{
-		}
-		_filereader(std::reference_wrapper<const FilePtr>&& file) : m_file(file)
-		{
-		}
-		_filereader(const std::reference_wrapper<const FilePtr>& file) : m_file(file)
-		{
-		}
-
-		_filereader& operator=(const _filereader&) = default;
-		_filereader& operator=(_filereader&&) = default;
-
-		//! reads ReadT from file, then endian-swaps and converts it into OutT
-		//! optional convert function can be used to upsample ReadT into bytewise
-		//! bigger OutT
-		//! e.g. to convert read U16 as F32
-		template <typename OutT, typename ReadT = OutT>
-		OutT read(SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
-		{
-			ReadT r;
-			fread(&r, sizeof(char), sizeof(ReadT), m_file.get().get());
-			return swapConv(r);
-		}
-
-		//! fetches ReadT from file WITHOUT incrementing position,
-		//! then endian-swaps and converts it into OutT
-		//! optional convert function can be used to upsample ReadT into bytewise
-		//! bigger OutT
-		//! e.g. to convert read U16 as F32
-		template <typename OutT, typename ReadT = OutT>
-		OutT fetch(SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
-		{
-			auto curPos = getCurrentOffset();
-			OutT t		= read<OutT, ReadT>(swapConv);
-			jumpToOffset(curPos);
-			return t;
-		}
-
-		//! fetches ReadT from file at given position WITHOUT incrementing position,
-		//! then
-		//! endian-swaps and converts it into OutT
-		//! optional convert function can be used to upsample ReadT into bytewise
-		//! bigger OutT
-		//! e.g. to convert read U16 as F32
-		template <typename OutT, typename ReadT = OutT>
-		OutT fetchAt(size_t readPos,
-					 SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
-		{
-			auto curPos = getCurrentOffset();
-			jumpToOffset(readPos);
-			OutT t = read<OutT, ReadT>(swapConv);
-			jumpToOffset(curPos);
-			return t;
-		}
-
-		//! reads count * ReadT from file, then endian-swaps and converts it into OutT
-		//! optional convert function can be used to upsample ReadT into bytewise
-		//! bigger OutT
-		//! e.g. to convert read U16 as F32
-		template <typename OutT, typename ReadT = OutT>
-		std::vector<OutT> read(size_t count,
-							   SwapConversionFuncT<OutT, ReadT> swapConv
-							   = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
-		{
-			std::vector<OutT> t(count);
-			std::generate_n(t.begin(), count, [&swapConv, this]() { return this->read<OutT, ReadT>(swapConv); });
-			return t;
-		}
-
-		//! fetches count * ReadT from file WITHOUT incrementing position,
-		//! then endian-swaps and converts it into OutT
-		//! optional convert function can be used to upsample ReadT into bytewise
-		//! bigger OutT
-		//! e.g. to convert read U16 as F32
-		template <typename OutT, typename ReadT = OutT>
-		std::vector<OutT> fetch(size_t count,
-								SwapConversionFuncT<OutT, ReadT> swapConv
-								= base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
-		{
-			auto			  curPos = getCurrentOffset();
-			std::vector<OutT> t		 = read<OutT, ReadT>(count, swapConv);
-			jumpToOffset(curPos);
-			return t;
-		}
-
-		//! fetches count * ReadT from file at given position WITHOUT incrementing
-		//! position,
-		//! then endian-swaps and converts it into OutT
-		//! optional convert function can be used to upsample ReadT into bytewise
-		//! bigger OutT
-		//! e.g. to convert read U16 as F32
-		template <typename OutT, typename ReadT = OutT>
-		std::vector<OutT> fetchAt(size_t readPos,
-								  size_t count,
-								  SwapConversionFuncT<OutT, ReadT> swapConv
-								  = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
-		{
-			auto curPos = getCurrentOffset();
-			jumpToOffset(readPos);
-			std::vector<OutT> t = read<OutT, ReadT>(count, swapConv);
-			jumpToOffset(curPos);
-			return t;
-		}
-
-		template <typename _SkipT>
-		void skip(size_t count = 1)
-		{
-			auto curPos = getCurrentOffset();
-			jumpToOffset(curPos + sizeof(_SkipT) * count);
-		}
-
-		template <size_t _Alignment>
-		void			 alignToNext()
-		{
-			auto pos			= getCurrentOffset();
-			auto nextAlignedPos = pos + (pos % _Alignment);
-			skip<char>(nextAlignedPos - pos);
-		}
-
-		const FilePtr& getFile()
-		{
-			return m_file;
-		}
-
-		size_t getCurrentOffset()
-		{
-			return ftell(m_file.get().get());
-		}
-
-		void jumpToOffset(size_t pos)
-		{
-			fseek(m_file.get().get(), pos, SEEK_SET);
-		}
-
-		bool isEnd()
-		{
-			return feof(m_file.get().get());
-		}
-	};
-
 }	// namespace khutils
+
+
+#if defined(KHUTILS_FILEREADER_IMPL)
+
+khutils::FileReaderImplementation::FileReaderImplementation(const FilePtr& file)	//
+	: m_file(file)
+{
+}
+
+//----------------------------
+
+khutils::FileReaderImplementation::FileReaderImplementation(std::reference_wrapper<const FilePtr>&& file)	//
+	: m_file(file)
+{
+}
+
+//----------------------------
+
+khutils::FileReaderImplementation::FileReaderImplementation(const std::reference_wrapper<const FilePtr>& file)	//
+	: m_file(file)
+{
+}
+
+//----------------------------
+//-- handler interface
+
+size_t khutils::FileReaderImplementation::getCurrentOffset()
+{
+	return ftell(m_file.get().get());
+}
+
+//----------------------------
+
+void khutils::FileReaderImplementation::jumpToOffset(size_t pos)
+{
+	fseek(m_file.get().get(), pos, SEEK_SET);
+}
+
+//----------------------------
+
+void khutils::FileReaderImplementation::skip(size_t bytes)
+{
+	auto curPos = getCurrentOffset();
+	jumpToOffset(curPos + bytes);
+}
+
+//----------------------------
+
+bool khutils::FileReaderImplementation::isEnd()
+{
+	return feof(m_file.get().get());
+}
+
+//----------------------------
+//-- reader interface
+
+void khutils::FileReaderImplementation::read(void* data, size_t size)
+{
+	fread(data, sizeof(char), size, m_file.get().get());
+}
+
+#endif	// defined(KHUTILS_FILEREADER_IMPL)
+
 
 #endif	// KHUTILS_FILEREADER_HPP_INC

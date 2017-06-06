@@ -3,12 +3,11 @@
 
 #define KHUTILS_ASSERTION_INLINE
 
-//! file has dependency on boost.endian
-//! include wisely to keep compile times minimal
-
 #include "khutils/assertion.hpp"
 #include "khutils/base_handler.hpp"
 #include "khutils/endian.hpp"
+#include "khutils/handlerinterface.hpp"
+#include "khutils/readerinterface.hpp"
 #include "khutils/typeconversion.hpp"
 
 #include <functional>
@@ -16,211 +15,310 @@
 
 namespace khutils
 {
-	//! data reader
-	//! read data from buffer
-	//! usage: use typedef'ed version (see below)
-	template <typename ByteForwardIterator, endian::order _order>
-	struct _memoryreader;
-
-	template <typename ByteForwardIterator>
-	using memoryreader = _memoryreader<ByteForwardIterator, endian::native>;
-	template <typename ByteForwardIterator>
-	using little_endian_memoryreader = _memoryreader<ByteForwardIterator, endian::order::little>;
-	template <typename ByteForwardIterator>
-	using big_endian_memoryreader = _memoryreader<ByteForwardIterator, endian::order::big>;
-
-	template <typename ByteForwardIterator>
-	struct memoryreader_trait
+	struct MemoryReaderStateInterface
 	{
-		typedef memoryreader<ByteForwardIterator>				native_endian_reader;
-		typedef little_endian_memoryreader<ByteForwardIterator> little_endian_reader;
-		typedef big_endian_memoryreader<ByteForwardIterator>	big_endian_reader;
+		//! reads n bytes and updates internal position
+		//! @return int: 0 or negative: out of range; positive: ok
+		virtual int read_bytes(void* data, size_t size) = 0;
+
+		//! reads n bytes and DOES NOT update internal position
+		//! @return int: 0 or negative: out of range; positive: ok
+		virtual int fetch_bytes(void* data, size_t size) = 0;
+
+		//! updates internal position
+		//! @return int: 0 or negative: out of range; positive: ok
+		virtual int set_position(size_t offset) = 0;
+
+		//! returns current position
+		virtual size_t get_position() = 0;
+
+		//! return true if at end or beyond
+		virtual bool is_end() = 0;
 	};
 
+	//----------------------------
+
 	template <typename ByteForwardIterator>
-	struct _memoryreader_state
+	struct BFI_MemoryReaderStateInterface : MemoryReaderStateInterface
 	{
 		const ByteForwardIterator begin;
 		const ByteForwardIterator end;
 		ByteForwardIterator		  current;
+		static_assert(sizeof(decltype(*begin)) == sizeof(uint8_t), "wrong iterator type: not pointing to bytes");
 
-		_memoryreader_state() = delete;
-		_memoryreader_state(ByteForwardIterator alpha, ByteForwardIterator omega)
-			: begin(alpha), current(alpha), end(omega)
+		BFI_MemoryReaderStateInterface() = delete;
+		BFI_MemoryReaderStateInterface(ByteForwardIterator alpha, ByteForwardIterator omega)
+			: begin(alpha)	//
+			, current(alpha)
+			, end(omega)
 		{
 		}
-		_memoryreader_state(const _memoryreader_state&) = default;
-		_memoryreader_state(_memoryreader_state&&)		= default;
+		BFI_MemoryReaderStateInterface(const BFI_MemoryReaderStateInterface&) = default;
+		BFI_MemoryReaderStateInterface(BFI_MemoryReaderStateInterface&&)	  = default;
 
-		_memoryreader_state& operator=(const _memoryreader_state&) = default;
-		_memoryreader_state& operator=(_memoryreader_state&&) = default;
+		BFI_MemoryReaderStateInterface& operator=(const BFI_MemoryReaderStateInterface&) = default;
+		BFI_MemoryReaderStateInterface& operator=(BFI_MemoryReaderStateInterface&&) = default;
+
+		//- MemoryReaderStateInterface
+		virtual int read_bytes(void* data, size_t size)
+		{
+			if (size < std::distance(current, end))
+			{
+				std::copy(current, current + size, (char*)data);
+				current += size;	// UPDATE current
+				return size;
+			}
+
+			return (int32_t)std::distance(current, end) - (int32_t)size;
+		}
+
+		virtual int fetch_bytes(void* data, size_t size)
+		{
+			if (size < std::distance(current, end))
+			{
+				std::copy(current, current + size, (char*)data);
+				// DO NOT UPDATE current
+				return size;
+			}
+
+			return (int32_t)std::distance(current, end) - (int32_t)size;
+		}
+
+		virtual int set_position(size_t offset)
+		{
+			if (offset <= std::distance(begin, end))
+			{
+				current = begin + offset;
+				return offset;
+			}
+
+			return std::distance(begin, end) - offset;
+		}
+
+		virtual size_t get_position()
+		{
+			return std::distance(begin, current);
+		}
+
+		virtual bool is_end()
+		{
+			return std::distance(begin, end) <= std::distance(begin, current);
+		}
 	};
 
-	template <typename ByteForwardIterator, endian::order _order>
-	struct _memoryreader : base_handler_trait<_order>
+	template <typename ByteForwardIterator>
+	std::shared_ptr<MemoryReaderStateInterface> make_bfi_readerstate(ByteForwardIterator alpha, ByteForwardIterator omega)
 	{
-		typedef _memoryreader_state<ByteForwardIterator>				 state;
-		std::reference_wrapper<_memoryreader_state<ByteForwardIterator>> m_ih;
-		// static_assert(sizeof(decltype(*(m_ih.get().begin))) == 1, "not a 1 byte sized datatype");
+		return std::shared_ptr<MemoryReaderStateInterface>{new BFI_MemoryReaderStateInterface<ByteForwardIterator>(alpha, omega)};
+	}
 
-		_memoryreader()						= delete;
-		_memoryreader(const _memoryreader&) = default;
-		_memoryreader(_memoryreader&&)		= default;
-		_memoryreader(_memoryreader_state<ByteForwardIterator>& ih) : m_ih(ih)	//
+	//----------------------------
+
+	class MemoryReaderImplementation : public virtual ReaderInterface
+	{
+	public:
+		typedef std::shared_ptr<MemoryReaderStateInterface> State;
+
+	protected:
+		State m_state;
+
+	protected:
+		MemoryReaderImplementation()								  = delete;
+		MemoryReaderImplementation(const MemoryReaderImplementation&) = default;
+		MemoryReaderImplementation(MemoryReaderImplementation&&)	  = default;
+		MemoryReaderImplementation(const State& state);
+		MemoryReaderImplementation(State&& state);
+
+		MemoryReaderImplementation& operator=(const MemoryReaderImplementation&) = default;
+		MemoryReaderImplementation& operator=(MemoryReaderImplementation&&) = default;
+
+	public:
+		virtual ~MemoryReaderImplementation() = default;
+
+		//-- handler interface
+		virtual size_t getCurrentOffset();
+		virtual void jumpToOffset(size_t pos);
+		virtual void skip(size_t bytes);
+		virtual bool isEnd();
+
+		//-- reader interface
+		virtual void read(void* data, size_t size);
+		virtual void fetch(void* data, size_t size);
+		virtual void readAt(size_t offset, void* data, size_t size);
+		virtual void fetchAt(size_t offset, void* data, size_t size);
+	};
+
+	//----------------------------
+
+	template <endian::order _order>
+	class _MemoryReader : public MemoryReaderImplementation, public EndianReaderInterface<_order>
+	{
+	public:
+		_MemoryReader()						= delete;
+		_MemoryReader(const _MemoryReader&) = default;
+		_MemoryReader(_MemoryReader&&)		= default;
+		_MemoryReader(const State& state)		   //
+			: MemoryReaderImplementation(state)	//
+			, EndianReaderInterface<_order>()
 		{
-			KHUTILS_ASSERT_NOT(ih.begin, ih.end);
 		}
-		_memoryreader(std::reference_wrapper<_memoryreader_state<ByteForwardIterator>>& ih) : m_ih(ih)
+		_MemoryReader(State&& state)			   //
+			: MemoryReaderImplementation(state)	//
+			, EndianReaderInterface<_order>()
 		{
-			KHUTILS_ASSERT_NOT(ih.begin, ih.end);
 		}
-		_memoryreader(std::reference_wrapper<_memoryreader_state<ByteForwardIterator>>&& ih) : m_ih(ih)
+		virtual ~_MemoryReader() = default;
+
+		_MemoryReader& operator=(const _MemoryReader&) = default;
+		_MemoryReader& operator=(_MemoryReader&&) = default;
+
+		//-- handler interface
+		virtual size_t getCurrentOffset()
 		{
-			KHUTILS_ASSERT_NOT(ih.begin, ih.end);
+			return MemoryReaderImplementation::getCurrentOffset();
 		}
-
-		_memoryreader& operator=(const _memoryreader&) = default;
-		_memoryreader& operator=(_memoryreader&&) = default;
-
-
-		//! reads ReadT from data, then endian-swaps and converts it into OutT
-		//! optional convert function can be used to upsample ReadT into bytewise
-		//! bigger OutT
-		//! e.g. to convert read U16 as F32
-		template <typename OutT, typename ReadT = OutT>
-		OutT read(SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
+		virtual void jumpToOffset(size_t pos)
 		{
-			ReadT r		  = (ReadT)0;
-			char* rawdata = reinterpret_cast<char*>(&r);
-			for (size_t i = 0; i < sizeof(ReadT); ++i)
-			{
-				if (m_ih.get().current != m_ih.get().end)
-				{
-					rawdata[i] = *(m_ih.get().current);
-				}
-				++m_ih.get().current;
-			}
-
-			return swapConv(r);
+			MemoryReaderImplementation::jumpToOffset(pos);
 		}
-
-		//! fetches ReadT from data WITHOUT incrementing position,
-		//! then endian-swaps and converts it into OutT
-		//! optional convert function can be used to upsample ReadT into bytewise
-		//! bigger OutT
-		//! e.g. to convert read U16 as F32
-		template <typename OutT, typename ReadT = OutT>
-		OutT fetch(SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
+		virtual void skip(size_t bytes)
 		{
-			auto curPos		   = m_ih.get().current;
-			OutT t			   = read<OutT, ReadT>(swapConv);
-			m_ih.get().current = curPos;
-			return t;
+			MemoryReaderImplementation::skip(bytes);
 		}
-
-		//! fetches ReadT from data at given position WITHOUT incrementing position,
-		//! then endian-swaps and converts it into OutT
-		//! optional convert function can be used to upsample ReadT into bytewise
-		//! bigger OutT
-		//! e.g. to convert read U16 as F32
-		template <typename OutT, typename ReadT = OutT>
-		OutT fetchAt(size_t readPos,
-					 SwapConversionFuncT<OutT, ReadT> swapConv = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
+		virtual bool isEnd()
 		{
-			auto curPos		   = m_ih.get().current;
-			m_ih.current	   = m_ih.get().begin + readPos;
-			OutT t			   = read<OutT, ReadT>(swapConv);
-			m_ih.get().current = curPos;
-			return t;
-		}
-
-		//! reads count * ReadT from data, then endian-swaps and converts it into OutT
-		//! optional convert function can be used to upsample ReadT into bytewise
-		//! bigger OutT
-		//! e.g. to convert read U16 as F32
-		template <typename OutT, typename ReadT = OutT>
-		std::vector<OutT> read(size_t count,
-							   SwapConversionFuncT<OutT, ReadT> swapConv
-							   = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
-		{
-			std::vector<OutT> t(count);
-			std::generate_n(t.begin(), count, [&swapConv, this]() { return this->read<OutT, ReadT>(swapConv); });
-			return t;
+			return MemoryReaderImplementation::isEnd();
 		}
 
-		//! fetches count * ReadT from data WITHOUT incrementing position, then
-		//! endian-swaps and converts it into OutT
-		//! optional convert function can be used to upsample ReadT into bytewise
-		//! bigger OutT
-		//! e.g. to convert read U16 as F32
-		template <typename OutT, typename ReadT = OutT>
-		std::vector<OutT> fetch(size_t count,
-								SwapConversionFuncT<OutT, ReadT> swapConv
-								= base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
+		//-- reader interface
+		virtual void read(void* data, size_t size)
 		{
-			auto			  curPos = m_ih.get().current;
-			std::vector<OutT> t		 = read<OutT, ReadT>(count, swapConv);
-			m_ih.get().current		 = curPos;
-			return t;
+			MemoryReaderImplementation::read(data, size);
 		}
+		virtual void fetch(void* data, size_t size)
+		{
+			MemoryReaderImplementation::fetch(data, size);
+		}
+		virtual void readAt(size_t offset, void* data, size_t size)
+		{
+			MemoryReaderImplementation::readAt(offset, data, size);
+		}
+		virtual void fetchAt(size_t offset, void* data, size_t size)
+		{
+			MemoryReaderImplementation::fetchAt(offset, data, size);
+		}
+	};
 
-		//! fetches count * ReadT from data at given position WITHOUT incrementing
-		//! position,
-		//! then endian-swaps and converts it into OutT
-		//! optional convert function can be used to upsample ReadT into bytewise
-		//! bigger OutT
-		//! e.g. to convert read U16 as F32
-		template <typename OutT, typename ReadT = OutT>
-		std::vector<OutT> fetchAt(size_t readPos,
-								  size_t count,
-								  SwapConversionFuncT<OutT, ReadT> swapConv
-								  = base_handler_trait<_order>::template convert_after_swap<OutT, ReadT>)
-		{
-			auto curPos			= m_ih.get().current;
-			m_ih.get().current  = m_ih.get().begin + readPos;
-			std::vector<OutT> t = read<OutT, ReadT>(count, swapConv);
-			m_ih.get().current  = curPos;
-			return t;
-		}
+	//----------------------------
 
-		template <typename _SkipT>
-		void skip(size_t count = 1)
-		{
-			for (size_t i = 0; i < (sizeof(_SkipT) * count); ++i)
-			{
-				++m_ih.get().current;
-			}
-		}
+	using memoryreader				 = _MemoryReader<endian::native>;
+	using little_endian_memoryreader = _MemoryReader<endian::order::little>;
+	using big_endian_memoryreader	= _MemoryReader<endian::order::big>;
 
-		template <size_t _Alignment>
-		void			 alignToNext()
-		{
-			auto pos			= getCurrentOffset();
-			auto nextAlignedPos = pos + (pos % _Alignment);
-			skip<char>(nextAlignedPos - pos);
-		}
-
-		ByteForwardIterator getCurrent()
-		{
-			return m_ih.get().current;
-		}
-
-		size_t getCurrentOffset()
-		{
-			return std::distance(m_ih.get().begin, getCurrent());
-		}
-
-		void jumpToOffset(size_t pos)
-		{
-			m_ih.get().current = m_ih.get().begin + pos;
-		}
-
-		bool isEnd()
-		{
-			return m_ih.get().current == m_ih.get().end;
-		}
+	struct memoryreader_trait
+	{
+		typedef memoryreader			   native_endian_reader;
+		typedef little_endian_memoryreader little_endian_reader;
+		typedef big_endian_memoryreader	big_endian_reader;
 	};
 
 }	// namespace khutils
+
+
+#if defined(KHUTILS_MEMORYREADER_IMPL)
+
+khutils::MemoryReaderImplementation::MemoryReaderImplementation(const State& state)	//
+	: m_state(state)
+{
+	KHUTILS_ASSERT_PTR(state);
+	KHUTILS_ASSERT_PTR(m_state);
+}
+
+//----------------------------
+
+khutils::MemoryReaderImplementation::MemoryReaderImplementation(State&& state)	//
+	: m_state(state)
+{
+	KHUTILS_ASSERT_PTR(state);
+	KHUTILS_ASSERT_PTR(m_state);
+}
+
+//----------------------------
+//-- handler interface
+
+size_t khutils::MemoryReaderImplementation::getCurrentOffset()
+{
+	KHUTILS_ASSERT_PTR(m_state);
+	m_state->get_position();
+}
+
+//----------------------------
+
+void khutils::MemoryReaderImplementation::jumpToOffset(size_t pos)
+{
+	KHUTILS_ASSERT_PTR(m_state);
+	auto r = m_state->set_position(pos);
+	KHUTILS_ASSERT(r > 0);
+}
+
+//----------------------------
+
+void khutils::MemoryReaderImplementation::skip(size_t bytes)
+{
+	KHUTILS_ASSERT_PTR(m_state);
+	jumpToOffset(m_state->get_position() + bytes);
+}
+
+//----------------------------
+
+bool khutils::MemoryReaderImplementation::isEnd()
+{
+	KHUTILS_ASSERT_PTR(m_state);
+	return m_state->is_end();
+}
+
+//----------------------------
+//-- reader interface
+
+void khutils::MemoryReaderImplementation::read(void* data, size_t size)
+{
+	KHUTILS_ASSERT_PTR(m_state);
+	auto r = m_state->read_bytes(data, size);
+	KHUTILS_ASSERT(r > 0);
+}
+
+//----------------------------
+
+void khutils::MemoryReaderImplementation::fetch(void* data, size_t size)
+{
+	KHUTILS_ASSERT_PTR(m_state);
+	auto r = m_state->fetch_bytes(data, size);
+	KHUTILS_ASSERT(r > 0);
+}
+
+//----------------------------
+
+void khutils::MemoryReaderImplementation::readAt(size_t offset, void* data, size_t size)
+{
+	KHUTILS_ASSERT_PTR(m_state);
+	auto r = m_state->set_position(offset);
+	KHUTILS_ASSERT(r > 0);
+	read(data, size);
+}
+
+//----------------------------
+
+void khutils::MemoryReaderImplementation::fetchAt(size_t offset, void* data, size_t size)
+{
+	KHUTILS_ASSERT_PTR(m_state);
+	auto pos = m_state->get_position();
+	auto r   = m_state->set_position(offset);
+	KHUTILS_ASSERT(r > 0);
+	fetch(data, size);
+	r = m_state->set_position(pos);
+	KHUTILS_ASSERT(r > 0);
+}
+
+#endif	// defined(KHUTILS_MEMORYREADER_IMPL)
 
 #endif	// KHUTILS_MEMORYREADER_HPP_INC

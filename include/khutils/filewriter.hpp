@@ -1,13 +1,15 @@
 #ifndef KHUTILS_FILEWRITER_HPP_INC
 #define KHUTILS_FILEWRITER_HPP_INC
 
-//! file has dependency on boost.endian
-//! include wisely to keep compile times minimal
+#define KHUTILS_ASSERTION_INLINE
 
+#include "khutils/assertion.hpp"
 #include "khutils/base_handler.hpp"
 #include "khutils/endian.hpp"
 #include "khutils/file.hpp"
+#include "khutils/handlerinterface.hpp"
 #include "khutils/typeconversion.hpp"
+#include "khutils/writerinterface.hpp"
 
 #include <cstdio>
 #include <functional>
@@ -16,16 +18,93 @@
 
 namespace khutils
 {
-	//! file writer
-	//! wraps FILE* write in an endian-aware
-	//! and bit-fitting manner
-	//! usage: use typedef'ed version (see below)
-	template <endian::order _order>
-	struct _filewriter;
+	class FileWriterImplementation : public virtual WriterInterface
+	{
+	protected:
+		std::reference_wrapper<const FilePtr> m_file;
 
-	using filewriter			   = _filewriter<endian::native>;
-	using little_endian_filewriter = _filewriter<endian::order::little>;
-	using big_endian_filewriter	= _filewriter<endian::order::big>;
+		FileWriterImplementation()								  = delete;
+		FileWriterImplementation(const FileWriterImplementation&) = default;
+		FileWriterImplementation(FileWriterImplementation&&)	  = default;
+		FileWriterImplementation(const FilePtr& file);
+		FileWriterImplementation(std::reference_wrapper<const FilePtr>&& file);
+		FileWriterImplementation(const std::reference_wrapper<const FilePtr>& file);
+
+		FileWriterImplementation& operator=(const FileWriterImplementation&) = default;
+		FileWriterImplementation& operator=(FileWriterImplementation&&) = default;
+
+	public:
+		virtual ~FileWriterImplementation() = default;
+
+		//-- handler interface
+		virtual size_t getCurrentOffset();
+		virtual void jumpToOffset(size_t pos);
+		virtual void skip(size_t bytes);
+		virtual bool isEnd();
+
+		//-- writer interface
+		virtual void write(void* data, size_t size);
+	};
+
+	//----------------------------
+
+	template <endian::order _order>
+	class _FileWriter : public FileWriterImplementation, public EndianWriterInterface<_order>
+	{
+	public:
+		_FileWriter()					= delete;
+		_FileWriter(const _FileWriter&) = default;
+		_FileWriter(_FileWriter&&)		= default;
+		_FileWriter(const FilePtr& file)		//
+			: FileWriterImplementation(file)	//
+			, EndianWriterInterface<_order>()
+		{
+		}
+		_FileWriter(std::reference_wrapper<const FilePtr>&& file)	//
+			: FileWriterImplementation(file)						 //
+			, EndianWriterInterface<_order>()
+		{
+		}
+		_FileWriter(const std::reference_wrapper<const FilePtr>& file)	//
+			: FileWriterImplementation(file)							  //
+			, EndianWriterInterface<_order>()
+		{
+		}
+		virtual ~_FileWriter() = default;
+
+		_FileWriter& operator=(const _FileWriter&) = default;
+		_FileWriter& operator=(_FileWriter&&) = default;
+
+		//-- handler interface
+		virtual size_t getCurrentOffset()
+		{
+			return FileWriterImplementation::getCurrentOffset();
+		}
+		virtual void jumpToOffset(size_t pos)
+		{
+			FileWriterImplementation::jumpToOffset(pos);
+		}
+		virtual void skip(size_t bytes)
+		{
+			FileWriterImplementation::skip(bytes);
+		}
+		virtual bool isEnd()
+		{
+			return FileWriterImplementation::isEnd();
+		}
+
+		//-- writer interface
+		virtual void write(void* data, size_t size)
+		{
+			FileWriterImplementation::write(data, size);
+		}
+	};
+
+	//----------------------------
+
+	using filewriter			   = _FileWriter<endian::native>;
+	using little_endian_filewriter = _FileWriter<endian::order::little>;
+	using big_endian_filewriter	= _FileWriter<endian::order::big>;
 
 	struct filewriter_trait
 	{
@@ -34,100 +113,68 @@ namespace khutils
 		typedef big_endian_filewriter	big_endian_writer;
 	};
 
-	template <endian::order _order>
-	struct _filewriter : base_handler_trait<_order>
-	{
-		std::reference_wrapper<const FilePtr> m_file;
-
-		_filewriter()					= delete;
-		_filewriter(const _filewriter&) = default;
-		_filewriter(_filewriter&&)		= default;
-		_filewriter(const FilePtr& file) : m_file(file)
-		{
-		}
-		_filewriter(std::reference_wrapper<const FilePtr>&& file) : m_file(file)
-		{
-		}
-		_filewriter(const std::reference_wrapper<const FilePtr>& file) : m_file(file)
-		{
-		}
-
-		_filewriter& operator=(const _filewriter&) = default;
-		_filewriter& operator=(_filewriter&&) = default;
-
-		//! writes WriteT into ofile after converting and end0an-swapping provided
-		//! InT
-		//! optional convert function can be used to downsample InT into bytewise
-		//! smaller WriteT
-		//! e.g. to write F32 as U16
-		template <typename WriteT, typename InT = WriteT>
-		void write(InT t, SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
-		{
-			WriteT r = swapConv(t);
-			fwrite(&r, sizeof(char), sizeof(WriteT), m_file.get().get());
-		}
-
-		//! writes coubnt * WriteT into ofile after converting and end0an-swapping
-		//! provided
-		//! InT
-		//! optional convert function can be used to downsample InT into bytewise
-		//! smaller WriteT
-		//! e.g. to write F32 as U16
-		template <typename WriteT, typename InT = WriteT>
-		void write(const InT* t,
-				   size_t	 count,
-				   SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
-		{
-			std::for_each(t, t + count, [&swapConv, this](const auto& elem) { this->write<WriteT, InT>(elem, swapConv); });
-		}
-
-		//! writes vector<WriteT> into ofile after converting and end0an-swapping
-		//! provided
-		//! InT
-		//! optional convert function can be used to downsample InT into bytewise
-		//! smaller WriteT
-		//! e.g. to write F32 as U16
-		template <typename WriteT, typename InT = WriteT>
-		void write(const std::vector<InT>& t,
-				   SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
-		{
-			write(t.data(), t.size(), swapConv);
-		}
-
-		template <typename _SkipT>
-		void skip(size_t count = 1)
-		{
-			const char c = 0;
-			for (size_t i = 0; i < sizeof(_SkipT) * count; ++i)
-			{
-				fwrite(&c, sizeof(char), 1, m_file.get().get());
-			}
-		}
-
-		template <size_t _Alignment>
-		void			 alignToNext()
-		{
-			auto pos			= getCurrentOffset();
-			auto nextAlignedPos = pos + (pos % _Alignment);
-			skip<char>(nextAlignedPos - pos);
-		}
-
-		const FilePtr& getFile()
-		{
-			return m_file;
-		}
-
-		size_t getCurrentOffset()
-		{
-			return ftell(m_file.get().get());
-		}
-
-		bool isEnd()
-		{
-			return feof(m_file.get().get());
-		}
-	};
-
 }	// namespace khutils
+
+#if defined(KHUTILS_FILEWRITER_IMPL)
+
+khutils::FileWriterImplementation::FileWriterImplementation(const FilePtr& file)	//
+	: m_file(file)
+{
+}
+
+//----------------------------
+
+khutils::FileWriterImplementation::FileWriterImplementation(std::reference_wrapper<const FilePtr>&& file)	//
+	: m_file(file)
+{
+}
+
+//----------------------------
+
+khutils::FileWriterImplementation::FileWriterImplementation(const std::reference_wrapper<const FilePtr>& file)	//
+	: m_file(file)
+{
+}
+
+//----------------------------
+//-- handler interface
+
+size_t khutils::FileWriterImplementation::getCurrentOffset()
+{
+	return ftell(m_file.get().get());
+}
+
+//----------------------------
+
+void khutils::FileWriterImplementation::jumpToOffset(size_t pos)
+{
+	fseek(m_file.get().get(), pos, SEEK_SET);
+}
+
+//----------------------------
+
+void khutils::FileWriterImplementation::skip(size_t bytes)
+{
+	auto curPos = getCurrentOffset();
+	jumpToOffset(curPos + bytes);
+}
+
+//----------------------------
+
+bool khutils::FileWriterImplementation::isEnd()
+{
+	return feof(m_file.get().get());
+}
+
+//----------------------------
+//-- writer interface
+
+void khutils::FileWriterImplementation::write(void* data, size_t size)
+{
+	fwrite(data, sizeof(char), size, m_file.get().get());
+}
+
+#endif	// defined(KHUTILS_FILEWRITER_IMPL)
+
 
 #endif	// KHUTILS_FILEWRITER_HPP_INC

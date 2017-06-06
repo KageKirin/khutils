@@ -10,6 +10,8 @@
 #include "khutils/handlerinterface.hpp"
 #include "khutils/typeconversion.hpp"
 
+#include <algorithm>
+#include <functional>
 
 namespace khutils
 {
@@ -36,167 +38,265 @@ namespace khutils
 
 		// write 1 element of given type
 		template <typename InT>
-		void write(const InT& val)
+		void writeType(const InT& _val)
 		{
-			write(&val, sizeof(val));
-			return endian_reverse<m_order, endian::native>(val);
+			const InT val = endian_reverse<m_order, endian::native>(_val);
+			write((void*)&val, sizeof(val));
 		}
 
 		// put 1 element of given type
 		template <typename InT>
-		void put(const InT& val)
+		void putType(const InT& _val)
 		{
-			put(&val, sizeof(val));
-			return endian_reverse<m_order, endian::native>(val);
+			const InT val = endian_reverse<m_order, endian::native>(_val);
+			put((void*)&val, sizeof(val));
 		}
 
 		// write 1 element of given type at given offset
 		template <typename InT>
-		void writeAt(const InT& val, size_t offset)
+		void writeTypeAt(const InT& _val, size_t offset)
 		{
-			writeAt(offset, &val, sizeof(val));
-			return endian_reverse<m_order, endian::native>(val);
+			const InT val = endian_reverse<m_order, endian::native>(_val);
+			writeAt(offset, (void*)&val, sizeof(val));
 		}
 
 		// put 1 element of given type at given offset
 		template <typename InT>
-		void putAt(const InT& val, size_t offset)
+		void putTypeAt(const InT& _val, size_t offset)
 		{
-			putAt(offset, &val, sizeof(val));
-			return endian_reverse<m_order, endian::native>(val);
+			const InT val = endian_reverse<m_order, endian::native>(_val);
+			putAt(offset, (void*)&val, sizeof(val));
 		}
 
 		// write n elements of given type
 		template <typename InT>
-		void write(const std::vector<InT>& _val)
+		void writeType(const std::vector<InT>& _val)
 		{
-			const std::vector<InT> val;
+			std::vector<InT> val;
 			val.reserve(_val.size());
 			std::transform(_val.begin(), _val.end(), std::back_inserter(val), [](auto& _v) {
 				return endian_reverse<m_order, endian::native>(_v);
 			});
 
-			write(&val.front(), sizeof(val) * count);
-			return val;
+			write(&val.front(), sizeof(val) * val.size());
 		}
 
 		// put n elements of given type
 		template <typename InT>
-		void put(const std::vector<InT>& _val)
+		void putType(const std::vector<InT>& _val)
 		{
-			const std::vector<InT> val;
+			std::vector<InT> val;
 			val.reserve(_val.size());
 			std::transform(_val.begin(), _val.end(), std::back_inserter(val), [](auto& _v) {
 				return endian_reverse<m_order, endian::native>(_v);
 			});
 
-			put(&val.front(), sizeof(val) * count);
-			return val;
+			put(&val.front(), sizeof(val) * val.size());
 		}
 
 		// write n elements of given type at given offset
 		template <typename InT>
-		void writeAt(const std::vector<InT>& _val, size_t offset)
+		void writeTypeAt(const std::vector<InT>& _val, size_t offset)
 		{
-			const std::vector<InT> val;
+			std::vector<InT> val;
 			val.reserve(_val.size());
 			std::transform(_val.begin(), _val.end(), std::back_inserter(val), [](auto& _v) {
 				return endian_reverse<m_order, endian::native>(_v);
 			});
 
-			writeAt(offset, &val.front(), sizeof(val) * count);
-			return val;
+			writeAt(offset, &val.front(), sizeof(val) * val.size());
 		}
 
 		// write n elements of given type at given offset
 		template <typename InT>
-		void putAt(const std::vector<InT>& _val, size_t offset)
+		void putTypeAt(const std::vector<InT>& _val, size_t offset)
 		{
-			const std::vector<InT> val;
+			std::vector<InT> val;
 			val.reserve(_val.size());
 			std::transform(_val.begin(), _val.end(), std::back_inserter(val), [](auto& _v) {
 				return endian_reverse<m_order, endian::native>(_v);
 			});
 
-			putAt(offset, &val.front(), sizeof(val) * count);
-			return val;
+			putAt(offset, &val.front(), sizeof(val) * val.size());
+		}
+
+		//---
+
+		// write n elements of given type
+		template <typename InT>
+		void writeType(const InT* _val, size_t count)
+		{
+			std::vector<InT> val;
+			val.reserve(count);
+			std::transform(_val, _val + count, std::back_inserter(val), [](auto& _v) {
+				return endian_reverse<m_order, endian::native>(_v);
+			});
+
+			write(&val.front(), sizeof(val) * val.size());
+		}
+
+		// put n elements of given type
+		template <typename InT>
+		void putType(const InT* _val, size_t count)
+		{
+			std::vector<InT> val;
+			val.reserve(count);
+			std::transform(_val, _val + count, std::back_inserter(val), [](auto& _v) {
+				return endian_reverse<m_order, endian::native>(_v);
+			});
+
+			put(&val.front(), sizeof(val) * val.size());
+		}
+
+		// write n elements of given type at given offset
+		template <typename InT>
+		void writeTypeAt(const InT* _val, size_t count, size_t offset)
+		{
+			std::vector<InT> val;
+			val.reserve(count);
+			std::transform(_val, _val + count, std::back_inserter(val), [](auto& _v) {
+				return endian_reverse<m_order, endian::native>(_v);
+			});
+
+			writeAt(offset, &val.front(), sizeof(val) * val.size());
+		}
+
+		// write n elements of given type at given offset
+		template <typename InT>
+		void putTypeAt(const InT* _val, size_t count, size_t offset)
+		{
+			std::vector<InT> val;
+			val.reserve(count);
+			std::transform(_val, _val + count, std::back_inserter(val), [](auto& _v) {
+				return endian_reverse<m_order, endian::native>(_v);
+			});
+
+			putAt(offset, &val.front(), sizeof(val) * val.size());
 		}
 
 		//---
 
 		template <typename InT, typename WriteT>
-		using std::function<WriteT(InT)> ConversionFunc;
+		using ConversionFunc = std::function<WriteT(InT)>;
 
 		// write 1 element of WriteT, return as InT
 		template <typename InT, typename WriteT>
-		void writeAs(const InT& val, ConversionFunc<InT, WriteT> conv)
+		void writeTypeAs(const InT& val, ConversionFunc<InT, WriteT> conv)
 		{
-			this->write<WriteT>(conv(val));
+			this->writeType<WriteT>(conv(val));
 		}
 
 		// put 1 element of WriteT, return as InT
 		template <typename InT, typename WriteT>
-		void putAs(const InT& val, ConversionFunc<InT, WriteT> conv)
+		void putTypeAs(const InT& val, ConversionFunc<InT, WriteT> conv)
 		{
-			this->put<WriteT>(conv(val));
+			this->putType<WriteT>(conv(val));
 		}
 
 		// write 1 element of WriteT at given offset, return as InT
 		template <typename InT, typename WriteT>
-		void writeAsAt(const InT& val, size_t offset, ConversionFunc<InT, WriteT> conv)
+		void writeTypeAsAt(const InT& val, size_t offset, ConversionFunc<InT, WriteT> conv)
 		{
-			this->writeAt<WriteT>(conv(val), offset);
+			this->writeTypeAt<WriteT>(conv(val), offset);
 		}
 
 		// put 1 element of WriteT at given offset, return as InT
 		template <typename InT, typename WriteT>
-		void putAsAt(const InT& val, size_t offset, ConversionFunc<InT, WriteT> conv)
+		void putTypeAsAt(const InT& val, size_t offset, ConversionFunc<InT, WriteT> conv)
 		{
-			this->putAt<WriteT>(conv(val), offset);
+			this->putTypeAt<WriteT>(conv(val), offset);
 		}
+
+		//---
 
 		// write n elements of WriteT, return as InT
 		template <typename InT, typename WriteT>
-		void writeAs(const std::vector<InT>& val, ConversionFunc<InT, WriteT> conv)
+		void writeTypeAs(const std::vector<InT>& val, ConversionFunc<InT, WriteT> conv)
 		{
-			const std::vector<WriteT> wval;
+			std::vector<WriteT> wval;
 			wval.reserve(val.size());
-			std::tranform(val.begin(), val.end(), std::back_inserter(wval), conv);
+			std::transform(val.begin(), val.end(), std::back_inserter(wval), conv);
 
-			this->write<WriteT>(wval);
+			this->writeType<WriteT>(wval);
 		}
 
 		// put n elements of WriteT, return as InT
 		template <typename InT, typename WriteT>
-		void putAs(const std::vector<InT>& val, ConversionFunc<InT, WriteT> conv)
+		void putTypeAs(const std::vector<InT>& val, ConversionFunc<InT, WriteT> conv)
 		{
-			const std::vector<WriteT> wval;
+			std::vector<WriteT> wval;
 			wval.reserve(val.size());
-			std::tranform(val.begin(), val.end(), std::back_inserter(wval), conv);
+			std::transform(val.begin(), val.end(), std::back_inserter(wval), conv);
 
-			this->put<WriteT>(wval);
+			this->putType<WriteT>(wval);
 		}
 
 		// write n elements of WriteT at given offset, return as InT
 		template <typename InT, typename WriteT>
-		void writeAsAt(const std::vector<InT>& val, size_t offset, ConversionFunc<InT, WriteT> conv)
+		void writeTypeAsAt(const std::vector<InT>& val, size_t offset, ConversionFunc<InT, WriteT> conv)
 		{
-			const std::vector<WriteT> wval;
+			std::vector<WriteT> wval;
 			wval.reserve(val.size());
-			std::tranform(val.begin(), val.end(), std::back_inserter(wval), conv);
+			std::transform(val.begin(), val.end(), std::back_inserter(wval), conv);
 
-			this->writeAt<WriteT>(count, wval);
+			this->writeTypeAt<WriteT>(wval, offset);
 		}
 
 		// write n elements of WriteT at given offset, return as InT
 		template <typename InT, typename WriteT>
-		void putAsAt(const std::vector<InT>& val, size_t offset, ConversionFunc<InT, WriteT> conv)
+		void putTypeAsAt(const std::vector<InT>& val, size_t offset, ConversionFunc<InT, WriteT> conv)
 		{
-			const std::vector<WriteT> wval;
+			std::vector<WriteT> wval;
 			wval.reserve(val.size());
-			std::tranform(val.begin(), val.end(), std::back_inserter(wval), conv);
+			std::transform(val.begin(), val.end(), std::back_inserter(wval), conv);
 
-			this->putAt<WriteT>(count, wval);
+			this->putTypeAt<WriteT>(wval, offset);
+		}
+
+		//---
+
+		// write n elements of WriteT, return as InT
+		template <typename InT, typename WriteT>
+		void writeTypeAs(const InT* val, size_t count, ConversionFunc<InT, WriteT> conv)
+		{
+			std::vector<WriteT> wval;
+			wval.reserve(count);
+			std::transform(val, val + count, std::back_inserter(wval), conv);
+
+			this->writeType<WriteT>(wval);
+		}
+
+		// put n elements of WriteT, return as InT
+		template <typename InT, typename WriteT>
+		void putTypeAs(const InT* val, size_t count, ConversionFunc<InT, WriteT> conv)
+		{
+			std::vector<WriteT> wval;
+			wval.reserve(count);
+			std::transform(val, val + count, std::back_inserter(wval), conv);
+
+			this->putType<WriteT>(wval);
+		}
+
+		// write n elements of WriteT at given offset, return as InT
+		template <typename InT, typename WriteT>
+		void writeTypeAsAt(const InT* val, size_t count, size_t offset, ConversionFunc<InT, WriteT> conv)
+		{
+			std::vector<WriteT> wval;
+			wval.reserve(count);
+			std::transform(val, val + count, std::back_inserter(wval), conv);
+
+			this->writeTypeAt<WriteT>(wval, offset);
+		}
+
+		// write n elements of WriteT at given offset, return as InT
+		template <typename InT, typename WriteT>
+		void putTypeAsAt(const InT* val, size_t count, size_t offset, ConversionFunc<InT, WriteT> conv)
+		{
+			std::vector<WriteT> wval;
+			wval.reserve(count);
+			std::transform(val, val + count, std::back_inserter(wval), conv);
+
+			this->putTypeAt<WriteT>(wval, offset);
 		}
 	};
 }	// namespace khutils

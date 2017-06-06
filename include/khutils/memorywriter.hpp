@@ -1,199 +1,323 @@
 #ifndef KHUTILS_MEMORYWRITER_HPP_INC
 #define KHUTILS_MEMORYWRITER_HPP_INC
 
-//! file has dependency on boost.endian
-//! include wisely to keep compile times minimal
-
+#include "khutils/assertion.hpp"
 #include "khutils/base_handler.hpp"
 #include "khutils/endian.hpp"
+#include "khutils/file.hpp"
+#include "khutils/handlerinterface.hpp"
 #include "khutils/typeconversion.hpp"
+#include "khutils/writerinterface.hpp"
 
 #include <functional>
 #include <vector>
 
 namespace khutils
 {
-	//! data writer
-	//! writes data into PRE-ALLOCATED buffer
-	//! DOES NOT RESIZE BUFFER
-	//! usage: use typedef'ed version (see below)
-	template <typename ByteForwardIterator, endian::order _order>
-	struct _memorywriter;
-
-	template <typename ByteForwardIterator>
-	using memorywriter = _memorywriter<ByteForwardIterator, endian::native>;
-	template <typename ByteForwardIterator>
-	using little_endian_memorywriter = _memorywriter<ByteForwardIterator, endian::order::little>;
-	template <typename ByteForwardIterator>
-	using big_endian_memorywriter = _memorywriter<ByteForwardIterator, endian::order::big>;
-
-	template <typename ByteForwardIterator>
-	struct memorywriter_trait
+	struct MemoryWriterStateInterface
 	{
-		typedef memorywriter<ByteForwardIterator>				native_endian_writer;
-		typedef little_endian_memorywriter<ByteForwardIterator> little_endian_writer;
-		typedef big_endian_memorywriter<ByteForwardIterator>	big_endian_writer;
+		//! writes n bytes and updates internal position
+		//! @return int: 0 or negative: out of range; positive: ok
+		virtual int write_bytes(void* data, size_t size) = 0;
+
+		//! writes n bytes and DOES NOT update internal position
+		//! @return int: 0 or negative: out of range; positive: ok
+		virtual int put_bytes(void* data, size_t size) = 0;
+
+		//! updates internal position
+		//! @return int: 0 or negative: out of range; positive: ok
+		virtual int set_position(size_t offset) = 0;
+
+		//! returns current position
+		virtual size_t get_position() = 0;
+
+		//! return true if at end or beyond
+		virtual bool is_end() = 0;
 	};
 
+	//----------------------------
+
+	//! note: memory must be PRE-ALLOCATED
+	//! NO RESIZING OCCURS
 	template <typename ByteForwardIterator>
-	struct _memorywriter_state
+	struct BFI_MemoryWriterStateInterface : MemoryWriterStateInterface
 	{
 		const ByteForwardIterator begin;
-		ByteForwardIterator		  end;
+		const ByteForwardIterator end;
 		ByteForwardIterator		  current;
+		static_assert(sizeof(decltype(*begin)) == sizeof(uint8_t), "wrong iterator type: not pointing to bytes");
 
-		_memorywriter_state() = delete;
-		_memorywriter_state(ByteForwardIterator alpha, ByteForwardIterator omega)
-			: begin(alpha), current(alpha), end(omega)
+		BFI_MemoryWriterStateInterface() = delete;
+		BFI_MemoryWriterStateInterface(ByteForwardIterator alpha, ByteForwardIterator omega)
+			: begin(alpha)	//
+			, current(alpha)
+			, end(omega)
 		{
 		}
-		_memorywriter_state(const _memorywriter_state&) = default;
-		_memorywriter_state(_memorywriter_state&&)		= default;
+		BFI_MemoryWriterStateInterface(const BFI_MemoryWriterStateInterface&) = default;
+		BFI_MemoryWriterStateInterface(BFI_MemoryWriterStateInterface&&)	  = default;
 
-		_memorywriter_state& operator=(const _memorywriter_state&) = default;
-		_memorywriter_state& operator=(_memorywriter_state&&) = default;
+		BFI_MemoryWriterStateInterface& operator=(const BFI_MemoryWriterStateInterface&) = default;
+		BFI_MemoryWriterStateInterface& operator=(BFI_MemoryWriterStateInterface&&) = default;
+
+		//- MemoryWriterStateInterface
+		virtual int write_bytes(void* data, size_t size)
+		{
+			if (size < std::distance(current, end))
+			{
+				std::copy((char*)data, (char*)data + size, current);
+				current += size;	// UPDATE current
+				return size;
+			}
+
+			return (int32_t)std::distance(current, end) - (int32_t)size;
+		}
+
+		virtual int put_bytes(void* data, size_t size)
+		{
+			if (size < std::distance(current, end))
+			{
+				std::copy((char*)data, (char*)data + size, current);
+				// DO NOT UPDATE current
+				return size;
+			}
+
+			return (int32_t)std::distance(current, end) - (int32_t)size;
+		}
+
+		virtual int set_position(size_t offset)
+		{
+			if (offset <= std::distance(begin, end))
+			{
+				current = begin + offset;
+				return offset;
+			}
+
+			return std::distance(begin, end) - offset;
+		}
+
+		virtual size_t get_position()
+		{
+			return std::distance(begin, current);
+		}
+
+		virtual bool is_end()
+		{
+			return std::distance(begin, end) <= std::distance(begin, current);
+		}
 	};
 
-	template <typename ByteForwardIterator, endian::order _order>
-	struct _memorywriter : base_handler_trait<_order>
+	template <typename ByteForwardIterator>
+	std::shared_ptr<MemoryWriterStateInterface> make_bfi_writerstate(ByteForwardIterator alpha, ByteForwardIterator omega)
 	{
-		typedef _memorywriter_state<ByteForwardIterator>				 state;
-		std::reference_wrapper<_memorywriter_state<ByteForwardIterator>> m_ih;
-		// static_assert(sizeof(decltype(*(m_ih.get().begin))) == 1, "not a 1 byte sized datatype");
+		return std::shared_ptr<MemoryWriterStateInterface>{new BFI_MemoryWriterStateInterface<ByteForwardIterator>(alpha, omega)};
+	}
 
-		_memorywriter()						= delete;
-		_memorywriter(const _memorywriter&) = default;
-		_memorywriter(_memorywriter&&)		= default;
-		_memorywriter(_memorywriter_state<ByteForwardIterator>& ih) : m_ih(ih)
-		{
-			KHUTILS_ASSERT_NOT(ih.begin, ih.end);
-		}
-		_memorywriter(std::reference_wrapper<_memorywriter_state<ByteForwardIterator>>& ih) : m_ih(ih)
-		{
-			KHUTILS_ASSERT_NOT(ih.get().begin, ih.get().end);
-		}
-		_memorywriter(std::reference_wrapper<_memorywriter_state<ByteForwardIterator>>&& ih) : m_ih(ih)
-		{
-			KHUTILS_ASSERT_NOT(ih.get().begin, ih.get().end);
-		}
+	//----------------------------
 
-		_memorywriter& operator=(const _memorywriter&) = default;
-		_memorywriter& operator=(_memorywriter&&) = default;
+	class MemoryWriterImplementation : public virtual WriterInterface
+	{
+	public:
+		typedef std::shared_ptr<MemoryWriterStateInterface> State;
 
-		// function must stay this way to be compatible with list iterators
-		void _write_raw(char* rawdata, size_t count)
+	protected:
+		State m_state;
+
+	protected:
+		MemoryWriterImplementation()								  = delete;
+		MemoryWriterImplementation(const MemoryWriterImplementation&) = default;
+		MemoryWriterImplementation(MemoryWriterImplementation&&)	  = default;
+		MemoryWriterImplementation(const State& state);
+		MemoryWriterImplementation(State&& state);
+
+		MemoryWriterImplementation& operator=(const MemoryWriterImplementation&) = default;
+		MemoryWriterImplementation& operator=(MemoryWriterImplementation&&) = default;
+
+	public:
+		virtual ~MemoryWriterImplementation() = default;
+
+		//-- handler interface
+		virtual size_t getCurrentOffset();
+		virtual void jumpToOffset(size_t pos);
+		virtual void skip(size_t bytes);
+		virtual bool isEnd();
+
+		//-- writer interface
+		virtual void write(void* data, size_t size);
+		virtual void put(void* data, size_t size);
+		virtual void writeAt(size_t offset, void* data, size_t size);
+		virtual void putAt(size_t offset, void* data, size_t size);
+	};
+
+	//----------------------------
+
+	template <endian::order _order>
+	class _MemoryWriter : public MemoryWriterImplementation, public EndianWriterInterface<_order>
+	{
+	public:
+		_MemoryWriter()						= delete;
+		_MemoryWriter(const _MemoryWriter&) = default;
+		_MemoryWriter(_MemoryWriter&&)		= default;
+		_MemoryWriter(const State& state)		   //
+			: MemoryWriterImplementation(state)	//
+			, EndianWriterInterface<_order>()
 		{
-			for (size_t i = 0; i < count; ++i)
-			{
-				if (m_ih.get().current != m_ih.get().end)
-				{
-					*(m_ih.get().current) = rawdata[i];
-				}
-				++m_ih.get().current;
-			}
 		}
-
-		//! writes WriteT into buffer after converting and endian-swapping provided
-		//! InT
-		//! optional convert function can be used to downsample InT into bytewise
-		//! smaller WriteT
-		//! e.g. to write F32 as U16
-		template <typename WriteT, typename InT = WriteT>
-		void write(InT t, SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
+		_MemoryWriter(State&& state)			   //
+			: MemoryWriterImplementation(state)	//
+			, EndianWriterInterface<_order>()
 		{
-			WriteT r = swapConv(t);
-			_write_raw(reinterpret_cast<char*>(&r), sizeof(WriteT));
 		}
+		virtual ~_MemoryWriter() = default;
 
-		//! writes count * WriteT into buffer after converting and endian-swapping
-		//! provided
-		//! InT
-		//! optional convert function can be used to downsample InT into bytewise
-		//! smaller WriteT
-		//! e.g. to write F32 as U16
-		template <typename WriteT, typename InT = WriteT>
-		void write(const InT* t,
-				   size_t	 count,
-				   SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
+		_MemoryWriter& operator=(const _MemoryWriter&) = default;
+		_MemoryWriter& operator=(_MemoryWriter&&) = default;
+
+		//-- handler interface
+		virtual size_t getCurrentOffset()
 		{
-			std::for_each(t, t + count, [&swapConv, this](const auto& elem) { this->write<WriteT, InT>(elem, swapConv); });
+			return MemoryWriterImplementation::getCurrentOffset();
 		}
-
-		//! writes vector<WriteT> into buffer after converting and endian-swapping
-		//! provided
-		//! InT
-		//! optional convert function can be used to downsample InT into bytewise
-		//! smaller WriteT
-		//! e.g. to write F32 as U16
-		template <typename WriteT, typename InT = WriteT>
-		void write(const std::vector<InT>& t,
-				   SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
+		virtual void jumpToOffset(size_t pos)
 		{
-			write(t.data(), t.size(), swapConv);
+			MemoryWriterImplementation::jumpToOffset(pos);
 		}
-
-		//! puts WriteT from data WITHOUT incrementing position,
-		//! then endian-swaps and converts it into OutT
-		//! optional convert function can be used to upsample ReadT into bytewise
-		//! bigger InT
-		//! e.g. to convert read U16 as F32
-		template <typename WriteT, typename InT = WriteT>
-		void put(InT t, SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
+		virtual void skip(size_t bytes)
 		{
-			auto curPos = m_ih.get().current;
-			write<WriteT, InT>(swapConv);
-			m_ih.get().current = curPos;
+			MemoryWriterImplementation::skip(bytes);
+		}
+		virtual bool isEnd()
+		{
+			return MemoryWriterImplementation::isEnd();
 		}
 
-		//! puts WriteT from data at given position WITHOUT incrementing position,
-		//! then endian-swaps and converts it into InT
-		//! optional convert function can be used to upsample ReadT into bytewise
-		//! bigger InT
-		//! e.g. to convert read U16 as F32
-		template <typename WriteT, typename InT = WriteT>
-		void putAt(InT	t,
-				   size_t writePos,
-				   SwapConversionFuncT<WriteT, InT> swapConv = base_handler_trait<_order>::template swap_after_convert<WriteT, InT>)
+		//-- writer interface
+		virtual void write(void* data, size_t size)
 		{
-			auto curPos		   = m_ih.get().current;
-			m_ih.get().current = m_ih.get().begin + writePos;
-			write<WriteT, InT>(t, swapConv);
-			m_ih.get().current = curPos;
+			MemoryWriterImplementation::write(data, size);
 		}
+		virtual void put(void* data, size_t size)
+		{
+			MemoryWriterImplementation::put(data, size);
+		}
+		virtual void writeAt(size_t offset, void* data, size_t size)
+		{
+			MemoryWriterImplementation::writeAt(offset, data, size);
+		}
+		virtual void putAt(size_t offset, void* data, size_t size)
+		{
+			MemoryWriterImplementation::putAt(offset, data, size);
+		}
+	};
 
-		template <typename _SkipT>
-		void skip(size_t count = 1)
-		{
-			for (size_t i = 0; i < (sizeof(_SkipT) * count); ++i)
-			{
-				++m_ih.get().current;
-			}
-		}
+	//----------------------------
 
-		template <size_t _Alignment>
-		void			 alignToNext()
-		{
-			auto pos			= getCurrentOffset();
-			auto nextAlignedPos = pos + (pos % _Alignment);
-			skip<char>(nextAlignedPos - pos);
-		}
+	using memorywriter				 = _MemoryWriter<endian::native>;
+	using little_endian_memorywriter = _MemoryWriter<endian::order::little>;
+	using big_endian_memorywriter	= _MemoryWriter<endian::order::big>;
 
-		ByteForwardIterator getCurrent()
-		{
-			return m_ih.get().current;
-		}
-
-		size_t getCurrentOffset()
-		{
-			return std::distance(m_ih.begin, getCurrent());
-		}
-
-		bool isEnd()
-		{
-			return m_ih.get().current == m_ih.get().end;
-		}
+	struct memorywriter_trait
+	{
+		typedef memorywriter			   native_endian_writer;
+		typedef little_endian_memorywriter little_endian_writer;
+		typedef big_endian_memorywriter	big_endian_writer;
 	};
 
 }	// namespace khutils
+
+#if defined(KHUTILS_MEMORYWRITER_IMPL)
+
+khutils::MemoryWriterImplementation::MemoryWriterImplementation(const State& state)	//
+	: m_state(state)
+{
+	KHUTILS_ASSERT_PTR(state);
+	KHUTILS_ASSERT_PTR(m_state);
+}
+
+//----------------------------
+khutils::MemoryWriterImplementation::MemoryWriterImplementation(State&& state)	//
+	: m_state(state)
+{
+	KHUTILS_ASSERT_PTR(state);
+	KHUTILS_ASSERT_PTR(m_state);
+}
+
+//----------------------------
+//-- handler interface
+
+size_t khutils::MemoryWriterImplementation::getCurrentOffset()
+{
+	KHUTILS_ASSERT_PTR(m_state);
+	return m_state->get_position();
+}
+
+//----------------------------
+
+void khutils::MemoryWriterImplementation::jumpToOffset(size_t pos)
+{
+	KHUTILS_ASSERT_PTR(m_state);
+	auto r = m_state->set_position(pos);
+	KHUTILS_ASSERT(r > 0);
+}
+
+//----------------------------
+
+void khutils::MemoryWriterImplementation::skip(size_t bytes)
+{
+	KHUTILS_ASSERT_PTR(m_state);
+	jumpToOffset(m_state->get_position() + bytes);
+}
+
+//----------------------------
+
+bool khutils::MemoryWriterImplementation::isEnd()
+{
+	KHUTILS_ASSERT_PTR(m_state);
+	return m_state->is_end();
+}
+
+//----------------------------
+//-- writer interface
+
+void khutils::MemoryWriterImplementation::write(void* data, size_t size)
+{
+	KHUTILS_ASSERT_PTR(m_state);
+	auto r = m_state->write_bytes(data, size);
+	KHUTILS_ASSERT(r > 0);
+}
+
+//----------------------------
+
+void khutils::MemoryWriterImplementation::put(void* data, size_t size)
+{
+	KHUTILS_ASSERT_PTR(m_state);
+	auto r = m_state->put_bytes(data, size);
+	KHUTILS_ASSERT(r > 0);
+}
+
+//----------------------------
+
+void khutils::MemoryWriterImplementation::writeAt(size_t offset, void* data, size_t size)
+{
+	KHUTILS_ASSERT_PTR(m_state);
+	auto r = m_state->set_position(offset);
+	KHUTILS_ASSERT(r > 0);
+	write(data, size);
+}
+
+//----------------------------
+
+void khutils::MemoryWriterImplementation::putAt(size_t offset, void* data, size_t size)
+{
+	KHUTILS_ASSERT_PTR(m_state);
+	auto pos = m_state->get_position();
+	auto r   = m_state->set_position(offset);
+	KHUTILS_ASSERT(r > 0);
+	put(data, size);
+	r = m_state->set_position(pos);
+	KHUTILS_ASSERT(r > 0);
+}
+
+#endif	// defined(KHUTILS_MEMORYWRITER_IMPL)
 
 #endif	// KHUTILS_MEMORYWRITER_HPP_INC

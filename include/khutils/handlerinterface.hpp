@@ -40,7 +40,7 @@ void khutils::HandlerInterface::align(size_t alignment)
 {
 	auto pos			= getCurrentOffset();
 	auto nextAlignedPos = pos + (pos % alignment);
-	skip<char>(nextAlignedPos - pos);
+	skip(nextAlignedPos - pos);
 }
 
 #endif	// defined(KHUTILS_HANDLERINTERFACE_IMPL)
