@@ -1,6 +1,8 @@
 #ifndef KHUTILS_GLM_COMPARISON_HPP_INC
 #define KHUTILS_GLM_COMPARISON_HPP_INC
 
+//#define GLM_HAS_CONSTEXPR 1
+
 #include "khutils/comparison.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -10,7 +12,7 @@
 namespace std
 {
 	template <>
-	constexpr glm::quat numeric_limits<glm::quat>::epsilon() noexcept
+	constexpr glm::quat numeric_limits<glm::quat>::epsilon() noexcept noexcept
 	{
 		return glm::quat(numeric_limits<float>::epsilon(),
 						 numeric_limits<float>::epsilon(),
@@ -79,6 +81,241 @@ namespace std
 	}
 }	// namespace std
 #endif	// 0
+
+#if 0
+// overloading std::numeric_limits for glm types
+namespace std
+{
+	template <>
+	constexpr glm::quat numeric_limits<glm::quat>::epsilon() noexcept
+	{
+		return glm::quat(numeric_limits<float>::epsilon(),	//
+						 numeric_limits<float>::epsilon(),
+						 numeric_limits<float>::epsilon(),
+						 numeric_limits<float>::epsilon());
+	}
+
+	template <>
+	constexpr glm::vec2 numeric_limits<glm::vec2>::epsilon() noexcept
+	{
+		return glm::vec2(numeric_limits<float>::epsilon(),	//
+						 numeric_limits<float>::epsilon());
+	}
+
+	template <>
+	constexpr glm::vec3 numeric_limits<glm::vec3>::epsilon() noexcept
+	{
+		return glm::vec3(numeric_limits<float>::epsilon(),	//
+						 numeric_limits<float>::epsilon(),
+						 numeric_limits<float>::epsilon());
+	}
+
+	template <>
+	constexpr glm::vec4 numeric_limits<glm::vec4>::epsilon() noexcept
+	{
+		return glm::vec4(numeric_limits<float>::epsilon(),	//
+						 numeric_limits<float>::epsilon(),
+						 numeric_limits<float>::epsilon(),
+						 numeric_limits<float>::epsilon());
+	}
+
+	template <>
+	constexpr glm::mat4 numeric_limits<glm::mat4>::epsilon() noexcept
+	{
+		return glm::mat4(numeric_limits<glm::vec4>::epsilon(),	//
+						 numeric_limits<glm::vec4>::epsilon(),
+						 numeric_limits<glm::vec4>::epsilon(),
+						 numeric_limits<glm::vec4>::epsilon());
+	}
+
+	template <>
+	constexpr glm::dquat numeric_limits<glm::dquat>::epsilon() noexcept
+	{
+		return glm::dquat(numeric_limits<double>::epsilon(),	//
+						  numeric_limits<double>::epsilon(),
+						  numeric_limits<double>::epsilon(),
+						  numeric_limits<double>::epsilon());
+	}
+
+	template <>
+	constexpr glm::dvec2 numeric_limits<glm::dvec2>::epsilon() noexcept
+	{
+		return glm::dvec2(numeric_limits<double>::epsilon(),	//
+						  numeric_limits<double>::epsilon());
+	}
+
+	template <>
+	constexpr glm::dvec3 numeric_limits<glm::dvec3>::epsilon() noexcept
+	{
+		return glm::dvec3(numeric_limits<double>::epsilon(),	//
+						  numeric_limits<double>::epsilon(),
+						  numeric_limits<double>::epsilon());
+	}
+
+	template <>
+	constexpr glm::dvec4 numeric_limits<glm::dvec4>::epsilon() noexcept
+	{
+		return glm::dvec4(numeric_limits<double>::epsilon(),	//
+						  numeric_limits<double>::epsilon(),
+						  numeric_limits<double>::epsilon(),
+						  numeric_limits<double>::epsilon());
+	}
+
+	template <>
+	constexpr glm::dmat4 numeric_limits<glm::dmat4>::epsilon() noexcept
+	{
+		return glm::dmat4(numeric_limits<glm::dvec4>::epsilon(),	//
+						  numeric_limits<glm::dvec4>::epsilon(),
+						  numeric_limits<glm::dvec4>::epsilon(),
+						  numeric_limits<glm::dvec4>::epsilon());
+	}
+
+	template <>
+	constexpr glm::ivec2 numeric_limits<glm::ivec2>::epsilon() noexcept
+	{
+		return glm::ivec2(numeric_limits<int>::epsilon(),	//
+						  numeric_limits<int>::epsilon());
+	}
+
+	template <>
+	constexpr glm::ivec3 numeric_limits<glm::ivec3>::epsilon() noexcept
+	{
+		return glm::ivec3(numeric_limits<int>::epsilon(),	//
+						  numeric_limits<int>::epsilon(),
+						  numeric_limits<int>::epsilon());
+	}
+
+	template <>
+	constexpr glm::ivec4 numeric_limits<glm::ivec4>::epsilon() noexcept
+	{
+		return glm::ivec4(numeric_limits<int>::epsilon(),	//
+						  numeric_limits<int>::epsilon(),
+						  numeric_limits<int>::epsilon(),
+						  numeric_limits<int>::epsilon());
+	}
+
+	template <>
+	constexpr glm::uvec2 numeric_limits<glm::uvec2>::epsilon() noexcept
+	{
+		return glm::uvec2(numeric_limits<unsigned int>::epsilon(),	//
+						  numeric_limits<unsigned int>::epsilon());
+	}
+
+	template <>
+	constexpr glm::uvec3 numeric_limits<glm::uvec3>::epsilon() noexcept
+	{
+		return glm::uvec3(numeric_limits<unsigned int>::epsilon(),	//
+						  numeric_limits<unsigned int>::epsilon(),
+						  numeric_limits<unsigned int>::epsilon());
+	}
+
+	template <>
+	constexpr glm::uvec4 numeric_limits<glm::uvec4>::epsilon() noexcept
+	{
+		return glm::uvec4(numeric_limits<unsigned int>::epsilon(),	//
+						  numeric_limits<unsigned int>::epsilon(),
+						  numeric_limits<unsigned int>::epsilon(),
+						  numeric_limits<unsigned int>::epsilon());
+	}
+
+	template <>
+	constexpr glm::i8vec2 numeric_limits<glm::i8vec2>::epsilon() noexcept
+	{
+		return glm::i8vec2(numeric_limits<int8_t>::epsilon(),	//
+						   numeric_limits<int8_t>::epsilon());
+	}
+
+	template <>
+	constexpr glm::i8vec3 numeric_limits<glm::i8vec3>::epsilon() noexcept
+	{
+		return glm::i8vec3(numeric_limits<int8_t>::epsilon(),	//
+						   numeric_limits<int8_t>::epsilon(),
+						   numeric_limits<int8_t>::epsilon());
+	}
+
+	template <>
+	constexpr glm::i8vec4 numeric_limits<glm::i8vec4>::epsilon() noexcept
+	{
+		return glm::i8vec4(numeric_limits<int8_t>::epsilon(),	//
+						   numeric_limits<int8_t>::epsilon(),
+						   numeric_limits<int8_t>::epsilon(),
+						   numeric_limits<int8_t>::epsilon());
+	}
+
+	template <>
+	constexpr glm::u8vec2 numeric_limits<glm::u8vec2>::epsilon() noexcept
+	{
+		return glm::u8vec2(numeric_limits<uint8_t>::epsilon(),	//
+						   numeric_limits<uint8_t>::epsilon());
+	}
+
+	template <>
+	constexpr glm::u8vec3 numeric_limits<glm::u8vec3>::epsilon() noexcept
+	{
+		return glm::u8vec3(numeric_limits<uint8_t>::epsilon(),	//
+						   numeric_limits<uint8_t>::epsilon(),
+						   numeric_limits<uint8_t>::epsilon());
+	}
+
+	template <>
+	constexpr glm::u8vec4 numeric_limits<glm::u8vec4>::epsilon() noexcept
+	{
+		return glm::u8vec4(numeric_limits<uint8_t>::epsilon(),	//
+						   numeric_limits<uint8_t>::epsilon(),
+						   numeric_limits<uint8_t>::epsilon(),
+						   numeric_limits<uint8_t>::epsilon());
+	}
+
+	template <>
+	constexpr glm::i16vec2 numeric_limits<glm::i16vec2>::epsilon() noexcept
+	{
+		return glm::i16vec2(numeric_limits<int16_t>::epsilon(),	//
+							numeric_limits<int16_t>::epsilon());
+	}
+
+	template <>
+	constexpr glm::i16vec3 numeric_limits<glm::i16vec3>::epsilon() noexcept
+	{
+		return glm::i16vec3(numeric_limits<int16_t>::epsilon(),	//
+							numeric_limits<int16_t>::epsilon(),
+							numeric_limits<int16_t>::epsilon());
+	}
+
+	template <>
+	constexpr glm::i16vec4 numeric_limits<glm::i16vec4>::epsilon() noexcept
+	{
+		return glm::i16vec4(numeric_limits<int16_t>::epsilon(),	//
+							numeric_limits<int16_t>::epsilon(),
+							numeric_limits<int16_t>::epsilon(),
+							numeric_limits<int16_t>::epsilon());
+	}
+
+	template <>
+	constexpr glm::u16vec2 numeric_limits<glm::u16vec2>::epsilon() noexcept
+	{
+		return glm::u16vec2(numeric_limits<uint16_t>::epsilon(),	//
+							numeric_limits<uint16_t>::epsilon());
+	}
+
+	template <>
+	constexpr glm::u16vec3 numeric_limits<glm::u16vec3>::epsilon() noexcept
+	{
+		return glm::u16vec3(numeric_limits<uint16_t>::epsilon(),	//
+							numeric_limits<uint16_t>::epsilon(),
+							numeric_limits<uint16_t>::epsilon());
+	}
+
+	template <>
+	constexpr glm::u16vec4 numeric_limits<glm::u16vec4>::epsilon() noexcept
+	{
+		return glm::u16vec4(numeric_limits<uint16_t>::epsilon(),	//
+							numeric_limits<uint16_t>::epsilon(),
+							numeric_limits<uint16_t>::epsilon(),
+							numeric_limits<uint16_t>::epsilon());
+	}
+}	// namespace std
+#endif	// 0
+
 
 namespace khutils
 {
