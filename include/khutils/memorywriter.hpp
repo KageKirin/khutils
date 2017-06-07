@@ -45,7 +45,7 @@ namespace khutils
 		const ByteForwardIterator begin;
 		const ByteForwardIterator end;
 		ByteForwardIterator		  current;
-		static_assert(sizeof(decltype(*begin)) == sizeof(uint8_t), "wrong iterator type: not pointing to bytes");
+		// static_assert(sizeof(decltype(*begin)) == sizeof(uint8_t), "wrong iterator type: not pointing to bytes");
 
 		BFI_MemoryWriterStateInterface() = delete;
 		BFI_MemoryWriterStateInterface(ByteForwardIterator alpha, ByteForwardIterator omega)
@@ -138,9 +138,9 @@ namespace khutils
 
 		//-- handler interface
 		virtual size_t getCurrentOffset();
-		virtual void jumpToOffset(size_t pos);
-		virtual void skip(size_t bytes);
-		virtual bool isEnd();
+		virtual void   jumpToOffset(size_t pos);
+		virtual void   skip(size_t bytes);
+		virtual bool   isEnd();
 
 		//-- writer interface
 		virtual void write(void* data, size_t size);

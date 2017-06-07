@@ -44,7 +44,7 @@ namespace khutils
 		const ByteForwardIterator begin;
 		const ByteForwardIterator end;
 		ByteForwardIterator		  current;
-		static_assert(sizeof(decltype(*begin)) == sizeof(uint8_t), "wrong iterator type: not pointing to bytes");
+		// static_assert(sizeof(decltype(*begin)) == sizeof(uint8_t), "wrong iterator type: not pointing to bytes");
 
 		BFI_MemoryReaderStateInterface() = delete;
 		BFI_MemoryReaderStateInterface(ByteForwardIterator alpha, ByteForwardIterator omega)
@@ -137,9 +137,9 @@ namespace khutils
 
 		//-- handler interface
 		virtual size_t getCurrentOffset();
-		virtual void jumpToOffset(size_t pos);
-		virtual void skip(size_t bytes);
-		virtual bool isEnd();
+		virtual void   jumpToOffset(size_t pos);
+		virtual void   skip(size_t bytes);
+		virtual bool   isEnd();
 
 		//-- reader interface
 		virtual void read(void* data, size_t size);
@@ -249,7 +249,7 @@ khutils::MemoryReaderImplementation::MemoryReaderImplementation(State&& state)	/
 size_t khutils::MemoryReaderImplementation::getCurrentOffset()
 {
 	KHUTILS_ASSERT_PTR(m_state);
-	m_state->get_position();
+	return m_state->get_position();
 }
 
 //----------------------------
