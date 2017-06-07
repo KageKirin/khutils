@@ -146,8 +146,7 @@ namespace khutils
 
 		return "({0},\n{1},\n{2}\n)"_format(fmt::format(linefmt, m[0][0], m[1][0], m[2][0]),
 											fmt::format(linefmt, m[0][1], m[1][1], m[2][1]),
-											fmt::format(linefmt, m[0][2], m[1][2], m[2][2]),
-											fmt::format(linefmt, m[0][3], m[1][3], m[2][3]));
+											fmt::format(linefmt, m[0][2], m[1][2], m[2][2]));
 	}
 
 	const std::string to_string(const glm::mat4& m)
@@ -191,8 +190,7 @@ namespace khutils
 
 		return "({0},\n{1},\n{2})"_format(fmt::format(linefmt, m[0][0], m[1][0], m[2][0]),
 										  fmt::format(linefmt, m[0][1], m[1][1], m[2][1]),
-										  fmt::format(linefmt, m[0][2], m[1][2], m[2][2]),
-										  fmt::format(linefmt, m[0][3], m[1][3], m[2][3]));
+										  fmt::format(linefmt, m[0][2], m[1][2], m[2][2]));
 	}
 
 	const std::string to_string(const glm::dmat4& m)
