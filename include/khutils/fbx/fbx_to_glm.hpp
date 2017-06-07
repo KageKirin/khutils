@@ -110,12 +110,16 @@ namespace khutils
 
 	FbxAMatrix getFbxNodeGlobalTransformInverse(FbxNode* node)
 	{
+		KHUTILS_ASSERT_PTR(node);
+
 		FbxAMatrix& npMat = node->EvaluateGlobalTransform();
 		return npMat.Inverse();
 	}
 
 	glm::dmat4 getFbxNodeGlobalTransformInverse_GlmMat4x4(FbxNode* node)
 	{
+		KHUTILS_ASSERT_PTR(node);
+
 		return FbxAMatrixToGlmMat4x4(getFbxNodeGlobalTransformInverse(node));
 	}
 
