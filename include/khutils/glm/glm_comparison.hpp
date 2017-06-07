@@ -141,62 +141,62 @@ namespace khutils
 	bool compareLiterally(const glm::u16vec4& lhv, const glm::u16vec4& rhv);
 
 	template <>
-	bool compareEpsilon(const glm::quat& lhv, const glm::quat& rhv, glm::quat epsilon);
+	bool compareEpsilon<glm::quat>(const glm::quat& lhv, const glm::quat& rhv, glm::quat epsilon);
 	template <>
-	bool compareEpsilon(const glm::vec2& lhv, const glm::vec2& rhv, glm::vec2 epsilon);
+	bool compareEpsilon<glm::vec2>(const glm::vec2& lhv, const glm::vec2& rhv, glm::vec2 epsilon);
 	template <>
-	bool compareEpsilon(const glm::vec3& lhv, const glm::vec3& rhv, glm::vec3 epsilon);
+	bool compareEpsilon<glm::vec3>(const glm::vec3& lhv, const glm::vec3& rhv, glm::vec3 epsilon);
 	template <>
-	bool compareEpsilon(const glm::vec4& lhv, const glm::vec4& rhv, glm::vec4 epsilon);
+	bool compareEpsilon<glm::vec4>(const glm::vec4& lhv, const glm::vec4& rhv, glm::vec4 epsilon);
 	template <>
-	bool compareEpsilon(const glm::mat4& lhv, const glm::mat4& rhv, glm::mat4 epsilon);
+	bool compareEpsilon<glm::mat4>(const glm::mat4& lhv, const glm::mat4& rhv, glm::mat4 epsilon);
 	template <>
-	bool compareEpsilon(const glm::dquat& lhv, const glm::dquat& rhv, glm::dquat epsilon);
+	bool compareEpsilon<glm::dquat>(const glm::dquat& lhv, const glm::dquat& rhv, glm::dquat epsilon);
 	template <>
-	bool compareEpsilon(const glm::dvec2& lhv, const glm::dvec2& rhv, glm::dvec2 epsilon);
+	bool compareEpsilon<glm::dvec2>(const glm::dvec2& lhv, const glm::dvec2& rhv, glm::dvec2 epsilon);
 	template <>
-	bool compareEpsilon(const glm::dvec3& lhv, const glm::dvec3& rhv, glm::dvec3 epsilon);
+	bool compareEpsilon<glm::dvec3>(const glm::dvec3& lhv, const glm::dvec3& rhv, glm::dvec3 epsilon);
 	template <>
-	bool compareEpsilon(const glm::dvec4& lhv, const glm::dvec4& rhv, glm::dvec4 epsilon);
+	bool compareEpsilon<glm::dvec4>(const glm::dvec4& lhv, const glm::dvec4& rhv, glm::dvec4 epsilon);
 	template <>
-	bool compareEpsilon(const glm::dmat4& lhv, const glm::dmat4& rhv, glm::dmat4 epsilon);
+	bool compareEpsilon<glm::dmat4>(const glm::dmat4& lhv, const glm::dmat4& rhv, glm::dmat4 epsilon);
 
 	template <>
-	bool compareEpsilon(const glm::ivec2& lhv, const glm::ivec2& rhv, glm::ivec2 epsilon);
+	bool compareEpsilon<glm::ivec2>(const glm::ivec2& lhv, const glm::ivec2& rhv, glm::ivec2 epsilon);
 	template <>
-	bool compareEpsilon(const glm::ivec3& lhv, const glm::ivec3& rhv, glm::ivec3 epsilon);
+	bool compareEpsilon<glm::ivec3>(const glm::ivec3& lhv, const glm::ivec3& rhv, glm::ivec3 epsilon);
 	template <>
-	bool compareEpsilon(const glm::ivec4& lhv, const glm::ivec4& rhv, glm::ivec4 epsilon);
+	bool compareEpsilon<glm::ivec4>(const glm::ivec4& lhv, const glm::ivec4& rhv, glm::ivec4 epsilon);
 	template <>
-	bool compareEpsilon(const glm::uvec2& lhv, const glm::uvec2& rhv, glm::uvec2 epsilon);
+	bool compareEpsilon<glm::uvec2>(const glm::uvec2& lhv, const glm::uvec2& rhv, glm::uvec2 epsilon);
 	template <>
-	bool compareEpsilon(const glm::uvec3& lhv, const glm::uvec3& rhv, glm::uvec3 epsilon);
+	bool compareEpsilon<glm::uvec3>(const glm::uvec3& lhv, const glm::uvec3& rhv, glm::uvec3 epsilon);
 	template <>
-	bool compareEpsilon(const glm::uvec4& lhv, const glm::uvec4& rhv, glm::uvec4 epsilon);
+	bool compareEpsilon<glm::uvec4>(const glm::uvec4& lhv, const glm::uvec4& rhv, glm::uvec4 epsilon);
 	template <>
-	bool compareEpsilon(const glm::i8vec2& lhv, const glm::i8vec2& rhv, glm::i8vec2 epsilon);
+	bool compareEpsilon<glm::i8vec2>(const glm::i8vec2& lhv, const glm::i8vec2& rhv, glm::i8vec2 epsilon);
 	template <>
-	bool compareEpsilon(const glm::i8vec3& lhv, const glm::i8vec3& rhv, glm::i8vec3 epsilon);
+	bool compareEpsilon<glm::i8vec3>(const glm::i8vec3& lhv, const glm::i8vec3& rhv, glm::i8vec3 epsilon);
 	template <>
-	bool compareEpsilon(const glm::i8vec4& lhv, const glm::i8vec4& rhv, glm::i8vec4 epsilon);
+	bool compareEpsilon<glm::i8vec4>(const glm::i8vec4& lhv, const glm::i8vec4& rhv, glm::i8vec4 epsilon);
 	template <>
-	bool compareEpsilon(const glm::u8vec2& lhv, const glm::u8vec2& rhv, glm::u8vec2 epsilon);
+	bool compareEpsilon<glm::u8vec2>(const glm::u8vec2& lhv, const glm::u8vec2& rhv, glm::u8vec2 epsilon);
 	template <>
-	bool compareEpsilon(const glm::u8vec3& lhv, const glm::u8vec3& rhv, glm::u8vec3 epsilon);
+	bool compareEpsilon<glm::u8vec3>(const glm::u8vec3& lhv, const glm::u8vec3& rhv, glm::u8vec3 epsilon);
 	template <>
-	bool compareEpsilon(const glm::u8vec4& lhv, const glm::u8vec4& rhv, glm::u8vec4 epsilon);
+	bool compareEpsilon<glm::u8vec4>(const glm::u8vec4& lhv, const glm::u8vec4& rhv, glm::u8vec4 epsilon);
 	template <>
-	bool compareEpsilon(const glm::i16vec2& lhv, const glm::i16vec2& rhv, glm::i16vec2 epsilon);
+	bool compareEpsilon<glm::i16vec2>(const glm::i16vec2& lhv, const glm::i16vec2& rhv, glm::i16vec2 epsilon);
 	template <>
-	bool compareEpsilon(const glm::i16vec3& lhv, const glm::i16vec3& rhv, glm::i16vec3 epsilon);
+	bool compareEpsilon<glm::i16vec3>(const glm::i16vec3& lhv, const glm::i16vec3& rhv, glm::i16vec3 epsilon);
 	template <>
-	bool compareEpsilon(const glm::i16vec4& lhv, const glm::i16vec4& rhv, glm::i16vec4 epsilon);
+	bool compareEpsilon<glm::i16vec4>(const glm::i16vec4& lhv, const glm::i16vec4& rhv, glm::i16vec4 epsilon);
 	template <>
-	bool compareEpsilon(const glm::u16vec2& lhv, const glm::u16vec2& rhv, glm::u16vec2 epsilon);
+	bool compareEpsilon<glm::u16vec2>(const glm::u16vec2& lhv, const glm::u16vec2& rhv, glm::u16vec2 epsilon);
 	template <>
-	bool compareEpsilon(const glm::u16vec3& lhv, const glm::u16vec3& rhv, glm::u16vec3 epsilon);
+	bool compareEpsilon<glm::u16vec3>(const glm::u16vec3& lhv, const glm::u16vec3& rhv, glm::u16vec3 epsilon);
 	template <>
-	bool compareEpsilon(const glm::u16vec4& lhv, const glm::u16vec4& rhv, glm::u16vec4 epsilon);
+	bool compareEpsilon<glm::u16vec4>(const glm::u16vec4& lhv, const glm::u16vec4& rhv, glm::u16vec4 epsilon);
 
 	bool operator==(const glm::quat& lhv, const glm::quat& rhv);
 	bool operator==(const glm::vec2& lhv, const glm::vec2& rhv);
@@ -697,259 +697,259 @@ namespace khutils
 	}
 
 	template <>
-	bool compareEpsilon(const glm::quat& lhv, const glm::quat& rhv, glm::quat epsilon)
+	bool compareEpsilon<glm::quat>(const glm::quat& lhv, const glm::quat& rhv, glm::quat epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y) &&	//
-		  compareEpsilon(lhv.z, rhv.z) &&	//
-		  compareEpsilon(lhv.w, rhv.w);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z, epsilon.z) &&	//
+		  compareEpsilon(lhv.w, rhv.w, epsilon.w);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::vec2& lhv, const glm::vec2& rhv, glm::vec2 epsilon)
+	bool compareEpsilon<glm::vec2>(const glm::vec2& lhv, const glm::vec2& rhv, glm::vec2 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::vec3& lhv, const glm::vec3& rhv, glm::vec3 epsilon)
+	bool compareEpsilon<glm::vec3>(const glm::vec3& lhv, const glm::vec3& rhv, glm::vec3 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y) &&	//
-		  compareEpsilon(lhv.z, rhv.z);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z, epsilon.z);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::vec4& lhv, const glm::vec4& rhv, glm::vec4 epsilon)
+	bool compareEpsilon<glm::vec4>(const glm::vec4& lhv, const glm::vec4& rhv, glm::vec4 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y) &&	//
-		  compareEpsilon(lhv.z, rhv.z) &&	//
-		  compareEpsilon(lhv.w, rhv.w);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z, epsilon.z) &&	//
+		  compareEpsilon(lhv.w, rhv.w, epsilon.w);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::mat4& lhv, const glm::mat4& rhv, glm::mat4 epsilon)
+	bool compareEpsilon<glm::mat4>(const glm::mat4& lhv, const glm::mat4& rhv, glm::mat4 epsilon)
 	{
-		return								   //
-		  compareEpsilon(lhv[0], rhv[0]) &&	//
-		  compareEpsilon(lhv[1], rhv[1]) &&	//
-		  compareEpsilon(lhv[2], rhv[2]) &&	//
-		  compareEpsilon(lhv[3], rhv[3]);
+		return											   //
+		  compareEpsilon(lhv[0], rhv[0], epsilon[0]) &&	//
+		  compareEpsilon(lhv[1], rhv[1], epsilon[1]) &&	//
+		  compareEpsilon(lhv[2], rhv[2], epsilon[2]) &&	//
+		  compareEpsilon(lhv[3], rhv[3], epsilon[3]);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::dquat& lhv, const glm::dquat& rhv, glm::dquat epsilon)
+	bool compareEpsilon<glm::dquat>(const glm::dquat& lhv, const glm::dquat& rhv, glm::dquat epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y) &&	//
-		  compareEpsilon(lhv.z, rhv.z) &&	//
-		  compareEpsilon(lhv.w, rhv.w);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z, epsilon.z) &&	//
+		  compareEpsilon(lhv.w, rhv.w, epsilon.w);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::dvec2& lhv, const glm::dvec2& rhv, glm::dvec2 epsilon)
+	bool compareEpsilon<glm::dvec2>(const glm::dvec2& lhv, const glm::dvec2& rhv, glm::dvec2 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::dvec3& lhv, const glm::dvec3& rhv, glm::dvec3 epsilon)
+	bool compareEpsilon<glm::dvec3>(const glm::dvec3& lhv, const glm::dvec3& rhv, glm::dvec3 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y) &&	//
-		  compareEpsilon(lhv.z, rhv.z);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z, epsilon.z);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::dvec4& lhv, const glm::dvec4& rhv, glm::dvec4 epsilon)
+	bool compareEpsilon<glm::dvec4>(const glm::dvec4& lhv, const glm::dvec4& rhv, glm::dvec4 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y) &&	//
-		  compareEpsilon(lhv.z, rhv.z) &&	//
-		  compareEpsilon(lhv.w, rhv.w);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z, epsilon.z) &&	//
+		  compareEpsilon(lhv.w, rhv.w, epsilon.w);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::dmat4& lhv, const glm::dmat4& rhv, glm::dmat4 epsilon)
+	bool compareEpsilon<glm::dmat4>(const glm::dmat4& lhv, const glm::dmat4& rhv, glm::dmat4 epsilon)
 	{
-		return								   //
-		  compareEpsilon(lhv[0], rhv[0]) &&	//
-		  compareEpsilon(lhv[1], rhv[1]) &&	//
-		  compareEpsilon(lhv[2], rhv[2]) &&	//
-		  compareEpsilon(lhv[3], rhv[3]);
+		return											   //
+		  compareEpsilon(lhv[0], rhv[0], epsilon[0]) &&	//
+		  compareEpsilon(lhv[1], rhv[1], epsilon[1]) &&	//
+		  compareEpsilon(lhv[2], rhv[2], epsilon[2]) &&	//
+		  compareEpsilon(lhv[3], rhv[3], epsilon[3]);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::ivec2& lhv, const glm::ivec2& rhv, glm::ivec2 epsilon)
+	bool compareEpsilon<glm::ivec2>(const glm::ivec2& lhv, const glm::ivec2& rhv, glm::ivec2 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::ivec3& lhv, const glm::ivec3& rhv, glm::ivec3 epsilon)
+	bool compareEpsilon<glm::ivec3>(const glm::ivec3& lhv, const glm::ivec3& rhv, glm::ivec3 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y) &&	//
-		  compareEpsilon(lhv.z, rhv.z);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z, epsilon.z);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::ivec4& lhv, const glm::ivec4& rhv, glm::ivec4 epsilon)
+	bool compareEpsilon<glm::ivec4>(const glm::ivec4& lhv, const glm::ivec4& rhv, glm::ivec4 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y) &&	//
-		  compareEpsilon(lhv.z, rhv.z) &&	//
-		  compareEpsilon(lhv.w, rhv.w);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z, epsilon.z) &&	//
+		  compareEpsilon(lhv.w, rhv.w, epsilon.w);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::uvec2& lhv, const glm::uvec2& rhv, glm::uvec2 epsilon)
+	bool compareEpsilon<glm::uvec2>(const glm::uvec2& lhv, const glm::uvec2& rhv, glm::uvec2 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::uvec3& lhv, const glm::uvec3& rhv, glm::uvec3 epsilon)
+	bool compareEpsilon<glm::uvec3>(const glm::uvec3& lhv, const glm::uvec3& rhv, glm::uvec3 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y) &&	//
-		  compareEpsilon(lhv.z, rhv.z);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z, epsilon.z);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::uvec4& lhv, const glm::uvec4& rhv, glm::uvec4 epsilon)
+	bool compareEpsilon<glm::uvec4>(const glm::uvec4& lhv, const glm::uvec4& rhv, glm::uvec4 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y) &&	//
-		  compareEpsilon(lhv.z, rhv.z) &&	//
-		  compareEpsilon(lhv.w, rhv.w);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z, epsilon.z) &&	//
+		  compareEpsilon(lhv.w, rhv.w, epsilon.w);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::i8vec2& lhv, const glm::i8vec2& rhv, glm::i8vec2 epsilon)
+	bool compareEpsilon<glm::i8vec2>(const glm::i8vec2& lhv, const glm::i8vec2& rhv, glm::i8vec2 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::i8vec3& lhv, const glm::i8vec3& rhv, glm::i8vec3 epsilon)
+	bool compareEpsilon<glm::i8vec3>(const glm::i8vec3& lhv, const glm::i8vec3& rhv, glm::i8vec3 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y) &&	//
-		  compareEpsilon(lhv.z, rhv.z);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z, epsilon.z);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::i8vec4& lhv, const glm::i8vec4& rhv, glm::i8vec4 epsilon)
+	bool compareEpsilon<glm::i8vec4>(const glm::i8vec4& lhv, const glm::i8vec4& rhv, glm::i8vec4 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y) &&	//
-		  compareEpsilon(lhv.z, rhv.z) &&	//
-		  compareEpsilon(lhv.w, rhv.w);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z, epsilon.z) &&	//
+		  compareEpsilon(lhv.w, rhv.w, epsilon.w);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::u8vec2& lhv, const glm::u8vec2& rhv, glm::u8vec2 epsilon)
+	bool compareEpsilon<glm::u8vec2>(const glm::u8vec2& lhv, const glm::u8vec2& rhv, glm::u8vec2 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::u8vec3& lhv, const glm::u8vec3& rhv, glm::u8vec3 epsilon)
+	bool compareEpsilon<glm::u8vec3>(const glm::u8vec3& lhv, const glm::u8vec3& rhv, glm::u8vec3 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y) &&	//
-		  compareEpsilon(lhv.z, rhv.z);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z, epsilon.z);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::u8vec4& lhv, const glm::u8vec4& rhv, glm::u8vec4 epsilon)
+	bool compareEpsilon<glm::u8vec4>(const glm::u8vec4& lhv, const glm::u8vec4& rhv, glm::u8vec4 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y) &&	//
-		  compareEpsilon(lhv.z, rhv.z) &&	//
-		  compareEpsilon(lhv.w, rhv.w);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z, epsilon.z) &&	//
+		  compareEpsilon(lhv.w, rhv.w, epsilon.w);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::i16vec2& lhv, const glm::i16vec2& rhv, glm::i16vec2 epsilon)
+	bool compareEpsilon<glm::i16vec2>(const glm::i16vec2& lhv, const glm::i16vec2& rhv, glm::i16vec2 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::i16vec3& lhv, const glm::i16vec3& rhv, glm::i16vec3 epsilon)
+	bool compareEpsilon<glm::i16vec3>(const glm::i16vec3& lhv, const glm::i16vec3& rhv, glm::i16vec3 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y) &&	//
-		  compareEpsilon(lhv.z, rhv.z);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z, epsilon.z);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::i16vec4& lhv, const glm::i16vec4& rhv, glm::i16vec4 epsilon)
+	bool compareEpsilon<glm::i16vec4>(const glm::i16vec4& lhv, const glm::i16vec4& rhv, glm::i16vec4 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y) &&	//
-		  compareEpsilon(lhv.z, rhv.z) &&	//
-		  compareEpsilon(lhv.w, rhv.w);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z, epsilon.z) &&	//
+		  compareEpsilon(lhv.w, rhv.w, epsilon.w);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::u16vec2& lhv, const glm::u16vec2& rhv, glm::u16vec2 epsilon)
+	bool compareEpsilon<glm::u16vec2>(const glm::u16vec2& lhv, const glm::u16vec2& rhv, glm::u16vec2 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::u16vec3& lhv, const glm::u16vec3& rhv, glm::u16vec3 epsilon)
+	bool compareEpsilon<glm::u16vec3>(const glm::u16vec3& lhv, const glm::u16vec3& rhv, glm::u16vec3 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y) &&	//
-		  compareEpsilon(lhv.z, rhv.z);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z, epsilon.z);
 	}
 
 	template <>
-	bool compareEpsilon(const glm::u16vec4& lhv, const glm::u16vec4& rhv, glm::u16vec4 epsilon)
+	bool compareEpsilon<glm::u16vec4>(const glm::u16vec4& lhv, const glm::u16vec4& rhv, glm::u16vec4 epsilon)
 	{
-		return								 //
-		  compareEpsilon(lhv.x, rhv.x) &&	//
-		  compareEpsilon(lhv.y, rhv.y) &&	//
-		  compareEpsilon(lhv.z, rhv.z) &&	//
-		  compareEpsilon(lhv.w, rhv.w);
+		return											//
+		  compareEpsilon(lhv.x, rhv.x, epsilon.x) &&	//
+		  compareEpsilon(lhv.y, rhv.y, epsilon.y) &&	//
+		  compareEpsilon(lhv.z, rhv.z, epsilon.z) &&	//
+		  compareEpsilon(lhv.w, rhv.w, epsilon.w);
 	}
 
 	bool operator==(const glm::quat& lhv, const glm::quat& rhv)
