@@ -62,7 +62,7 @@ namespace khutils
 		//- MemoryReaderStateInterface
 		virtual int read_bytes(void* data, size_t size)
 		{
-			if (size < std::distance(current, end))
+			if (size <= std::distance(current, end))
 			{
 				std::copy(current, current + size, (char*)data);
 				current += size;	// UPDATE current
@@ -74,7 +74,7 @@ namespace khutils
 
 		virtual int fetch_bytes(void* data, size_t size)
 		{
-			if (size < std::distance(current, end))
+			if (size <= std::distance(current, end))
 			{
 				std::copy(current, current + size, (char*)data);
 				// DO NOT UPDATE current
