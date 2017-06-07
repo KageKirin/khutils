@@ -207,7 +207,9 @@ namespace khutils
 								 const char** include_dirs = nullptr)
 	{
 		return std::all_of(namedSchemas.begin(), namedSchemas.end(), [&parser, &include_dirs](auto& _namedSchema) {
-			return parser.Parse(std::get<1>(_namedSchema), include_dirs, std::get<0>(_namedSchema));
+			auto parseOk = parser.Parse(std::get<1>(_namedSchema), include_dirs, std::get<0>(_namedSchema));
+			KHUTILS_ASSERT(parseOk);
+			return parseOk;
 		});
 	}
 
