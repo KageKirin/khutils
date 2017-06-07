@@ -7,7 +7,7 @@
 namespace khutils
 {
 	template <typename T>
-	bool compareEpsilon(const T& lhv, const T& rhv, const T epsilon = std::numeric_limits<T>::epsilon())
+	bool compareEpsilon(const T& lhv, const T& rhv, const T epsilon)
 	{
 		T diff = lhv - rhv;
 		return -epsilon <= diff && diff <= epsilon;
