@@ -1,8 +1,8 @@
 #include <string>
 
 extern const std::string map_embedded_schema; // for linker happiness
-const std::string map_embedded_schema(
-R"(
+const std::string map_embedded_schema =
+std::string(R"(
 namespace khutils.string_map;
 
 /// simple simili-map type for Flatbuffers
@@ -20,5 +20,5 @@ table MapEntry {
 table Map {
 	entries: [MapEntry];
 }
-)"
-);
+)") +
+"";

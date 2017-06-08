@@ -1,8 +1,8 @@
 #include <string>
 
 extern const std::string datamultimap_embedded_schema; // for linker happiness
-const std::string datamultimap_embedded_schema(
-R"(
+const std::string datamultimap_embedded_schema =
+std::string(R"(
 namespace khutils.data_multimap;
 
 /// simple simili-multimap type for Flatbuffers
@@ -25,5 +25,5 @@ table MapEntry {
 table Map {
 	entries: [MapEntry];
 }
-)"
-);
+)") +
+"";

@@ -1,8 +1,8 @@
 #include <string>
 
 extern const std::string stringmap_embedded_schema; // for linker happiness
-const std::string stringmap_embedded_schema(
-R"(namespace khutils.hashstring_map;
+const std::string stringmap_embedded_schema =
+std::string(R"(namespace khutils.hashstring_map;
 
 /// simple hash LUT for Flatbuffers
 
@@ -19,5 +19,5 @@ table MapEntry {
 table Map {
 	entries: [MapEntry];
 }
-)"
-);
+)") +
+"";
