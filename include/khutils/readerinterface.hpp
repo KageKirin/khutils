@@ -41,7 +41,7 @@ namespace khutils
 		OutT readType()
 		{
 			OutT val;
-			read(&val, sizeof(val));
+			read(&val, sizeof(OutT));
 			return endian_reverse<endian::native, m_order>(val);
 		}
 
@@ -50,7 +50,7 @@ namespace khutils
 		OutT fetchType()
 		{
 			OutT val;
-			fetch(&val, sizeof(val));
+			fetch(&val, sizeof(OutT));
 			return endian_reverse<endian::native, m_order>(val);
 		}
 
@@ -59,7 +59,7 @@ namespace khutils
 		OutT readTypeAt(size_t offset)
 		{
 			OutT val;
-			readAt(offset, &val, sizeof(val));
+			readAt(offset, &val, sizeof(OutT));
 			return endian_reverse<endian::native, m_order>(val);
 		}
 
@@ -68,7 +68,7 @@ namespace khutils
 		OutT fetchTypeAt(size_t offset)
 		{
 			OutT val;
-			fetchAt(offset, &val, sizeof(val));
+			fetchAt(offset, &val, sizeof(OutT));
 			return endian_reverse<endian::native, m_order>(val);
 		}
 
@@ -77,7 +77,7 @@ namespace khutils
 		std::vector<OutT> readType(size_t count)
 		{
 			std::vector<OutT> val(count);
-			read(&val.front(), sizeof(val) * count);
+			read(&val.front(), sizeof(OutT) * count);
 			std::transform(val.begin(), val.end(), val.begin(), [](auto& _v) {
 				return endian_reverse<endian::native, m_order>(_v);
 			});
@@ -89,7 +89,7 @@ namespace khutils
 		std::vector<OutT> fetchType(size_t count)
 		{
 			std::vector<OutT> val(count);
-			fetch(&val.front(), sizeof(val) * count);
+			fetch(&val.front(), sizeof(OutT) * count);
 			std::transform(val.begin(), val.end(), val.begin(), [](auto& _v) {
 				return endian_reverse<endian::native, m_order>(_v);
 			});
@@ -101,7 +101,7 @@ namespace khutils
 		std::vector<OutT> readTypeAt(size_t count, size_t offset)
 		{
 			std::vector<OutT> val(count);
-			readAt(offset, &val.front(), sizeof(val) * count);
+			readAt(offset, &val.front(), sizeof(OutT) * count);
 			std::transform(val.begin(), val.end(), val.begin(), [](auto& _v) {
 				return endian_reverse<endian::native, m_order>(_v);
 			});
@@ -113,7 +113,7 @@ namespace khutils
 		std::vector<OutT> fetchTypeAt(size_t count, size_t offset)
 		{
 			std::vector<OutT> val(count);
-			fetchAt(offset, &val.front(), sizeof(val) * count);
+			fetchAt(offset, &val.front(), sizeof(OutT) * count);
 			std::transform(val.begin(), val.end(), val.begin(), [](auto& _v) {
 				return endian_reverse<endian::native, m_order>(_v);
 			});

@@ -41,7 +41,7 @@ namespace khutils
 		void writeType(const InT& _val)
 		{
 			const InT val = endian_reverse<m_order, endian::native>(_val);
-			write((void*)&val, sizeof(val));
+			write((void*)&val, sizeof(InT));
 		}
 
 		// put 1 element of given type
@@ -49,7 +49,7 @@ namespace khutils
 		void putType(const InT& _val)
 		{
 			const InT val = endian_reverse<m_order, endian::native>(_val);
-			put((void*)&val, sizeof(val));
+			put((void*)&val, sizeof(InT));
 		}
 
 		// write 1 element of given type at given offset
@@ -57,7 +57,7 @@ namespace khutils
 		void writeTypeAt(const InT& _val, size_t offset)
 		{
 			const InT val = endian_reverse<m_order, endian::native>(_val);
-			writeAt(offset, (void*)&val, sizeof(val));
+			writeAt(offset, (void*)&val, sizeof(InT));
 		}
 
 		// put 1 element of given type at given offset
@@ -65,7 +65,7 @@ namespace khutils
 		void putTypeAt(const InT& _val, size_t offset)
 		{
 			const InT val = endian_reverse<m_order, endian::native>(_val);
-			putAt(offset, (void*)&val, sizeof(val));
+			putAt(offset, (void*)&val, sizeof(InT));
 		}
 
 		// write n elements of given type
@@ -78,7 +78,7 @@ namespace khutils
 				return endian_reverse<m_order, endian::native>(_v);
 			});
 
-			write(&val.front(), sizeof(val) * val.size());
+			write(&val.front(), sizeof(InT) * val.size());
 		}
 
 		// put n elements of given type
@@ -91,7 +91,7 @@ namespace khutils
 				return endian_reverse<m_order, endian::native>(_v);
 			});
 
-			put(&val.front(), sizeof(val) * val.size());
+			put(&val.front(), sizeof(InT) * val.size());
 		}
 
 		// write n elements of given type at given offset
@@ -104,7 +104,7 @@ namespace khutils
 				return endian_reverse<m_order, endian::native>(_v);
 			});
 
-			writeAt(offset, &val.front(), sizeof(val) * val.size());
+			writeAt(offset, &val.front(), sizeof(InT) * val.size());
 		}
 
 		// write n elements of given type at given offset
@@ -117,7 +117,7 @@ namespace khutils
 				return endian_reverse<m_order, endian::native>(_v);
 			});
 
-			putAt(offset, &val.front(), sizeof(val) * val.size());
+			putAt(offset, &val.front(), sizeof(InT) * val.size());
 		}
 
 		//---
@@ -132,7 +132,7 @@ namespace khutils
 				return endian_reverse<m_order, endian::native>(_v);
 			});
 
-			write(&val.front(), sizeof(val) * val.size());
+			write(&val.front(), sizeof(InT) * val.size());
 		}
 
 		// put n elements of given type
@@ -145,7 +145,7 @@ namespace khutils
 				return endian_reverse<m_order, endian::native>(_v);
 			});
 
-			put(&val.front(), sizeof(val) * val.size());
+			put(&val.front(), sizeof(InT) * val.size());
 		}
 
 		// write n elements of given type at given offset
@@ -158,7 +158,7 @@ namespace khutils
 				return endian_reverse<m_order, endian::native>(_v);
 			});
 
-			writeAt(offset, &val.front(), sizeof(val) * val.size());
+			writeAt(offset, &val.front(), sizeof(InT) * val.size());
 		}
 
 		// write n elements of given type at given offset
@@ -171,7 +171,7 @@ namespace khutils
 				return endian_reverse<m_order, endian::native>(_v);
 			});
 
-			putAt(offset, &val.front(), sizeof(val) * val.size());
+			putAt(offset, &val.front(), sizeof(InT) * val.size());
 		}
 
 		//---
