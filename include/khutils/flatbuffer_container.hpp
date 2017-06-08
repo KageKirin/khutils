@@ -3,6 +3,7 @@
 
 #include "khutils/assertion.hpp"
 #include "khutils/file.hpp"
+#include "khutils/logging.hpp"
 #include "khutils/runtime_exceptions.hpp"
 
 #include <flatbuffers/flatbuffers.h>
@@ -207,7 +208,12 @@ namespace khutils
 								 const char** include_dirs = nullptr)
 	{
 		return std::all_of(namedSchemas.begin(), namedSchemas.end(), [&parser, &include_dirs](auto& _namedSchema) {
+			logger::debug() << "parsing schema: " << std::get<0>(_namedSchema);
 			auto parseOk = parser.Parse(std::get<1>(_namedSchema), include_dirs, std::get<0>(_namedSchema));
+			if (!parseOk)
+			{
+				logger::debug() << "schema source: " << std::endl << std::get<1>(_namedSchema);
+			}
 			KHUTILS_ASSERT(parseOk);
 			return parseOk;
 		});
