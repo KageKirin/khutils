@@ -63,26 +63,36 @@ namespace khutils
 		//- MemoryWriterStateInterface
 		virtual int write_bytes(void* data, size_t size)
 		{
-			if (size < std::distance(current, end))
+			KHUTILS_ASSERT_PTR(data);
+			KHUTILS_ASSERT_GREATER(size, 0);
+			KHUTILS_ASSERT_GREATEREQ(std::distance(current, end), size);
+
+			auto overflow = (int32_t)std::distance(current, end) - (int32_t)size;
+			if (overflow < 0)
 			{
-				std::copy((char*)data, (char*)data + size, current);
-				current += size;	// UPDATE current
-				return size;
+				return overflow;
 			}
 
-			return (int32_t)std::distance(current, end) - (int32_t)size;
+			std::copy((char*)data, (char*)data + size, current);
+			current += size;	// UPDATE current
+			return size;
 		}
 
 		virtual int put_bytes(void* data, size_t size)
 		{
-			if (size < std::distance(current, end))
+			KHUTILS_ASSERT_PTR(data);
+			KHUTILS_ASSERT_GREATER(size, 0);
+			KHUTILS_ASSERT_GREATEREQ(std::distance(current, end), size);
+
+			auto overflow = (int32_t)std::distance(current, end) - (int32_t)size;
+			if (overflow < 0)
 			{
-				std::copy((char*)data, (char*)data + size, current);
-				// DO NOT UPDATE current
-				return size;
+				return overflow;
 			}
 
-			return (int32_t)std::distance(current, end) - (int32_t)size;
+			std::copy((char*)data, (char*)data + size, current);
+			// DO NOT UPDATE current
+			return size;
 		}
 
 		virtual int set_position(size_t offset)
@@ -138,9 +148,9 @@ namespace khutils
 
 		//-- handler interface
 		virtual size_t getCurrentOffset();
-		virtual void   jumpToOffset(size_t pos);
-		virtual void   skip(size_t bytes);
-		virtual bool   isEnd();
+		virtual void jumpToOffset(size_t pos);
+		virtual void skip(size_t bytes);
+		virtual bool isEnd();
 
 		//-- writer interface
 		virtual void write(void* data, size_t size);

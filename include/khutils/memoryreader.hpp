@@ -7,6 +7,7 @@
 #include "khutils/base_handler.hpp"
 #include "khutils/endian.hpp"
 #include "khutils/handlerinterface.hpp"
+#include "khutils/logging.hpp"
 #include "khutils/readerinterface.hpp"
 #include "khutils/typeconversion.hpp"
 
@@ -62,26 +63,36 @@ namespace khutils
 		//- MemoryReaderStateInterface
 		virtual int read_bytes(void* data, size_t size)
 		{
-			if (size <= std::distance(current, end))
+			KHUTILS_ASSERT_PTR(data);
+			KHUTILS_ASSERT_GREATER(size, 0);
+			KHUTILS_ASSERT_GREATEREQ(std::distance(current, end), size);
+
+			auto overflow = (int32_t)std::distance(current, end) - (int32_t)size;
+			if (overflow < 0)
 			{
-				std::copy(current, current + size, (char*)data);
-				current += size;	// UPDATE current
-				return size;
+				return overflow;
 			}
 
-			return (int32_t)std::distance(current, end) - (int32_t)size;
+			std::copy(current, current + size, (char*)data);
+			current += size;	// UPDATE current
+			return size;
 		}
 
 		virtual int fetch_bytes(void* data, size_t size)
 		{
-			if (size <= std::distance(current, end))
+			KHUTILS_ASSERT_PTR(data);
+			KHUTILS_ASSERT_GREATER(size, 0);
+			KHUTILS_ASSERT_GREATEREQ(std::distance(current, end), size);
+
+			auto overflow = (int32_t)std::distance(current, end) - (int32_t)size;
+			if (overflow < 0)
 			{
-				std::copy(current, current + size, (char*)data);
-				// DO NOT UPDATE current
-				return size;
+				return overflow;
 			}
 
-			return (int32_t)std::distance(current, end) - (int32_t)size;
+			std::copy(current, current + size, (char*)data);
+			// DO NOT UPDATE current
+			return size;
 		}
 
 		virtual int set_position(size_t offset)
@@ -137,9 +148,9 @@ namespace khutils
 
 		//-- handler interface
 		virtual size_t getCurrentOffset();
-		virtual void   jumpToOffset(size_t pos);
-		virtual void   skip(size_t bytes);
-		virtual bool   isEnd();
+		virtual void jumpToOffset(size_t pos);
+		virtual void skip(size_t bytes);
+		virtual bool isEnd();
 
 		//-- reader interface
 		virtual void read(void* data, size_t size);
