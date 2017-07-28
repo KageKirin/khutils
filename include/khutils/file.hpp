@@ -109,6 +109,7 @@ namespace khutils
 
 	std::vector<uint8_t> openBufferFromStream(std::istream& ins)
 	{
+		KHUTILS_ASSERT((bool)ins);
 		ins.seekg(0, ins.end);
 		size_t length = ins.tellg();
 		ins.seekg(0, ins.beg);
@@ -194,6 +195,7 @@ namespace khutils
 
 	void dumpBufferToStream(const uint8_t* data, size_t length, std::ostream& outs)
 	{
+		KHUTILS_ASSERT((bool)outs);
 		outs.write((char*)data, length);
 	}
 
@@ -206,6 +208,7 @@ namespace khutils
 
 	void dumpBufferToFile(const uint8_t* data, size_t length, const FilePtr& file)
 	{
+		KHUTILS_ASSERT_PTR(file);
 		std::fwrite((char*)data, length, 1, file.get());
 	}
 
