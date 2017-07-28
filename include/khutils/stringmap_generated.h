@@ -82,7 +82,7 @@ namespace khutils
 					   && VerifyOffset(verifier, VT_VALUE) && verifier.Verify(value()) && verifier.EndTable();
 			}
 			MapEntryT* UnPack(const flatbuffers::resolver_function_t* _resolver = nullptr) const;
-			void UnPackTo(MapEntryT* _o, const flatbuffers::resolver_function_t* _resolver = nullptr) const;
+			void	   UnPackTo(MapEntryT* _o, const flatbuffers::resolver_function_t* _resolver = nullptr) const;
 			static flatbuffers::Offset<MapEntry> Pack(flatbuffers::FlatBufferBuilder&		  _fbb,
 													  const MapEntryT*						  _o,
 													  const flatbuffers::rehasher_function_t* _rehasher = nullptr);
@@ -92,7 +92,7 @@ namespace khutils
 		{
 			flatbuffers::FlatBufferBuilder& fbb_;
 			flatbuffers::uoffset_t			start_;
-			void add_id(uint64_t id)
+			void							add_id(uint64_t id)
 			{
 				fbb_.AddElement<uint64_t>(MapEntry::VT_ID, id, 0);
 			}
@@ -169,7 +169,7 @@ namespace khutils
 					   && verifier.VerifyVectorOfTables(entries()) && verifier.EndTable();
 			}
 			MapT* UnPack(const flatbuffers::resolver_function_t* _resolver = nullptr) const;
-			void UnPackTo(MapT* _o, const flatbuffers::resolver_function_t* _resolver = nullptr) const;
+			void  UnPackTo(MapT* _o, const flatbuffers::resolver_function_t* _resolver = nullptr) const;
 			static flatbuffers::Offset<Map> Pack(flatbuffers::FlatBufferBuilder&		 _fbb,
 												 const MapT*							 _o,
 												 const flatbuffers::rehasher_function_t* _rehasher = nullptr);
@@ -249,6 +249,13 @@ namespace khutils
 		{
 			(void)_rehasher;
 			(void)_o;
+			struct _VectorArgs
+			{
+				flatbuffers::FlatBufferBuilder*			__fbb;
+				const MapEntryT*						__o;
+				const flatbuffers::rehasher_function_t* __rehasher;
+			} _va = {&_fbb, _o, _rehasher};
+			(void)_va;
 			auto _id	= _o->id;
 			auto _value = _o->value.size() ? _fbb.CreateString(_o->value) : 0;
 			return khutils::hashstring_map::CreateMapEntry(_fbb, _id, _value);
@@ -291,10 +298,22 @@ namespace khutils
 		{
 			(void)_rehasher;
 			(void)_o;
+			struct _VectorArgs
+			{
+				flatbuffers::FlatBufferBuilder*			__fbb;
+				const MapT*								__o;
+				const flatbuffers::rehasher_function_t* __rehasher;
+			} _va = {&_fbb, _o, _rehasher};
+			(void)_va;
 			auto _entries
 			  = _o->entries.size() ?
-				  _fbb.CreateVector<flatbuffers::Offset<MapEntry>>(
-					_o->entries.size(), [&](size_t i) { return CreateMapEntry(_fbb, _o->entries[i].get(), _rehasher); }) :
+				  _fbb.CreateVector<flatbuffers::Offset<MapEntry>>(_o->entries.size(),
+																   [](size_t i, _VectorArgs* __va) {
+																	   return CreateMapEntry(*__va->__fbb,
+																							 __va->__o->entries[i].get(),
+																							 __va->__rehasher);
+																   },
+																   &_va) :
 				  0;
 			return khutils::hashstring_map::CreateMap(_fbb, _entries);
 		}
